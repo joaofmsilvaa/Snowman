@@ -56,7 +56,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                pt.ipbeja.estig.po2.snowman.po2.javafxpo2template/pt.ipbeja.estig.po2.snowman.app.ui.HelloApplication
+                                pt.ipbeja.estig.po2.snowman.po2.javafxpo2template/pt.ipbeja.estig.po2.snowman.app.ui.SnowmanStart
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
