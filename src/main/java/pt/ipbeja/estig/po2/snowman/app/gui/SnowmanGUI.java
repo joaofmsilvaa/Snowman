@@ -10,12 +10,12 @@ public class SnowmanGUI extends Application {
     @Override
     public void start(Stage stage) {
 
-        BoardModel boardModel = new BoardModel(10, 10); // Tamanho 10x10
-        SnowmanBoard snowmanBoard = new SnowmanBoard(boardModel);
+        //BoardModel boardModel = new BoardModel(10, 10); // Tamanho 10x10
+        //SnowmanBoard snowmanBoard = new SnowmanBoard(boardModel);
 
         //
         Pane root = new Pane();
-        root.getChildren().add(snowmanBoard);
+        //root.getChildren().add(snowmanBoard);
 
         Scene scene = new Scene(root, 800, 600);
         stage.setScene(scene);

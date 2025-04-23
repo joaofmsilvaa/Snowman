@@ -4,17 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BoardModel {
-    //aqui fazemos um modelo e no snowmanboard implementamos as cenas da board
     private List<List<PositionContent>> board;
+    private Monster monster;
+    private List<Snowball> snowballs;
 
-    public BoardModel(int rows, int cols) {
-        board = new ArrayList<>(rows);
-        for (int i = 0; i < rows; i++) {
-            List<PositionContent> row = new ArrayList<>(cols);
-            for (int j = 0; j < cols; j++) {
-                row.add(PositionContent.NO_SNOW); // Inicializa todas as posições como sem neve
-            }
-            board.add(row);
-        }
+    public BoardModel(List<List<PositionContent>> board, Monster monster, List<Snowball> snowballs) {
+        this.board = board;
+        this.monster = monster;
+        this.snowballs = snowballs;
     }
+
+    public PositionContent getPositionContent(int row, int col) {
+        return board.get(row).get(col);
+    }
+
+    public boolean moveMonster(Direction direction) {
+        return monster.move(direction, this);
+    }
+
+    // Outros métodos necessários para a lógica do jogo
 }
