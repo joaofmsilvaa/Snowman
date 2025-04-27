@@ -1,8 +1,11 @@
 package pt.ipbeja.estig.po2.snowman.app.model;
 
 public class Monster extends MobileElement {
-    public Monster(int row, int col) {
-        super(row, col);
+    MobileElement position;
+
+    public Monster(MobileElement position) {
+        super(position.row, position.col);
+        this.position = position;
     }
 
 
