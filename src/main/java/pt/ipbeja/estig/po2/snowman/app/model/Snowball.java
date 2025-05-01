@@ -2,16 +2,13 @@ package pt.ipbeja.estig.po2.snowman.app.model;
 
 public class Snowball extends MobileElement {
     private SnowballType type;
-    private MobileElement position;
 
         /**
          * Construtor
-         * @param position - Linha inicial
          * @param type - Tipo/tamanho inicial
          */
-        public Snowball(MobileElement position, SnowballType type) {
-            super(position.row, position.col);
-            this.position = position;
+        public Snowball(int row, int col, SnowballType type) {
+            super(row, col);
             this.type = type;
         }
 

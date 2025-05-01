@@ -18,8 +18,8 @@ public class BoardModel {
         return board.get(row).get(col);
     }
 
-    public boolean moveMonster(Direction direction) {
-        return monster.move(direction, this);
+    public void moveMonster(Direction direction) {
+        monster.move(direction, this);
     }
 
     // Outros métodos necessários para a lógica do jogo
