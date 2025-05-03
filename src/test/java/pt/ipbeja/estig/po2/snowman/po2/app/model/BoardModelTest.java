@@ -57,7 +57,17 @@ public class BoardModelTest {
         assertEquals(1, monster.getCol());
     }
 
+    @Test
+    @DisplayName("Test invalid move")
+    void testMonsterInvalidMove(){
+        board.moveMonster(Direction.UP);
 
+        assertEquals(0, monster.getRow());
+        assertEquals(1, monster.getCol());
+
+        boolean validMove = board.moveMonster(Direction.UP);
+
+        assertFalse(validMove);
     }
 
     @Test
