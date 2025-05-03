@@ -19,6 +19,14 @@ public abstract class MobileElement {
         return col;
     }
 
+    public boolean validPosition(int newRow, int newCol, BoardModel board) {
+        try{
+            return board.getPositionContent(newRow, newCol) != PositionContent.BLOCK;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     // Metodo abstrato para mover o elemento
     public abstract void move(int newRow, int newCol);
 

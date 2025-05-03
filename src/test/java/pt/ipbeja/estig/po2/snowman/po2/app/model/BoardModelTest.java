@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class BoardModelTest {
     Monster monster;
@@ -45,6 +46,17 @@ public class BoardModelTest {
 
         assertEquals(1, monster.getRow());
         assertEquals(0, monster.getCol());
+    }
+
+    @Test
+    @DisplayName("Move the monster up")
+    void testMonsterToUp(){
+        board.moveMonster(Direction.UP);
+
+        assertEquals(0, monster.getRow());
+        assertEquals(1, monster.getCol());
+    }
+
 
     }
 
