@@ -14,12 +14,28 @@ public class Monster extends MobileElement {
 
     @Override
     public boolean move(Direction direction, BoardModel board) {
+        int newRow = row;
+        int newCol = col;
 
         switch (direction) {
-            case UP -> row--;
-            case DOWN -> row++;
-            case LEFT -> col--;
-            case RIGHT -> col++;
+            case UP:
+                newRow--;
+                break;
+            case DOWN:
+                newRow++;
+                break;
+            case LEFT:
+                newCol--;
+                break;
+            case RIGHT:
+                newCol++;
+                break;
+        }
+
+        if (validPosition(newRow, newCol, board)) {
+            row = newRow;
+            col = newCol;
+            return true;
         }
 
         return false;
