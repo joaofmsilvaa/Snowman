@@ -12,27 +12,26 @@ public class Monster extends MobileElement {
         int newCol = col;
 
         switch (direction) {
-            case UP:
-                newRow--;
-                break;
-            case DOWN:
-                newRow++;
-                break;
-            case LEFT:
-                newCol--;
-                break;
-            case RIGHT:
-                newCol++;
-                break;
+            case UP:    newRow--; break;
+            case DOWN:  newRow++; break;
+            case LEFT:  newCol--; break;
+            case RIGHT: newCol++; break;
         }
 
-        if (validPosition(newRow, newCol, board)) {
-            row = newRow;
-            col = newCol;
-            return true;
+        if (!board.validPosition(newRow, newCol)) {
+            return false;
         }
 
-        return false;
+        Snowball snowball = board.snowballInPosition(newRow, newCol);
 
+        if (snowball != null) {
+            if (!board.moveSnowball(direction, snowball)) {
+                return false;
+            }
+        }
+
+        row = newRow;
+        col = newCol;
+        return true;
     }
 }
