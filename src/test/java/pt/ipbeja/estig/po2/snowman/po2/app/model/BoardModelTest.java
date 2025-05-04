@@ -103,4 +103,17 @@ public class BoardModelTest {
         assertEquals(1, snowball.getCol());
     }
 
+    @Test
+    @DisplayName("Create average snowball")
+    void testCreateAverageSnowball(){
+        Snowball snowball = board.snowballInPosition(1, 1);
+        board.moveSnowball(Direction.LEFT, snowball);
+
+        assertEquals(1, snowball.getRow());
+        assertEquals(0, snowball.getCol());
+        assertEquals(SnowballType.MID, snowball.getType());
+
+
+    }
+
 }
