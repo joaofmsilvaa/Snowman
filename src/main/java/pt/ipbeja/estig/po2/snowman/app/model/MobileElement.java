@@ -28,8 +28,6 @@ public abstract class MobileElement {
     }
 
     // Metodo abstrato para mover o elemento
-    public abstract void move(int newRow, int newCol);
-
     public abstract boolean move(Direction direction, BoardModel board);
 }
 

@@ -16,11 +16,6 @@ public class Snowball extends MobileElement {
         public SnowballType getType() { return type; }
         public void setType(SnowballType type) { this.type = type; }
 
-    @Override
-    public void move(int newRow, int newCol) {
-
-    }
-
     /**
          * Implementação do movimento da bola de neve
          * @param direction - Direção do movimento

@@ -6,12 +6,6 @@ public class Monster extends MobileElement {
         super(row, col);
     }
 
-    //para usar quando ele for mover
-    @Override
-    public void move(int newRow, int newCol) {
-
-    }
-
     @Override
     public boolean move(Direction direction, BoardModel board) {
         int newRow = row;
