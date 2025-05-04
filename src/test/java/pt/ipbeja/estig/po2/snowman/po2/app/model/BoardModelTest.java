@@ -34,6 +34,8 @@ public class BoardModelTest {
             content.add(row);
         }
 
+        Snowball snowball = new Snowball(1,1, SnowballType.SMALL);
+        snowballs.add(snowball);
         board = new BoardModel(content, monster, snowballs);
 
     }
@@ -72,7 +74,6 @@ public class BoardModelTest {
 
     @Test
     void testPositionContent(){
-
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
                 PositionContent element = board.getPositionContent(i,j);
@@ -80,6 +81,26 @@ public class BoardModelTest {
             }
             System.out.println(" |");
         }
+    }
+
+    @Test
+    @DisplayName("Move snowball to the left")
+    void testMoveSnowballToTheLeft(){
+        Snowball snowball = board.snowballInPosition(1, 1);
+        board.moveSnowball(Direction.LEFT, snowball);
+
+        assertEquals(1, snowball.getRow());
+        assertEquals(0, snowball.getCol());
+    }
+
+    @Test
+    @DisplayName("Move the snowball up")
+    void testMoveSnowballToUp(){
+        Snowball snowball = board.snowballInPosition(1, 1);
+        board.moveSnowball(Direction.UP, snowball);
+
+        assertEquals(0, snowball.getRow());
+        assertEquals(1, snowball.getCol());
     }
 
 }
