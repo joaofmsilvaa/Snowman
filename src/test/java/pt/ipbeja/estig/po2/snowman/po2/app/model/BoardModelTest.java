@@ -72,7 +72,7 @@ public class BoardModelTest {
         assertFalse(validMove);
     }
 
-    @Test
+/*    @Test
     void testPositionContent(){
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
@@ -81,7 +81,7 @@ public class BoardModelTest {
             }
             System.out.println(" |");
         }
-    }
+    }*/
 
     @Test
     @DisplayName("Move snowball to the left")

@@ -18,9 +18,29 @@ public class BoardModel {
         return board.get(row).get(col);
     }
 
+    public boolean validPosition(int newRow, int newCol) {
+        try{
+            return getPositionContent(newRow, newCol) != PositionContent.BLOCK;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Snowball snowballInPosition(int row, int col) {
+        for (Snowball snowball : snowballs) {
+            if(snowball.getRow() == row && snowball.getCol() == col) {
+                return snowball;
+            }
+        }
+
+        return null;
+    }
+
     public boolean moveMonster(Direction direction) {
         return monster.move(direction, this);
     }
 
-    // Outros métodos necessários para a lógica do jogo
+    public boolean moveSnowball(Direction direction, Snowball snowball) {
+        return snowball.move(direction, this);
+    }
 }
