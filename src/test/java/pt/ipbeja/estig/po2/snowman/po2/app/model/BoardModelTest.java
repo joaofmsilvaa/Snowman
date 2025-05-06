@@ -17,14 +17,17 @@ public class BoardModelTest {
     List<Snowball> snowballs = new ArrayList<>();
     BoardModel board;
 
+    int rows = 3;
+    int cols = 1;
+
     @BeforeEach
     public void setUp() {
-        monster = new Monster(1,1);
+        monster = new Monster(2,0);
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < rows; i++) {
             List<PositionContent> row = new ArrayList<>();
-            for (int j = 0; j < 2; j++) {
-                if(j % 2 == 0) {
+            for (int j = 0; j < cols; j++) {
+                if(j == 0) {
                     row.add(PositionContent.SNOW);
                 }
                 else{
@@ -34,7 +37,7 @@ public class BoardModelTest {
             content.add(row);
         }
 
-        Snowball snowball = new Snowball(1,1, SnowballType.SMALL);
+        Snowball snowball = new Snowball(1,0, SnowballType.SMALL);
         snowballs.add(snowball);
         board = new BoardModel(content, monster, snowballs);
 
@@ -86,11 +89,15 @@ public class BoardModelTest {
     @Test
     @DisplayName("Move snowball to the left")
     void testMoveSnowballToTheLeft(){
-        Snowball snowball = board.snowballInPosition(1, 1);
-        board.moveSnowball(Direction.LEFT, snowball);
+        Snowball snowball = board.snowballInPosition(0, 1);
+        board.moveMonster(Direction.LEFT);
 
-        assertEquals(1, snowball.getRow());
+        assertEquals(0, snowball.getRow());
         assertEquals(0, snowball.getCol());
+
+        assertEquals(0, monster.getRow());
+        assertEquals(1, monster.getCol());
+
     }
 
     @Test
