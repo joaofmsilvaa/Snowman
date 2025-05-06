@@ -8,8 +8,7 @@ import pt.ipbeja.estig.po2.snowman.app.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardModelTest {
     Monster monster;
@@ -63,7 +62,7 @@ public class BoardModelTest {
     }
 
     @Test
-    @DisplayName("Test invalid move")
+    @DisplayName("Test invalid monster move")
     void testMonsterInvalidMove(){
         board.moveMonster(Direction.UP);
 
@@ -129,6 +128,27 @@ public class BoardModelTest {
         assertEquals(0, snowball.getRow());
         assertEquals(0, snowball.getCol());
         assertEquals(SnowballType.MID, snowball.getType());
+    }
+
+    @Test
+    @DisplayName("Test invalid snowball move")
+    void testSnowballInvalidMove(){
+        Snowball snowball = board.snowballInPosition(1, 0);
+        assertEquals(1, snowball.getRow());
+        assertEquals(0, snowball.getCol());
+
+        boolean move = board.moveMonster(Direction.UP);
+
+        assertEquals(0, snowball.getRow());
+        assertEquals(0, snowball.getCol());
+        assertTrue(move);
+
+        move = board.moveMonster(Direction.UP);
+
+        assertEquals(0, snowball.getRow());
+        assertEquals(0, snowball.getCol());
+        assertFalse(move);
+
 
     }
 
