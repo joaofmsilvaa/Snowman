@@ -27,7 +27,7 @@ public class BoardModelTest {
         for (int i = 0; i < rows; i++) {
             List<PositionContent> row = new ArrayList<>();
             for (int j = 0; j < cols; j++) {
-                if(j == 0) {
+                if(i == 0) {
                     row.add(PositionContent.SNOW);
                 }
                 else{
@@ -116,13 +116,19 @@ public class BoardModelTest {
     @Test
     @DisplayName("Create average snowball")
     void testCreateAverageSnowball(){
-        Snowball snowball = board.snowballInPosition(1, 1);
-        board.moveSnowball(Direction.LEFT, snowball);
-
+        Snowball snowball = board.snowballInPosition(1, 0);
         assertEquals(1, snowball.getRow());
         assertEquals(0, snowball.getCol());
-        assertEquals(SnowballType.MID, snowball.getType());
+        assertEquals(SnowballType.SMALL, snowball.getType());
 
+        board.moveMonster(Direction.UP);
+
+        assertEquals(1, monster.getRow());
+        assertEquals(0, monster.getCol());
+
+        assertEquals(0, snowball.getRow());
+        assertEquals(0, snowball.getCol());
+        assertEquals(SnowballType.MID, snowball.getType());
 
     }
 
