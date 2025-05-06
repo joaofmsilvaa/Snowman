@@ -103,11 +103,14 @@ public class BoardModelTest {
     @Test
     @DisplayName("Move the snowball up")
     void testMoveSnowballToUp(){
-        Snowball snowball = board.snowballInPosition(1, 1);
-        board.moveSnowball(Direction.UP, snowball);
+        Snowball snowball = board.snowballInPosition(1, 0);
+        board.moveMonster(Direction.UP);
 
         assertEquals(0, snowball.getRow());
-        assertEquals(1, snowball.getCol());
+        assertEquals(0, snowball.getCol());
+
+        assertEquals(1, monster.getRow());
+        assertEquals(0, monster.getCol());
     }
 
     @Test
