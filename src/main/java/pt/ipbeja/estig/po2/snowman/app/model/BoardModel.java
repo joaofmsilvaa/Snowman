@@ -42,7 +42,39 @@ public class BoardModel {
 
     public boolean moveSnowball(Direction direction, Snowball snowball) {
         return snowball.move(direction, this);
+
     }
 
-    //Verificar se ja existe um sn
+    //Tentar empelhar uma bola sobre outra
+    public boolean tryStackSnowballs(Snowball top, Snowball bottom) {
+        SnowballType newType = top.stackOn(bottom);
+        if (newType == null) {
+            return false; // Não pode empilhar
+        }
+
+        // Remove as bolas individuais
+        snowballs.remove(top);
+        snowballs.remove(bottom);
+
+        // Cria a nova bola combinada
+        Snowball stacked = new Snowball(bottom.getRow(), bottom.getCol(), newType);
+        snowballs.add(stacked);
+
+        return true;
+    }
+
+
+     //Verifica e executa empilhamentos após movimento
+    private void checkStackingAfterMove(int row, int col) {
+        Snowball bottom = snowballInPosition(row, col);
+        if (bottom == null) {
+            return;
+        }
+
+        // Verifica se há bola acima que pode ser empilhada
+        Snowball top = snowballInPosition(row - 1, col);
+        if (top != null && top.canStackOn(bottom)) {
+            tryStackSnowballs(top, bottom);
+        }
+    }
 }

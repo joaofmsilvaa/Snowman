@@ -65,6 +65,8 @@ public class Snowball extends MobileElement {
 
         return null;
     }
+
+
     /**
      * Implementação do movimento da bola de neve
      * @param direction - Direção do movimento
