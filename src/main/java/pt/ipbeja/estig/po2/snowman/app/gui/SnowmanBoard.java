@@ -8,34 +8,23 @@ import java.util.List;
 
 public class SnowmanBoard extends GridPane implements View {
 
-    private BoardModel boardModel;
-    private BoardButton[][] buttons = new BoardButton[boardModel.SIZE][boardModel.SIZE];
+    private BoardModel board;
+    private BoardButton[][] buttons = new BoardButton[board.SIZE][board.SIZE];
 
     // Construtor que inicializa o SnowmanBoard com o modelo do tabuleiro
-    public SnowmanBoard(BoardModel boardModel) {
-        this.boardModel = boardModel;
-        drawBoard();
+    public SnowmanBoard() {
+        this.board = new BoardModel();
+       drawBoard();
     }
 
-    private void drawBoard() {
-        monster = new Monster(2,0);
-
-        for (int i = 0; i < boardModel.SIZE; i++) {
-            List<PositionContent> row = new ArrayList<>();
-            for (int j = 0; j < boardModel.SIZE; j++) {
-                if(i == 0) {
-                    row.add(PositionContent.SNOW);
-                }
-                else{
-                    row.add(PositionContent.NO_SNOW);
-                }
+    public void drawBoard(){
+        for (int row = 0; row < board.SIZE; row++) {
+            for (int col = 0; col < board.SIZE; col++) {
+                BoardButton button = new BoardButton();
+                this.add(button, row, col);
+                buttons[row][col] = button;
             }
-            content.add(row);
         }
-
-        Snowball snowball = new Snowball(1,0, SnowballType.SMALL);
-        snowballs.add(snowball);
-        boardModel = new BoardModel(content, monster, snowballs);
     }
 
 }

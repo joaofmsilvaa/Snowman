@@ -7,14 +7,13 @@ import pt.ipbeja.estig.po2.snowman.app.model.BoardModel;
 
 public class BoardButton extends Button {
 
-    private static final Image EMPTY = new Image("/images/empty.png");
+    private static final Image GRASS = new Image("/grass.png");
 
     private ImageView imageView;
 
-    public BoardButton(BoardModel board, int col, int row) {
-        this.imageView = new ImageView(EMPTY);
+    public BoardButton() {
+        this.imageView = new ImageView(GRASS);
         this.setGraphic(imageView);
-        this.setPrefSize(100,100);
 
     }
 
