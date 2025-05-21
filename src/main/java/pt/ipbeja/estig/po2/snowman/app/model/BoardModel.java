@@ -7,6 +7,7 @@ public class BoardModel {
     private List<List<PositionContent>> board;
     private Monster monster;
     private List<Snowball> snowballs;
+    public static final int SIZE = 5;
 
     public BoardModel(List<List<PositionContent>> board, Monster monster, List<Snowball> snowballs) {
         this.board = board;
