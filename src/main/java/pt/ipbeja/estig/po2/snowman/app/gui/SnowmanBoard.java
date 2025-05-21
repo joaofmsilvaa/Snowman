@@ -20,7 +20,14 @@ public class SnowmanBoard extends GridPane implements View {
     public void drawBoard(){
         for (int row = 0; row < board.SIZE; row++) {
             for (int col = 0; col < board.SIZE; col++) {
-                BoardButton button = new BoardButton();
+                PositionContent terrain;
+                if(col % 3 == 0 && row % 3 == 0) {
+                    terrain = PositionContent.SNOW;
+                }
+                else{
+                    terrain = PositionContent.NO_SNOW;
+                }
+                BoardButton button = new BoardButton(terrain);
                 this.add(button, row, col);
                 buttons[row][col] = button;
             }
