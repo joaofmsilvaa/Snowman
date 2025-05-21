@@ -31,13 +31,11 @@ public class Snowball extends MobileElement {
 
 
     //Verifica se esta bola pode ser empilhada sobre outra bola
-
     public boolean canStackOn(Snowball other) {
         switch (this.type) {
             case SMALL:
                 return other.type == SnowballType.MID ||
                         other.type == SnowballType.BIG;
-
             case MID:
                 return other.type == SnowballType.BIG;
 
