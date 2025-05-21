@@ -7,11 +7,16 @@ public class BoardModel {
     private List<List<PositionContent>> board;
     private Monster monster;
     private List<Snowball> snowballs;
+    private View view;
 
     public BoardModel(List<List<PositionContent>> board, Monster monster, List<Snowball> snowballs) {
         this.board = board;
         this.monster = monster;
         this.snowballs = snowballs;
+    }
+
+    public void setView(View view){
+        this.view = view;
     }
 
     public PositionContent getPositionContent(int row, int col) {
@@ -75,6 +80,32 @@ public class BoardModel {
         Snowball top = snowballInPosition(row - 1, col);
         if (top != null && top.canStackOn(bottom)) {
             tryStackSnowballs(top, bottom);
+        }
+    }
+
+
+    // Metodo para verificar se formou um snowman completo
+    private void checkCompleteSnowman(int row, int col) {
+        Snowball base = snowballInPosition(row, col);
+        if (base == null || base.getType() != SnowballType.BIG_MID) return;
+
+        Snowball top = snowballInPosition(row-1, col);
+        if (top != null && top.getType() == SnowballType.SMALL) {
+            // Remove as bolas individuais
+            snowballs.remove(base);
+            snowballs.remove(top);
+
+            // Cria o snowman completo
+            Snowball snowman = new Snowball(row, col, SnowballType.COMPLETE);
+            snowballs.add(snowman);
+
+            // Atualiza o tabuleiro
+            board.get(row).set(col, PositionContent.SNOWMAN);
+
+            // Notifica a view
+            if (view != null) {
+                view.onSnowmanCreated(row, col);
+            }
         }
     }
 }
