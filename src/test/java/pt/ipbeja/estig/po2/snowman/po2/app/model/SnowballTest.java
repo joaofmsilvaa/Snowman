@@ -121,5 +121,10 @@ public class SnowballTest {
         assertTrue(mid.canStackOn(big));
         assertFalse(mid.canStackOn(small));
         assertFalse(big.canStackOn(small));
+
+        assertEquals(SnowballType.MID_SMALL, small.stackOn(mid));
+        assertEquals(SnowballType.BIG_SMALL, small.stackOn(big));
+        assertEquals(SnowballType.BIG_MID, mid.stackOn(big));
+        assertNull(mid.stackOn(small));
     }
 }
