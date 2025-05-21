@@ -71,4 +71,12 @@ public class BoardModel {
     public boolean moveSnowball(Direction direction, Snowball snowball) {
         return snowball.move(direction, this);
     }
+
+    public Monster getMonster() {
+        return monster;
+    }
+
+    public List<Snowball> getSnowballs() {
+        return snowballs;
+    }
 }

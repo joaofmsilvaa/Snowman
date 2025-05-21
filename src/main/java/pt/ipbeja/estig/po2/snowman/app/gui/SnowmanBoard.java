@@ -18,17 +18,24 @@ public class SnowmanBoard extends GridPane implements View {
     }
 
     public void drawBoard(){
+        this.getChildren().clear();
         for (int row = 0; row < board.SIZE; row++) {
             for (int col = 0; col < board.SIZE; col++) {
-                PositionContent terrain;
-                if(col % 3 == 0 && row % 3 == 0) {
-                    terrain = PositionContent.SNOW;
-                }
-                else{
-                    terrain = PositionContent.NO_SNOW;
-                }
-                BoardButton button = new BoardButton(terrain);
-                this.add(button, row, col);
+                PositionContent terrain = board.getPositionContent(row, col);
+                Snowball snowball = board.snowballInPosition(row, col);
+                boolean hasMonster = board.getMonster().getRow() == row && board.getMonster().getCol() == col;
+
+                BoardButton button;
+
+                /*if (hasMonster) {
+                    button = new BoardButton(PositionContent.MONSTER);
+                } else if (snowball != null) {
+                    button = new BoardButton(snowball.getType().toPositionContent());
+                }*/
+
+                button = new BoardButton(terrain);
+
+                this.add(button, col, row);
                 buttons[row][col] = button;
             }
         }
