@@ -46,7 +46,7 @@ public class PositionsFileModelTest {
 
         List<String> lines = Files.readAllLines(new File(data.getPositionsFileName()).toPath());
         assertEquals(1, lines.size());
-        assertEquals("(1,1) -> (1,2)", lines.get(0).trim());
+        assertEquals("(1,A) -> (1,B)", lines.get(0).trim());
     }
 
     @Test
@@ -55,16 +55,24 @@ public class PositionsFileModelTest {
         data.storePosition(1, 1, 1, 2);
 
         List<String> lines = Files.readAllLines(new File(data.getPositionsFileName()).toPath());
-        assertEquals("(1,1) -> (1,2)", lines.get(0).trim());
+        assertEquals("(1,A) -> (1,B)", lines.get(0).trim());
         System.out.println(lines.get(0).trim());
 
         data.storePosition(1, 2, 2, 2);
 
         lines = Files.readAllLines(new File(data.getPositionsFileName()).toPath());
         assertEquals(2, lines.size());
-        assertEquals("(1,1) -> (1,2)", lines.get(0).trim());
-        assertEquals("(1,2) -> (2,2)", lines.get(1).trim());
+        assertEquals("(1,A) -> (1,B)", lines.get(0).trim());
+        assertEquals("(1,B) -> (2,B)", lines.get(1).trim());
         System.out.println(lines.get(1).trim());
+    }
+
+    @Test
+    @DisplayName("Convert position to letter")
+    void testConvertPositionToLetter() {
+        String letter = data.convertToLetter(1);
+
+        assertEquals("A", letter);
     }
 
 }
