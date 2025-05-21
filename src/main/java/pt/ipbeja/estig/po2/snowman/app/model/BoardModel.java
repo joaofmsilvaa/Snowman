@@ -65,6 +65,15 @@ public class BoardModel {
         Snowball stacked = new Snowball(bottom.getRow(), bottom.getCol(), newType);
         snowballs.add(stacked);
 
+        // Notifica a view sobre o empilhamento
+        if (view != null) {
+            view.onSnowballStacked(bottom.getRow(), bottom.getCol(), newType);
+        }
+        // Verifica se formou um snowman completo
+        if (newType == SnowballType.BIG_MID) {
+            checkCompleteSnowman(bottom.getRow(), bottom.getCol());
+        }
+
         return true;
     }
 
@@ -85,7 +94,7 @@ public class BoardModel {
 
 
     // Metodo para verificar se formou um snowman completo
-    private void checkCompleteSnowman(int row, int col) {
+    void checkCompleteSnowman(int row, int col) {
         Snowball base = snowballInPosition(row, col);
         if (base == null || base.getType() != SnowballType.BIG_MID) return;
 

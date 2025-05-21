@@ -75,6 +75,11 @@ public class Snowball extends MobileElement {
      */
     @Override
     public boolean move(Direction direction, BoardModel board) {
+        // Snowman completo não pode mover
+        if (this.type == SnowballType.COMPLETE) {
+            return false;
+        }
+
         int newRow = row;
         int newCol = col;
 
@@ -87,6 +92,11 @@ public class Snowball extends MobileElement {
 
         if (!board.validPosition(newRow, newCol)) {
             return false;
+        }
+        // Verifica se há outra bola no destino
+        Snowball target = board.snowballInPosition(newRow, newCol);
+        if (target != null) {
+            return board.tryStackSnowballs(this, target);
         }
 
         PositionContent destination = board.getPositionContent(newRow, newCol);
