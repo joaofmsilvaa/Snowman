@@ -47,7 +47,6 @@ public class BoardModel {
 
     public boolean moveSnowball(Direction direction, Snowball snowball) {
         return snowball.move(direction, this);
-
     }
 
     //Tentar empelhar uma bola sobre outra
