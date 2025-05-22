@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SnowmanTest {
+    // Não esta 100% funcional
     private BoardModel board;
     private Monster monster;
     List<List<PositionContent>> content = new ArrayList<>();
@@ -64,18 +65,7 @@ public class SnowmanTest {
         assertEquals(1, snowballs.size(), "Deveria haver apenas o snowman completo");
         assertEquals(SnowballType.COMPLETE, snowballs.get(0).getType());
         assertEquals(PositionContent.SNOWMAN, board.getPositionContent(4, 2));
-
-        // Debug: mostra a coluna central completa
-        printColumn(2);
     }
 
-    private void printColumn(int col) {
-        System.out.println("\n--- COLUNA " + col + " ---");
-        for (int row = 0; row < 5; row++) {
-            Snowball ball = board.snowballInPosition(row, col);
-            PositionContent content = board.getPositionContent(row, col);
-            System.out.println("Linha " + row + ": " +
-                    (ball != null ? ball.getType() : content));
-        }
-    }
+
 }
