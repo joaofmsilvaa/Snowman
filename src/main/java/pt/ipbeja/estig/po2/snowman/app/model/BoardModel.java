@@ -141,7 +141,7 @@ public class BoardModel {
             snowballs.add(snowman);
 
             // Atualiza o tabuleiro
-            board.get(row).set(col, PositionContent.SNOWMAN);
+            boardContent.get(row).set(col, PositionContent.SNOWMAN);
 
             // Notifica a view
             if (view != null) {
@@ -150,7 +150,6 @@ public class BoardModel {
         }
     }
 
-}
     public Monster getMonster() {
         return monster;
     }
@@ -159,3 +158,4 @@ public class BoardModel {
         return snowballs;
     }
 }
+

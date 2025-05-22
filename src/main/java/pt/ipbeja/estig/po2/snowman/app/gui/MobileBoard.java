@@ -7,7 +7,7 @@ import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MobileBoard extends GridPane implements View {
+public class MobileBoard extends GridPane {
 
     private BoardModel board;
     private EntityButton[][] buttons = new EntityButton[board.SIZE][board.SIZE];
