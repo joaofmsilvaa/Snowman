@@ -39,6 +39,12 @@ public class BoardModel {
 
         Snowball snowball = new Snowball(1,0, SnowballType.SMALL);
         snowballs.add(snowball);
+
+        snowball = new Snowball(3,1, SnowballType.SMALL);
+        snowballs.add(snowball);
+
+        snowball = new Snowball(4,3, SnowballType.SMALL);
+        snowballs.add(snowball);
     }
 
 

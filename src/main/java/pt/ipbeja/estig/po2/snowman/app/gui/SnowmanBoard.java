@@ -27,12 +27,6 @@ public class SnowmanBoard extends GridPane implements View {
 
                 BoardButton button;
 
-                /*if (hasMonster) {
-                    button = new BoardButton(PositionContent.MONSTER);
-                } else if (snowball != null) {
-                    button = new BoardButton(snowball.getType().toPositionContent());
-                }*/
-
                 button = new BoardButton(terrain);
 
                 this.add(button, col, row);
