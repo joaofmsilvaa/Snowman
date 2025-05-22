@@ -4,23 +4,56 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BoardModel {
-    private List<List<PositionContent>> board;
+    private List<List<PositionContent>> boardContent;
     private Monster monster;
     private List<Snowball> snowballs;
     private View view;
+    public static final int SIZE = 5;
 
-    public BoardModel(List<List<PositionContent>> board, Monster monster, List<Snowball> snowballs) {
-        this.board = board;
+    public BoardModel() {
+        boardContent = new ArrayList<>();
+        snowballs = new ArrayList<>();
+        startGame();
+    }
+
+    public BoardModel(List<List<PositionContent>> content,Monster monster, List<Snowball> snowballs) {
         this.monster = monster;
         this.snowballs = snowballs;
+        this.boardContent = content;
     }
 
     public void setView(View view){
         this.view = view;
     }
 
+    public void startGame(){
+        monster = new Monster(2,0);
+
+        for (int i = 0; i < SIZE; i++) {
+            List<PositionContent> row = new ArrayList<>();
+            for (int j = 0; j < SIZE; j++) {
+                if(i == 0) {
+                    row.add(PositionContent.SNOW);
+                }
+                else{
+                    row.add(PositionContent.NO_SNOW);
+                }
+            }
+            boardContent.add(row);
+        }
+
+        Snowball snowball = new Snowball(1,0, SnowballType.SMALL);
+        snowballs.add(snowball);
+
+        snowball = new Snowball(3,1, SnowballType.SMALL);
+        snowballs.add(snowball);
+
+        snowball = new Snowball(4,3, SnowballType.SMALL);
+        snowballs.add(snowball);
+    }
+
     public PositionContent getPositionContent(int row, int col) {
-        return board.get(row).get(col);
+        return boardContent.get(row).get(col);
     }
 
     public boolean validPosition(int newRow, int newCol) {
@@ -117,4 +150,12 @@ public class BoardModel {
         }
     }
 
+}
+    public Monster getMonster() {
+        return monster;
+    }
+
+    public List<Snowball> getSnowballs() {
+        return snowballs;
+    }
 }
