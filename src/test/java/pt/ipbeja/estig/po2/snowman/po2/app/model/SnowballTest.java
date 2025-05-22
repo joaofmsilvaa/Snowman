@@ -21,22 +21,21 @@ public class SnowballTest {
 
     @BeforeEach
     public void setUp() {
-        monster = new Monster(2,0);
+        monster = new Monster(2, 0);
 
         for (int i = 0; i < rows; i++) {
             List<PositionContent> row = new ArrayList<>();
             for (int j = 0; j < cols; j++) {
-                if(i == 0 && j == 1) {
+                if (i == 0 && j == 1) {
                     row.add(PositionContent.SNOW);
-                }
-                else{
+                } else {
                     row.add(PositionContent.NO_SNOW);
                 }
             }
             content.add(row);
         }
 
-        Snowball snowball = new Snowball(1,1, SnowballType.SMALL);
+        Snowball snowball = new Snowball(1, 1, SnowballType.SMALL);
         snowballs.add(snowball);
         board = new BoardModel(content, monster, snowballs);
 
@@ -44,7 +43,7 @@ public class SnowballTest {
 
     @Test
     @DisplayName("Move snowball to the left")
-    void testMoveSnowballToTheLeft(){
+    void testMoveSnowballToTheLeft() {
         Snowball snowball = board.snowballInPosition(1, 1);
         snowball.move(Direction.LEFT, board);
 
@@ -55,7 +54,7 @@ public class SnowballTest {
 
     @Test
     @DisplayName("Move the snowball up")
-    void testMoveSnowballToUp(){
+    void testMoveSnowballToUp() {
         Snowball snowball = board.snowballInPosition(1, 1);
         snowball.move(Direction.UP, board);
 
@@ -66,7 +65,7 @@ public class SnowballTest {
 
     @Test
     @DisplayName("Create average snowball")
-    void testCreateAverageSnowball(){
+    void testCreateAverageSnowball() {
         Snowball snowball = board.snowballInPosition(1, 1);
         snowball.move(Direction.UP, board);
 
@@ -77,7 +76,7 @@ public class SnowballTest {
 
     @Test
     @DisplayName("Test invalid snowball move")
-    void testSnowballInvalidMove(){
+    void testSnowballInvalidMove() {
         Snowball snowball = board.snowballInPosition(1, 1);
         boolean status = snowball.move(Direction.UP, board);
 
@@ -94,4 +93,38 @@ public class SnowballTest {
 
     }
 
+
+    @Test
+    @DisplayName("Test Increase snowball type")
+    void testIncreaseSnowballType() {
+        Snowball small = new Snowball(0, 0, SnowballType.SMALL);
+        small.increaseSnowballType();
+        assertEquals(SnowballType.MID, small.getType());
+
+        Snowball mid = new Snowball(0, 0, SnowballType.MID);
+        mid.increaseSnowballType();
+        assertEquals(SnowballType.BIG, mid.getType());
+
+        Snowball big = new Snowball(0, 0, SnowballType.BIG);
+        big.increaseSnowballType();
+        assertEquals(SnowballType.BIG, big.getType()); // Não deve mudar
+    }
+    @Test
+    @DisplayName("Test if can stack on")
+    void testCanStackOn() {
+        Snowball small = new Snowball(0, 0, SnowballType.SMALL);
+        Snowball mid = new Snowball(0, 0, SnowballType.MID);
+        Snowball big = new Snowball(0, 0, SnowballType.BIG);
+
+        assertTrue(small.canStackOn(mid));
+        assertTrue(small.canStackOn(big));
+        assertTrue(mid.canStackOn(big));
+        assertFalse(mid.canStackOn(small));
+        assertFalse(big.canStackOn(small));
+
+        assertEquals(SnowballType.MID_SMALL, small.stackOn(mid));
+        assertEquals(SnowballType.BIG_SMALL, small.stackOn(big));
+        assertEquals(SnowballType.BIG_MID, mid.stackOn(big));
+        assertNull(mid.stackOn(small));
+    }
 }

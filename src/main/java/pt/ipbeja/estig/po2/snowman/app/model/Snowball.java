@@ -13,8 +13,13 @@ public class Snowball extends MobileElement {
     }
 
     // Getters e setters
-    public SnowballType getType() { return type; }
-    public void setType(SnowballType type) { this.type = type; }
+    public SnowballType getType() {
+        return type;
+    }
+
+    public void setType(SnowballType type) {
+        this.type = type;
+    }
 
 
     public void increaseSnowballType() {
@@ -24,6 +29,42 @@ public class Snowball extends MobileElement {
         }
     }
 
+
+    //Verifica se esta bola pode ser empilhada sobre outra bola
+    public boolean canStackOn(Snowball other) {
+        switch (this.type) {
+            case SMALL:
+                return other.type == SnowballType.MID ||
+                        other.type == SnowballType.BIG;
+            case MID:
+                return other.type == SnowballType.BIG;
+
+            case BIG: // BIG não pode ser empilhada
+                return false;
+        }
+        return false;
+    }
+
+    // Dar Stack as bolas de neve
+    public SnowballType stackOn(Snowball other) {
+        if (!canStackOn(other)) {
+            return null; // Não pode empilhar
+        }
+
+        if (this.type == SnowballType.SMALL && other.type == SnowballType.MID) {
+            return SnowballType.MID_SMALL;
+        }
+        else if (this.type == SnowballType.SMALL && other.type == SnowballType.BIG) {
+            return SnowballType.BIG_SMALL;
+        }
+        else if (this.type == SnowballType.MID && other.type == SnowballType.BIG) {
+            return SnowballType.BIG_MID;
+        }
+
+        return null;
+    }
+
+
     /**
      * Implementação do movimento da bola de neve
      * @param direction - Direção do movimento
@@ -32,6 +73,11 @@ public class Snowball extends MobileElement {
      */
     @Override
     public boolean move(Direction direction, BoardModel board) {
+        // Snowman completo não pode mover
+        if (this.type == SnowballType.COMPLETE) {
+            return false;
+        }
+
         int newRow = row;
         int newCol = col;
 
@@ -44,6 +90,11 @@ public class Snowball extends MobileElement {
 
         if (!board.validPosition(newRow, newCol)) {
             return false;
+        }
+        // Verifica se há outra bola no destino
+        Snowball target = board.snowballInPosition(newRow, newCol);
+        if (target != null) {
+            return board.tryStackSnowballs(this, target);
         }
 
         PositionContent destination = board.getPositionContent(newRow, newCol);
@@ -60,5 +111,8 @@ public class Snowball extends MobileElement {
         col = newCol;
         return true;
     }
+
+
+
 
 }
