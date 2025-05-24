@@ -74,19 +74,44 @@ public class BoardModel {
         return null;
     }
 
+    public Snowball snowballInFrontOfMonster(Direction direction) {
+        int row = monster.getRow();
+        int col = monster.getCol();
+
+        return switch (direction) {
+            case UP -> snowballInPosition(row - 1, col);
+            case DOWN -> snowballInPosition(row + 1, col);
+            case LEFT -> snowballInPosition(row, col - 1);
+            case RIGHT -> snowballInPosition(row, col + 1);
+        };
+    }
+
     public boolean moveMonster(Direction direction) {
         int oldRow = monster.getRow();
         int oldCol = monster.getCol();
 
+        // ⚠️ Antes de mover, guarda a posição da bola (se houver)
+        Snowball snowball = snowballInFrontOfMonster(direction);
+        int oldSnowballRow = -1, oldSnowballCol = -1;
+        if (snowball != null) {
+            oldSnowballRow = snowball.getRow();
+            oldSnowballCol = snowball.getCol();
+        }
+
         boolean moved = monster.move(direction, this);
 
         if (moved && view != null) {
+            view.onMonsterCleared(oldRow, oldCol);
             view.onMonsterMoved(monster.getRow(), monster.getCol());
 
-            view.onMonsterCleared(oldRow, oldCol);
+            // ⚠️ Se a bola foi movida, notifica a View
+            if (snowball != null && (snowball.getRow() != oldSnowballRow || snowball.getCol() != oldSnowballCol)) {
+                view.onSnowballMoved(snowball.getRow(), snowball.getCol(), oldSnowballRow, oldSnowballCol);
+            }
         }
 
         return moved;
+
     }
 
     public boolean moveSnowball(Direction direction, Snowball snowball) {

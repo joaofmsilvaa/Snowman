@@ -77,22 +77,11 @@ public class MobileBoard extends GridPane implements View{
     }
 
     @Override
-    public void onSnowballMoved(int row, int col) {
-        // Limpar todas as bolas antigas
-        for (int r = 0; r < BoardModel.SIZE; r++) {
-            for (int c = 0; c < BoardModel.SIZE; c++) {
-                buttons[r][c].setSnowballVisible(false);
-            }
+    public void onSnowballMoved(int newRow, int newCol, int oldRow, int oldCol) {
+        buttons[oldRow][oldCol].setSnowballVisible(false);
+        buttons[newRow][newCol].setSnowballVisible(true);
         }
 
-        // Obter todas as bolas de neve
-        List<Snowball> snowballs = board.getSnowballs();
-        for (Snowball snowball : snowballs) {
-            int snowballRow = snowball.getRow();
-            int snowballCol = snowball.getCol();
-            buttons[snowballRow][snowballCol].setSnowballVisible(true);
-        }
-    }
 
 
 

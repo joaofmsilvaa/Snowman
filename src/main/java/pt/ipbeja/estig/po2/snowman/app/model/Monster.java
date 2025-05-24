@@ -40,6 +40,7 @@ public class Monster extends MobileElement {
         return true;
     }
 
+
     private void checkPotentialSnowman(BoardModel board, Direction direction) {
         // Verifica na posição oposta ao movimento
         switch (direction) {
