@@ -15,6 +15,8 @@ public class MobileBoard extends GridPane implements View{
     // Construtor que inicializa o SnowmanBoard com o modelo do tabuleiro
     public MobileBoard() {
         this.board = new BoardModel();
+        this.buttons = new EntityButton[BoardModel.SIZE][BoardModel.SIZE];
+
         this.board.setView(this);
         drawBoard();
 
@@ -76,6 +78,22 @@ public class MobileBoard extends GridPane implements View{
 
     @Override
     public void onSnowballMoved(int row, int col) {
+        for (int r = 0; r < BoardModel.SIZE; r++) {
+            for (int c = 0; c < BoardModel.SIZE; c++) {
+                if (buttons[r][c] != null) {
+                    Snowball snowball = board.snowballInPosition(r, c);
+                    if (snowball != null) {
+                        buttons[r][c].setEntity(MobileEntity.SNOWBALL);
+                    } else {
+                        buttons[r][c].setEntity(MobileEntity.EMPTY);
+                    }
+                }
+            }
+        }
+        Snowball snowball = board.snowballInPosition(row, col);
+        if (snowball != null) {
+            buttons[row][col].setEntity(MobileEntity.SNOWBALL);
+        }
     }
 
     @Override
