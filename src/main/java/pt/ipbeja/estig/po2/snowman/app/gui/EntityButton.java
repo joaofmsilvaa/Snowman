@@ -43,13 +43,38 @@ public class EntityButton extends Button {
     }
 
     public void setEntity(MobileEntity entity) {
-        switch (entity){
-            case SNOWBALL:
-                backgroundImage = new Image("/snowball.png");
-                break;
-            case MONSTER:
-                backgroundImage = new Image("/monster1.png");
-                break;
+        Image image = null;
+
+        switch (entity) {
+            case SNOWBALL -> image = new Image("/snowball.png");
+            case MONSTER -> image = new Image("/monster1.png");
+        }
+
+        if (image != null) {
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(size);
+            imageView.setFitHeight(size);
+            imageView.setPreserveRatio(false);
+            this.setGraphic(imageView);
+        } else {
+            this.setGraphic(null);
+        }
+    }
+
+    public void clearEntity() {
+        this.setGraphic(null);
+    }
+
+    public void setMonsterVisible(boolean visible) {
+        if (visible) {
+            Image monsterImage = new Image("/monster1.png");
+            ImageView imageView = new ImageView(monsterImage);
+            imageView.setFitWidth(size);
+            imageView.setFitHeight(size);
+            imageView.setPreserveRatio(false);
+            this.setGraphic(imageView);
+        } else {
+            this.setGraphic(null);
         }
     }
 

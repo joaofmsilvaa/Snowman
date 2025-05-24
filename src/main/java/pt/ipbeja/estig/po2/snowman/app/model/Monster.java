@@ -30,6 +30,8 @@ public class Monster extends MobileElement {
             }
         }
 
+        setPrevRow(row);
+        setPrevCol(col);
         row = newRow;
         col = newCol;
 
@@ -55,4 +57,6 @@ public class Monster extends MobileElement {
                 break;
         }
     }
+
+
 }
