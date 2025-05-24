@@ -75,7 +75,18 @@ public class BoardModel {
     }
 
     public boolean moveMonster(Direction direction) {
-        return monster.move(direction, this);
+        int oldRow = monster.getRow();
+        int oldCol = monster.getCol();
+
+        boolean moved = monster.move(direction, this);
+
+        if (moved && view != null) {
+            view.onMonsterMoved(monster.getRow(), monster.getCol());
+
+            view.onMonsterCleared(oldRow, oldCol);
+        }
+
+        return moved;
     }
 
     public boolean moveSnowball(Direction direction, Snowball snowball) {

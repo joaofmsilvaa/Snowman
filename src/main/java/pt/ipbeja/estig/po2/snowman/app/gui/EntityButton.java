@@ -42,4 +42,15 @@ public class EntityButton extends Button {
         this.setFocusTraversable(false);
     }
 
+    public void setEntity(MobileEntity entity) {
+        switch (entity){
+            case SNOWBALL:
+                backgroundImage = new Image("/snowball.png");
+                break;
+            case MONSTER:
+                backgroundImage = new Image("/monster1.png");
+                break;
+        }
+    }
+
 }
