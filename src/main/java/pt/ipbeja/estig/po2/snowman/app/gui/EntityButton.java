@@ -7,6 +7,8 @@ import pt.ipbeja.estig.po2.snowman.app.model.BoardModel;
 import pt.ipbeja.estig.po2.snowman.app.model.MobileEntity;
 import pt.ipbeja.estig.po2.snowman.app.model.PositionContent;
 
+import java.io.InputStream;
+
 public class EntityButton extends Button {
 
     private static Image backgroundImage;
@@ -48,6 +50,8 @@ public class EntityButton extends Button {
         switch (entity) {
             case SNOWBALL -> image = new Image("/snowball.png");
             case MONSTER -> image = new Image("/monster1.png");
+            case EMPTY -> {
+            }
         }
 
         if (image != null) {
@@ -62,6 +66,7 @@ public class EntityButton extends Button {
     }
 
     public void clearEntity() {
+
         this.setGraphic(null);
     }
 
