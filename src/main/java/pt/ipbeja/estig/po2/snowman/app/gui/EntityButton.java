@@ -82,5 +82,17 @@ public class EntityButton extends Button {
             this.setGraphic(null);
         }
     }
+    public void setSnowballVisible(boolean visible) {
+        if (visible) {
+            Image snowballImage = new Image("/ballsmall.png");
+            ImageView imageView = new ImageView(snowballImage);
+            imageView.setFitWidth(size);
+            imageView.setFitHeight(size);
+            imageView.setPreserveRatio(false);
+            this.setGraphic(imageView);
+        } else {
+            this.setGraphic(null);
+        }
+    }
 
 }
