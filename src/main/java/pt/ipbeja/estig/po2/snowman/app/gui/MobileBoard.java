@@ -97,13 +97,16 @@ public class MobileBoard extends GridPane implements View{
 
     @Override
     public void onSnowmanCreated(int row, int col, SnowballType newType) {
-        buttons[row][col].setSnowballType(newType);
+        buttons[row][col].setSnowballType(SnowballType.COMPLETE);
         System.out.println("Boneco de neve criado em: " + row + ", " + col);
     }
 
     @Override
     public void onSnowballStacked(int row, int col, SnowballType newType) {
         buttons[row][col].setSnowballType(newType);
+        if (board.getMonster().getRow() == row && board.getMonster().getCol() == col) {
+            buttons[row][col].setMonsterVisible(true);
+        }
         System.out.println("Empilhamento na posição: " + row + ", " + col + " -> " + newType);
     }
 

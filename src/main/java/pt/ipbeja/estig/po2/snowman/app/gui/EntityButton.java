@@ -83,24 +83,37 @@ public class EntityButton extends Button {
         this.hasSnowball = visible;
         updateGraphic();
     }
-
-    public void setSnowballType(SnowballType type) {
-        String path = switch (type) {
+    private String getImagePathForType(SnowballType type) {
+        return switch (type) {
             case SMALL -> "/ballsmall.png";
             case MID -> "/ballmedium.png";
             case BIG -> "/bigball.png";
-            case MID_SMALL -> "/midsmall.png";
-            case BIG_SMALL -> "/bigsmall.png";
-            case BIG_MID -> "/bigmidium.png";
+            case MID_SMALL -> "/midsmall.png";    // Nome corrigido
+            case BIG_SMALL -> "/bigsmall.png";     // Nome corrigido
+            case BIG_MID -> "/bigmid.png";         // Nome corrigido
             case COMPLETE -> "/snowman.png";
         };
+    }
 
-        Image image = new Image(path);
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(size);
-        imageView.setFitHeight(size);
-        imageView.setPreserveRatio(false);
-        this.setGraphic(imageView);
+    public void setSnowballType(SnowballType type) {
+        String imagePath = getImagePathForType(type);
+        System.out.println("Tentando carregar: " + imagePath); // Debug
+
+        try {
+            InputStream stream = getClass().getResourceAsStream(imagePath);
+            if (stream == null) {
+                System.err.println("ARQUIVO NÃO ENCONTRADO: " + imagePath);
+                return;
+            }
+
+            Image image = new Image(stream);
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(size);
+            imageView.setFitHeight(size);
+            this.setGraphic(imageView);
+        } catch (Exception e) {
+            System.out.println("Erro ao carregar imagem: " + imagePath);
+        }
     }
 
     private void updateGraphic() {

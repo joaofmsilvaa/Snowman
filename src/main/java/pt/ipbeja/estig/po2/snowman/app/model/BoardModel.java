@@ -124,6 +124,8 @@ public class BoardModel {
     //Tentar empelhar uma bola sobre outra
     public boolean tryStackSnowballs(Snowball top, Snowball bottom) {
         SnowballType newType = top.stackOn(bottom);
+        System.out.println("Resultado do empilhamento: " + newType);
+
         if (newType == null) {
             return false; // Não pode empilhar
         }
