@@ -99,12 +99,13 @@ public class MobileBoard extends GridPane implements View{
 
     @Override
     public void onSnowballStacked(int row, int col, SnowballType newType) {
-        
+        buttons[row][col].setSnowballType(newType);
         System.out.println("Empilhamento na posição: " + row + ", " + col + " -> " + newType);
     }
 
     @Override
     public void onMonsterCleared(int row, int col) {
+
         buttons[row][col].setMonsterVisible(false);
     }
 }

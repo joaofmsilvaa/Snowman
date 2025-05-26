@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import pt.ipbeja.estig.po2.snowman.app.model.BoardModel;
 import pt.ipbeja.estig.po2.snowman.app.model.MobileEntity;
 import pt.ipbeja.estig.po2.snowman.app.model.PositionContent;
+import pt.ipbeja.estig.po2.snowman.app.model.SnowballType;
 
 import java.io.InputStream;
 
@@ -99,5 +100,24 @@ public class EntityButton extends Button {
         } else {
             this.setGraphic(null);
         }
+    }
+
+    public void setSnowballType(SnowballType type) {
+        String imagePath = switch (type) {
+            case SMALL -> "/ballsmall.png";
+            case MID -> "/ballmedium.png";
+            case BIG -> "/bigball.png";
+            case MID_SMALL -> "/midsmall.png";
+            case BIG_SMALL -> "/bigsmall.png";
+            case BIG_MID -> "/bigmidium.png";
+            case COMPLETE -> "/snowman.png";
+        };
+
+        Image image = new Image(imagePath);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(size);
+        imageView.setFitHeight(size);
+        imageView.setPreserveRatio(false);
+        this.setGraphic(imageView);
     }
 }
