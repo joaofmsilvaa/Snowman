@@ -30,6 +30,8 @@ public class Monster extends MobileElement {
             }
         }
 
+        setPrevRow(row);
+        setPrevCol(col);
         row = newRow;
         col = newCol;
 
@@ -37,6 +39,7 @@ public class Monster extends MobileElement {
         checkPotentialSnowman(board, direction);
         return true;
     }
+
 
     private void checkPotentialSnowman(BoardModel board, Direction direction) {
         // Verifica na posição oposta ao movimento
@@ -55,4 +58,6 @@ public class Monster extends MobileElement {
                 break;
         }
     }
+
+
 }
