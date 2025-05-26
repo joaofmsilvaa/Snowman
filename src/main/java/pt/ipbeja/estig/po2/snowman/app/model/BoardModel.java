@@ -90,7 +90,7 @@ public class BoardModel {
         int oldRow = monster.getRow();
         int oldCol = monster.getCol();
 
-        // Antes de mover, guarda a posição da bola (se houver)
+        // Guarda a referência da bola antes do movimento
         Snowball snowball = snowballInFrontOfMonster(direction);
         int oldSnowballRow = -1, oldSnowballCol = -1;
         if (snowball != null) {
@@ -98,21 +98,24 @@ public class BoardModel {
             oldSnowballCol = snowball.getCol();
         }
 
+        // Faz o movimento completo (inclui mover a snowball e o monstro)
         boolean moved = monster.move(direction, this);
 
         if (moved && view != null) {
+            // Atualiza a UI corretamente
             view.onMonsterCleared(oldRow, oldCol);
             view.onMonsterMoved(monster.getRow(), monster.getCol());
 
-            // Se a bola foi movida, notifica a View
-            if (snowball != null && (snowball.getRow() != oldSnowballRow || snowball.getCol() != oldSnowballCol)) {
-                view.onSnowballMoved(snowball.getRow(), snowball.getCol(), oldSnowballRow, oldSnowballCol);
+            // Atualiza a snowball apenas na UI (não move de novo!)
+            if (snowball != null) {
+                view.onSnowballMoved(snowball, oldSnowballRow, oldSnowballCol);
             }
         }
 
         return moved;
-
     }
+
+
 
     public boolean moveSnowball(Direction direction, Snowball snowball) {
         return snowball.move(direction, this);
@@ -181,7 +184,7 @@ public class BoardModel {
 
             // Notifica a view
             if (view != null) {
-                view.onSnowmanCreated(row, col);
+                view.onSnowmanCreated(row, col, SnowballType.COMPLETE);
             }
         }
     }

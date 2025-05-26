@@ -84,6 +84,25 @@ public class EntityButton extends Button {
         updateGraphic();
     }
 
+    public void setSnowballType(SnowballType type) {
+        String path = switch (type) {
+            case SMALL -> "/ballsmall.png";
+            case MID -> "/ballmedium.png";
+            case BIG -> "/bigball.png";
+            case MID_SMALL -> "/midsmall.png";
+            case BIG_SMALL -> "/bigsmall.png";
+            case BIG_MID -> "/bigmidium.png";
+            case COMPLETE -> "/snowman.png";
+        };
+
+        Image image = new Image(path);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(size);
+        imageView.setFitHeight(size);
+        imageView.setPreserveRatio(false);
+        this.setGraphic(imageView);
+    }
+
     private void updateGraphic() {
         if (hasMonster) {
             ImageView imageView = new ImageView(new Image("/monster1.png"));
@@ -102,22 +121,6 @@ public class EntityButton extends Button {
         }
     }
 
-    public void setSnowballType(SnowballType type) {
-        String imagePath = switch (type) {
-            case SMALL -> "/ballsmall.png";
-            case MID -> "/ballmedium.png";
-            case BIG -> "/bigball.png";
-            case MID_SMALL -> "/midsmall.png";
-            case BIG_SMALL -> "/bigsmall.png";
-            case BIG_MID -> "/bigmidium.png";
-            case COMPLETE -> "/snowman.png";
-        };
 
-        Image image = new Image(imagePath);
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(size);
-        imageView.setFitHeight(size);
-        imageView.setPreserveRatio(false);
-        this.setGraphic(imageView);
-    }
+
 }

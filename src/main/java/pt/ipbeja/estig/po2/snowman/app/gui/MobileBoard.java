@@ -77,23 +77,27 @@ public class MobileBoard extends GridPane implements View{
     }
 
     @Override
-    public void onSnowballMoved(int newRow, int newCol, int oldRow, int oldCol) {
-        buttons[oldRow][oldCol].setSnowballVisible(false);
+    public void onSnowballMoved(Snowball snowball, int oldRow, int oldCol) {
+        buttons[oldRow][oldCol].clearEntity();
+      
+        if (board.getMonster().getRow() == oldRow && board.getMonster().getCol() == oldCol) {
+            buttons[oldRow][oldCol].setMonsterVisible(true);
+        }
+        int newRow = snowball.getRow();
+        int newCol = snowball.getCol();
+        buttons[newRow][newCol].setSnowballType(snowball.getType());
 
-// Se o monstro está na mesma posição que a nova bola
+        // Garante que o monstro ainda está visível na nova posição
         if (board.getMonster().getRow() == newRow && board.getMonster().getCol() == newCol) {
             buttons[newRow][newCol].setMonsterVisible(true);
         }
-
-// Atualiza a bola na nova posição
-        buttons[newRow][newCol].setSnowballVisible(true);
-        }
-
+    }
 
 
 
     @Override
-    public void onSnowmanCreated(int row, int col) {
+    public void onSnowmanCreated(int row, int col, SnowballType newType) {
+        buttons[row][col].setSnowballType(newType);
         System.out.println("Boneco de neve criado em: " + row + ", " + col);
     }
 
