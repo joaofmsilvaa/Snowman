@@ -70,29 +70,34 @@ public class EntityButton extends Button {
         this.setGraphic(null);
     }
 
+    private boolean hasMonster = false;
+    private boolean hasSnowball = false;
+
     public void setMonsterVisible(boolean visible) {
-        if (visible) {
-            Image monsterImage = new Image("/monster1.png");
-            ImageView imageView = new ImageView(monsterImage);
-            imageView.setFitWidth(size);
-            imageView.setFitHeight(size);
-            imageView.setPreserveRatio(false);
-            this.setGraphic(imageView);
-        } else {
-            this.setGraphic(null);
-        }
-    }
-    public void setSnowballVisible(boolean visible) {
-        if (visible) {
-            Image snowballImage = new Image("/ballsmall.png");
-            ImageView imageView = new ImageView(snowballImage);
-            imageView.setFitWidth(size);
-            imageView.setFitHeight(size);
-            imageView.setPreserveRatio(false);
-            this.setGraphic(imageView);
-        } else {
-            this.setGraphic(null);
-        }
+        this.hasMonster = visible;
+        updateGraphic();
     }
 
+    public void setSnowballVisible(boolean visible) {
+        this.hasSnowball = visible;
+        updateGraphic();
+    }
+
+    private void updateGraphic() {
+        if (hasMonster) {
+            ImageView imageView = new ImageView(new Image("/monster1.png"));
+            imageView.setFitWidth(size);
+            imageView.setFitHeight(size);
+            imageView.setPreserveRatio(false);
+            this.setGraphic(imageView);
+        } else if (hasSnowball) {
+            ImageView imageView = new ImageView(new Image("/ballsmall.png"));
+            imageView.setFitWidth(size);
+            imageView.setFitHeight(size);
+            imageView.setPreserveRatio(false);
+            this.setGraphic(imageView);
+        } else {
+            this.setGraphic(null);
+        }
+    }
 }

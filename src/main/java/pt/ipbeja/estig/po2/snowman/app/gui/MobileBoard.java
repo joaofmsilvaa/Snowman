@@ -79,6 +79,13 @@ public class MobileBoard extends GridPane implements View{
     @Override
     public void onSnowballMoved(int newRow, int newCol, int oldRow, int oldCol) {
         buttons[oldRow][oldCol].setSnowballVisible(false);
+
+// Se o monstro está na mesma posição que a nova bola
+        if (board.getMonster().getRow() == newRow && board.getMonster().getCol() == newCol) {
+            buttons[newRow][newCol].setMonsterVisible(true);
+        }
+
+// Atualiza a bola na nova posição
         buttons[newRow][newCol].setSnowballVisible(true);
         }
 
@@ -92,6 +99,7 @@ public class MobileBoard extends GridPane implements View{
 
     @Override
     public void onSnowballStacked(int row, int col, SnowballType newType) {
+        
         System.out.println("Empilhamento na posição: " + row + ", " + col + " -> " + newType);
     }
 
