@@ -81,15 +81,10 @@ public class Snowball extends MobileElement {
             return false;
         }
 
-        int newRow = row;
-        int newCol = col;
-
-        switch (direction) {
-            case UP:    newRow--; break;
-            case DOWN:  newRow++; break;
-            case LEFT:  newCol--; break;
-            case RIGHT: newCol++; break;
-        }
+        Position position = new Position(row, col);
+        position = position.changePosition(direction);
+        int newRow = position.getRow();
+        int newCol = position.getCol();
 
         if (!board.validPosition(newRow, newCol)) {
             return false;
@@ -97,6 +92,7 @@ public class Snowball extends MobileElement {
         // Verifica se há outra bola no destino
         Snowball target = board.snowballInPosition(newRow, newCol);
         if (target != null) {
+
             return board.tryStackSnowballs(this, target);
         }
 
@@ -116,6 +112,13 @@ public class Snowball extends MobileElement {
     }
 
 
+    public boolean isSnowballStack(){
+        SnowballType type = this.getType();
+        if(type == SnowballType.BIG_MID || type == SnowballType.MID_SMALL || type == SnowballType.BIG_SMALL) {
+            return true;
+        }
 
+        return false;
+    }
 
 }

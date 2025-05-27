@@ -42,6 +42,7 @@ public class BoardModelTest {
         snowballs.add(snowball);
         board = new BoardModel(content, monster, snowballs);
 
+
     }
 
     @Test
@@ -211,6 +212,29 @@ public class BoardModelTest {
         assertEquals(2, bigMidBall.getRow(), "Stacked row position");
         assertEquals(2, bigMidBall.getCol(), "Stacked col position");
         assertEquals(SnowballType.BIG_MID, bigMidBall.getType());
+    }
+
+    @Test
+    @DisplayName("Test unstack big-mid snowball")
+    void testUnstackBigMidSnowball(){
+        board.moveMonster(Direction.RIGHT);
+
+        Snowball bigMidBall = board.snowballInPosition(2, 2);
+        assertEquals(2, bigMidBall.getRow(), "Stacked row position");
+        assertEquals(2, bigMidBall.getCol(), "Stacked col position");
+        assertEquals(SnowballType.BIG_MID, bigMidBall.getType());
+
+        board.moveMonster(Direction.RIGHT);
+        Snowball mid = board.snowballInPosition(2,2);
+        assertEquals(2, mid.getRow(), "Bottom ball row");
+        assertEquals(2, mid.getCol(), "Bottom ball col");
+
+        Snowball big = board.snowballInPosition(2,3);
+        assertEquals(2, big.getRow(), "Top ball row");
+        assertEquals(3, big.getCol(), "Top ball col");
+
+        assertEquals(2, monster.getRow(), "Monster row");
+        assertEquals(1, monster.getCol(), "Monster col");
     }
 
 }
