@@ -36,7 +36,7 @@ public class BoardModelTest {
             content.add(row);
         }
 
-        Snowball snowball = new Snowball(2,1, SnowballType.SMALL);
+        Snowball snowball = new Snowball(2,1, SnowballType.BIG);
         snowballs.add(snowball);
         board = new BoardModel(content, monster, snowballs);
 
@@ -148,6 +148,21 @@ public class BoardModelTest {
 
         assertEquals(2, snowball.getRow(), "Third position row");
         assertEquals(3, snowball.getCol(), "Third position col");
+        assertEquals(SnowballType.BIG, snowball.getType());
+    }
+
+    @Test
+    @DisplayName("Maintain big snowball")
+    void testMaintainBigSnowball(){
+        Snowball snowball = board.snowballInPosition(2, 1);
+        assertEquals(2, snowball.getRow(), "Initial position row");
+        assertEquals(1, snowball.getCol(), "Initial position col");
+        assertEquals(SnowballType.BIG, snowball.getType());
+
+        board.moveMonster(Direction.RIGHT);
+
+        assertEquals(2, snowball.getRow(), "Second position row");
+        assertEquals(2, snowball.getCol(), "Second position col");
         assertEquals(SnowballType.BIG, snowball.getType());
     }
 
