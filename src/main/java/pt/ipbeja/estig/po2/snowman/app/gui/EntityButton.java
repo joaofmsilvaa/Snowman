@@ -88,9 +88,9 @@ public class EntityButton extends Button {
             case SMALL -> "/ballsmall.png";
             case MID -> "/ballmedium.png";
             case BIG -> "/bigball.png";
-            case MID_SMALL -> "/midsmall.png";    // Nome corrigido
-            case BIG_SMALL -> "/bigsmall.png";     // Nome corrigido
-            case BIG_MID -> "/bigmid.png";         // Nome corrigido
+            case MID_SMALL -> "/midsmall.png";
+            case BIG_SMALL -> "/bigsmall.png";
+            case BIG_MID -> "/bigmid.png";
             case COMPLETE -> "/snowman.png";
         };
     }

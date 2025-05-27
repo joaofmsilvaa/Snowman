@@ -24,20 +24,19 @@ public class Main extends Application {
     }
 
     private void playBackgroundMusic() {
-        try {
-            URL resource = getClass().getResource("/SnowmanMusic.mp3");
-            if (resource == null) {
-                System.err.println("Ficheiro de música não encontrado.");
-                return;
-            }
 
-            Media media = new Media(resource.toString());
-            mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            mediaPlayer.setVolume(0.5);
-            mediaPlayer.play();
-        } catch (Exception e) {
-            System.err.println("Erro ao tocar música: " + e.getMessage());
+        URL resource = getClass().getResource("/SnowmanMusic.mp3");
+        if (resource == null) {
+            System.err.println("Ficheiro de música não encontrado.");
+            return;
         }
+
+        Media media = new Media(resource.toString());
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.setVolume(0.5);
+        mediaPlayer.play();
+
+
     }
 }

@@ -1,6 +1,9 @@
 package pt.ipbeja.estig.po2.snowman.app.gui;
 
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import pt.ipbeja.estig.po2.snowman.app.model.*;
 
 import javax.swing.text.html.parser.Entity;
@@ -97,8 +100,22 @@ public class MobileBoard extends GridPane implements View{
 
     @Override
     public void onSnowmanCreated(int row, int col, SnowballType newType) {
+
         buttons[row][col].setSnowballType(SnowballType.COMPLETE);
         System.out.println("Boneco de neve criado em: " + row + ", " + col);
+
+        // Mostrar alerta Game Over
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Game Over");
+            alert.setHeaderText(null);
+            alert.setContentText("Parabéns! O boneco de neve foi criado. ");
+            alert.showAndWait();
+
+            // Voltar ao menu principal
+            Stage primaryStage = (Stage) this.getScene().getWindow();
+            StartMenu.show(primaryStage);
+        });
     }
 
     @Override
