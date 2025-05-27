@@ -36,7 +36,9 @@ public class BoardModelTest {
             content.add(row);
         }
 
-        Snowball snowball = new Snowball(2,1, SnowballType.BIG);
+        Snowball snowball = new Snowball(2,1, SnowballType.MID);
+        snowballs.add(snowball);
+        snowball = new Snowball(2,2, SnowballType.BIG);
         snowballs.add(snowball);
         board = new BoardModel(content, monster, snowballs);
 
@@ -186,6 +188,29 @@ public class BoardModelTest {
         assertFalse(move);
 
 
+    }
+
+    @Test
+    @DisplayName("Test stack mid sized snowball in a big snowball")
+    void testAverageBigSnowman(){
+        Snowball midBall = board.snowballInPosition(2, 1);
+        assertEquals(2, midBall.getRow(), "Initial row position");
+        assertEquals(1, midBall.getCol(), "Initial col position");
+        assertEquals(SnowballType.MID, midBall.getType());
+
+        Snowball bigBall = board.snowballInPosition(2, 2);
+        assertEquals(2, bigBall.getRow(), "Second row position");
+        assertEquals(2, bigBall.getCol(), "Second col position");
+        assertEquals(SnowballType.BIG, bigBall.getType());
+
+        assertTrue(midBall.canStackOn(bigBall));
+
+        board.moveMonster(Direction.RIGHT);
+
+        Snowball bigMidBall = board.snowballInPosition(2, 2);
+        assertEquals(2, bigMidBall.getRow(), "Stacked row position");
+        assertEquals(2, bigMidBall.getCol(), "Stacked col position");
+        assertEquals(SnowballType.BIG_MID, bigMidBall.getType());
     }
 
 }
