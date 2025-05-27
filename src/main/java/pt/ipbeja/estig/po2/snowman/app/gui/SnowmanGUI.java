@@ -7,11 +7,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import pt.ipbeja.estig.po2.snowman.app.model.BoardModel;
 
-public class SnowmanGUI extends Application {
 
-    public static void main(String[] args) {
-        launch();
-    }
+public class SnowmanGUI extends Application {
 
     @Override
     public void start(Stage stage) {
@@ -23,6 +20,7 @@ public class SnowmanGUI extends Application {
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setTitle("Snowman Game");
         stage.show();
     }
 }
