@@ -42,13 +42,13 @@ public class BoardModel {
             boardContent.add(row);
         }
 
-        Snowball snowball = new Snowball(1,0, SnowballType.SMALL);
+        Snowball snowball = new Snowball(2,1, SnowballType.SMALL);
         snowballs.add(snowball);
 
-        snowball = new Snowball(3,1, SnowballType.SMALL);
+        snowball = new Snowball(2,2, SnowballType.MID);
         snowballs.add(snowball);
 
-        snowball = new Snowball(4,3, SnowballType.SMALL);
+        snowball = new Snowball(2,3, SnowballType.BIG);
         snowballs.add(snowball);
     }
 
