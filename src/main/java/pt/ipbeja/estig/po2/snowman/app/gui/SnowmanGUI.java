@@ -7,6 +7,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import pt.ipbeja.estig.po2.snowman.app.model.BoardModel;
 
+
 public class SnowmanGUI extends Application {
 
     @Override

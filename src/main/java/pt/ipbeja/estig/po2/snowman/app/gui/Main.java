@@ -1,11 +1,17 @@
 package pt.ipbeja.estig.po2.snowman.app.gui;
 
 import javafx.application.Application;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-import pt.ipbeja.estig.po2.snowman.app.gui.StartMenu;
+
+import java.net.URL;
+
 import static pt.ipbeja.estig.po2.snowman.app.gui.StartMenu.show;
 
 public class Main extends Application {
+
+    private MediaPlayer mediaPlayer;
 
     public static void main(String[] args) {
         launch(args);
@@ -13,6 +19,25 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        show(primaryStage);  // Mostra o menu inicial
+        playBackgroundMusic(); // Música de fundo
+        show(primaryStage);    // Mostra o menu
+    }
+
+    private void playBackgroundMusic() {
+        try {
+            URL resource = getClass().getResource("/SnowmanMusic.mp3");
+            if (resource == null) {
+                System.err.println("Ficheiro de música não encontrado.");
+                return;
+            }
+
+            Media media = new Media(resource.toString());
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            mediaPlayer.setVolume(0.5);
+            mediaPlayer.play();
+        } catch (Exception e) {
+            System.err.println("Erro ao tocar música: " + e.getMessage());
+        }
     }
 }

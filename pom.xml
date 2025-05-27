@@ -22,6 +22,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>19.0.2.1</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.version}</version>
@@ -56,7 +62,11 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                pt.ipbeja.estig.po2.snowman.po2.javafxpo2template/pt.ipbeja.estig.po2.snowman.app.gui.SnowmanGUI
+                                pt.ipbeja.estig.po2.snowman.po2.javafxpo2template/pt.ipbeja.estig.po2.snowman.app.gui.Main
+                                <modules>
+                                    <module>javafx.controls</module>
+                                    <module>javafx.media</module>
+                                </modules>
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
