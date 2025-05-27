@@ -79,10 +79,6 @@ public class EntityButton extends Button {
         updateGraphic();
     }
 
-    public void setSnowballVisible(boolean visible) {
-        this.hasSnowball = visible;
-        updateGraphic();
-    }
     private String getImagePathForType(SnowballType type) {
         return switch (type) {
             case SMALL -> "/ballsmall.png";
