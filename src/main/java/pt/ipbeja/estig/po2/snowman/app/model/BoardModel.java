@@ -158,12 +158,16 @@ public class BoardModel {
 
         // Se a bola de cima não for movida para um campo inválido adiciona as bolas (executa o unstack)
         if(validPosition(top.getRow(), top.getCol())) {
+            snowballs.remove(stacked);
             snowballs.add(top);
             snowballs.add(bottom);
 
             if(view != null){
                 view.onSnowballUnstacked(top, bottom);
             }
+        }
+        else{
+            return false;
         }
 
 
@@ -204,11 +208,8 @@ public class BoardModel {
             case MID_SMALL -> {
                 return new Snowball(stack.getRow(),stack.getCol(), SnowballType.MID);
             }
-            case BIG_MID -> {
+            case BIG_MID, BIG_SMALL -> {
                 return new Snowball(stack.getRow(),stack.getCol(), SnowballType.BIG);
-            }
-            case BIG_SMALL -> {
-                return new Snowball(stack.getRow(),stack.getCol(), SnowballType.SMALL);
             }
         }
 
