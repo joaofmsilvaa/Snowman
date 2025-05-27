@@ -16,8 +16,8 @@ public class BoardModelTest {
     List<Snowball> snowballs = new ArrayList<>();
     BoardModel board;
 
-    int rows = 3;
-    int cols = 1;
+    int rows = 5;
+    int cols = 5;
 
     @BeforeEach
     public void setUp() {
@@ -26,7 +26,7 @@ public class BoardModelTest {
         for (int i = 0; i < rows; i++) {
             List<PositionContent> row = new ArrayList<>();
             for (int j = 0; j < cols; j++) {
-                if(i == 0) {
+                if(i == 2 && j > 1) {
                     row.add(PositionContent.SNOW);
                 }
                 else{
@@ -36,7 +36,9 @@ public class BoardModelTest {
             content.add(row);
         }
 
-        Snowball snowball = new Snowball(1,0, SnowballType.SMALL);
+        Snowball snowball = new Snowball(2,1, SnowballType.MID);
+        snowballs.add(snowball);
+        snowball = new Snowball(2,2, SnowballType.BIG);
         snowballs.add(snowball);
         board = new BoardModel(content, monster, snowballs);
 
@@ -74,16 +76,16 @@ public class BoardModelTest {
         assertFalse(validMove);
     }
 
-/*    @Test
+    @Test
     void testPositionContent(){
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 PositionContent element = board.getPositionContent(i,j);
-                System.out.print(" | " + element);
+                System.out.print("\t|\t" + element);
             }
-            System.out.println(" |");
+            System.out.println("\t|");
         }
-    }*/
+    }
 
     @Test
     @DisplayName("Move snowball to the left")
@@ -131,6 +133,42 @@ public class BoardModelTest {
     }
 
     @Test
+    @DisplayName("Create big snowball")
+    void testCreateBigSnowball(){
+        Snowball snowball = board.snowballInPosition(2, 1);
+        assertEquals(2, snowball.getRow(), "Initial position row");
+        assertEquals(1, snowball.getCol(), "Initial position col");
+        assertEquals(SnowballType.SMALL, snowball.getType());
+
+        board.moveMonster(Direction.RIGHT);
+
+        assertEquals(2, snowball.getRow(), "Second position row");
+        assertEquals(2, snowball.getCol(), "Second position col");
+        assertEquals(SnowballType.MID, snowball.getType());
+
+        board.moveMonster(Direction.RIGHT);
+
+        assertEquals(2, snowball.getRow(), "Third position row");
+        assertEquals(3, snowball.getCol(), "Third position col");
+        assertEquals(SnowballType.BIG, snowball.getType());
+    }
+
+    @Test
+    @DisplayName("Maintain big snowball")
+    void testMaintainBigSnowball(){
+        Snowball snowball = board.snowballInPosition(2, 1);
+        assertEquals(2, snowball.getRow(), "Initial position row");
+        assertEquals(1, snowball.getCol(), "Initial position col");
+        assertEquals(SnowballType.BIG, snowball.getType());
+
+        board.moveMonster(Direction.RIGHT);
+
+        assertEquals(2, snowball.getRow(), "Second position row");
+        assertEquals(2, snowball.getCol(), "Second position col");
+        assertEquals(SnowballType.BIG, snowball.getType());
+    }
+
+    @Test
     @DisplayName("Test invalid snowball move")
     void testSnowballInvalidMove(){
         Snowball snowball = board.snowballInPosition(1, 0);
@@ -150,6 +188,29 @@ public class BoardModelTest {
         assertFalse(move);
 
 
+    }
+
+    @Test
+    @DisplayName("Test stack mid sized snowball in a big snowball")
+    void testAverageBigSnowman(){
+        Snowball midBall = board.snowballInPosition(2, 1);
+        assertEquals(2, midBall.getRow(), "Initial row position");
+        assertEquals(1, midBall.getCol(), "Initial col position");
+        assertEquals(SnowballType.MID, midBall.getType());
+
+        Snowball bigBall = board.snowballInPosition(2, 2);
+        assertEquals(2, bigBall.getRow(), "Second row position");
+        assertEquals(2, bigBall.getCol(), "Second col position");
+        assertEquals(SnowballType.BIG, bigBall.getType());
+
+        assertTrue(midBall.canStackOn(bigBall));
+
+        board.moveMonster(Direction.RIGHT);
+
+        Snowball bigMidBall = board.snowballInPosition(2, 2);
+        assertEquals(2, bigMidBall.getRow(), "Stacked row position");
+        assertEquals(2, bigMidBall.getCol(), "Stacked col position");
+        assertEquals(SnowballType.BIG_MID, bigMidBall.getType());
     }
 
 }
