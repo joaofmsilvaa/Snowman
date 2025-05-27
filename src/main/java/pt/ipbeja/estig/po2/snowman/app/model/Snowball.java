@@ -35,7 +35,7 @@ public class Snowball extends MobileElement {
         switch (this.type) {
             case SMALL:
                 return other.type == SnowballType.MID ||
-                        other.type == SnowballType.BIG;
+                        other.type == SnowballType.BIG || other.type == SnowballType.BIG_MID;
             case MID:
                 return other.type == SnowballType.BIG;
 
@@ -59,6 +59,9 @@ public class Snowball extends MobileElement {
         }
         else if (this.type == SnowballType.MID && other.type == SnowballType.BIG) {
             return SnowballType.BIG_MID;
+        }
+        else if (this.type == SnowballType.SMALL && other.type == SnowballType.BIG_MID) {
+            return SnowballType.COMPLETE;
         }
 
         return null;

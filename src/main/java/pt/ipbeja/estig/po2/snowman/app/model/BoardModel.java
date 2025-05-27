@@ -23,6 +23,7 @@ public class BoardModel {
     }
 
     public void setView(View view){
+
         this.view = view;
     }
 
@@ -143,8 +144,11 @@ public class BoardModel {
             view.onSnowballStacked(bottom.getRow(), bottom.getCol(), newType);
         }
         // Verifica se formou um snowman completo
-        if (newType == SnowballType.BIG_MID) {
-            checkCompleteSnowman(bottom.getRow(), bottom.getCol());
+        if (newType == SnowballType.COMPLETE) {
+            boardContent.get(bottom.getRow()).set(bottom.getCol(), PositionContent.SNOWMAN);
+            if (view != null) {
+                view.onSnowmanCreated(bottom.getRow(), bottom.getCol(), newType);
+            }
         }
 
         return true;
