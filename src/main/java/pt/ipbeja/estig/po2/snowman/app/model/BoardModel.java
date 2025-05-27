@@ -71,7 +71,6 @@ public class BoardModel {
                 return snowball;
             }
         }
-
         return null;
     }
 
