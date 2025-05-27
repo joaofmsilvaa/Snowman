@@ -1,15 +1,31 @@
 package pt.ipbeja.estig.po2.snowman.app.model;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MapReader {
 
-    /**
-     * Lê um mapa textual e retorna um BoardModel preenchido.
-     * @param map Array de strings representando o mapa
-     * @return BoardModel inicializado com base no mapa
-     */
+    public BoardModel loadMapFromFile(String resourcePath) {
+        InputStream stream = getClass().getResourceAsStream(resourcePath);
+        if (stream == null) {
+            throw new RuntimeException("Mapa não encontrado: " + resourcePath);
+        }
+
+        List<String[]> lines = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line.split("\\s+"));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao ler o mapa: " + e.getMessage());
+        }
+
+        String[][] map = lines.toArray(new String[0][]);
+        return parseMap(map);
+    }
+
     public BoardModel parseMap(String[][] map) {
         List<List<PositionContent>> boardContent = new ArrayList<>();
         List<Snowball> snowballs = new ArrayList<>();

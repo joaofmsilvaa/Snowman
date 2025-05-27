@@ -13,16 +13,8 @@ public class SnowmanGUI extends Application {
 
     @Override
     public void start(Stage stage) {
-        String[][] mapa = {
-                {"S", "S", "S", "S", "S"},
-                {"X", "SB", "SB", "SB", "X"},
-                {"M", "X", "X", "X", "X"},
-                {"B", "S", "S", "S", "S"},
-                {"X", "X", "X", "X", "X"}
-        };
-
         MapReader reader = new MapReader();
-        BoardModel boardModel = reader.parseMap(mapa);
+        BoardModel boardModel = reader.loadMapFromFile("/map2.txt");
 
         SnowmanBoard board = new SnowmanBoard(boardModel);
         MobileBoard mobileBoard = new MobileBoard(boardModel);
