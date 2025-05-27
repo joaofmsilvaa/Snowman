@@ -116,8 +116,6 @@ public class BoardModel {
         return moved;
     }
 
-
-
     public boolean moveSnowball(Direction direction, Snowball snowball) {
         return snowball.move(direction, this);
     }
@@ -154,21 +152,27 @@ public class BoardModel {
         return true;
     }
 
+    public boolean unstackSnowballs(Snowball stacked, Direction direction) {
+        Snowball bottom = getBottom(stacked);
+        Snowball top = getTop(stacked, direction);
 
-     //Verifica e executa empilhamentos após movimento
-    private void checkStackingAfterMove(int row, int col) {
-        Snowball bottom = snowballInPosition(row, col);
-        if (bottom == null) {
-            return;
+        // Se a bola de cima não for movida para um campo inválido adiciona as bolas (executa o unstack)
+        if(validPosition(top.getRow(), top.getCol())) {
+            snowballs.add(top);
+            snowballs.add(bottom);
+
+            if(view != null){
+                view.onSnowballUnstacked(top, bottom);
+            }
         }
 
-        // Verifica se há bola acima que pode ser empilhada
-        Snowball top = snowballInPosition(row - 1, col);
-        if (top != null && top.canStackOn(bottom)) {
-            tryStackSnowballs(top, bottom);
-        }
+
+        return true;
     }
 
+    public boolean isSnowballStack(Snowball snowball) {
+        return snowball.isSnowballStack();
+    }
 
     // Metodo para verificar se formou um snowman completo
     void checkCompleteSnowman(int row, int col) {
@@ -195,12 +199,44 @@ public class BoardModel {
         }
     }
 
+    public Snowball getBottom(Snowball stack){
+        switch (stack.getType()){
+            case MID_SMALL -> {
+                return new Snowball(stack.getRow(),stack.getCol(), SnowballType.MID);
+            }
+            case BIG_MID -> {
+                return new Snowball(stack.getRow(),stack.getCol(), SnowballType.BIG);
+            }
+            case BIG_SMALL -> {
+                return new Snowball(stack.getRow(),stack.getCol(), SnowballType.SMALL);
+            }
+        }
+
+        return null;
+    }
+
+    public Snowball getTop(Snowball stack, Direction direction) {
+        SnowballType type = stack.getType();
+        Position position = new Position(stack.row, stack.col);
+        position = position.changePosition(direction);
+        int newRow = position.getRow(), newCol = position.getCol();
+
+        switch (stack.getType()){
+            case MID_SMALL, BIG_SMALL -> {
+                type = SnowballType.SMALL;
+            }
+            case BIG_MID -> {
+                type = SnowballType.MID;
+            }
+        }
+
+        // Retorna uma nova bola de neve com a posição e tipo
+        return new Snowball(newRow, newCol, type);
+    }
+
     public Monster getMonster() {
         return monster;
     }
 
-    public List<Snowball> getSnowballs() {
-        return snowballs;
-    }
 }
 

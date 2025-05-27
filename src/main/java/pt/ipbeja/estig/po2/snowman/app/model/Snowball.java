@@ -92,6 +92,7 @@ public class Snowball extends MobileElement {
         // Verifica se há outra bola no destino
         Snowball target = board.snowballInPosition(newRow, newCol);
         if (target != null) {
+
             return board.tryStackSnowballs(this, target);
         }
 
@@ -111,6 +112,13 @@ public class Snowball extends MobileElement {
     }
 
 
+    public boolean isSnowballStack(){
+        SnowballType type = this.getType();
+        if(type == SnowballType.BIG_MID || type == SnowballType.MID_SMALL || type == SnowballType.BIG_SMALL) {
+            return true;
+        }
 
+        return false;
+    }
 
 }

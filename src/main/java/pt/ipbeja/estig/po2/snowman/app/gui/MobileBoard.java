@@ -111,6 +111,31 @@ public class MobileBoard extends GridPane implements View{
     }
 
     @Override
+    public void onSnowballUnstacked(Snowball topSnowball, Snowball bottomSnowball) {
+        int topRow = topSnowball.getRow();
+        int topCol = topSnowball.getCol();
+        int bottomRow = bottomSnowball.getRow();
+        int bottomCol = bottomSnowball.getCol();
+
+        // Limpa as posições antigas (caso tenham mudado)
+        buttons[topRow][topCol].clearEntity();
+        buttons[bottomRow][bottomCol].clearEntity();
+
+        // Define os tipos corretos nas novas posições
+        buttons[topRow][topCol].setSnowballType(topSnowball.getType());
+        buttons[bottomRow][bottomCol].setSnowballType(bottomSnowball.getType());
+
+        // Se o monstro estiver em alguma das posições, reexibe-o
+        Monster monster = board.getMonster();
+        if (monster.getRow() == topRow && monster.getCol() == topCol) {
+            buttons[topRow][topCol].setMonsterVisible(true);
+        }
+        if (monster.getRow() == bottomRow && monster.getCol() == bottomCol) {
+            buttons[bottomRow][bottomCol].setMonsterVisible(true);
+        }
+    }
+
+    @Override
     public void onMonsterCleared(int row, int col) {
 
         buttons[row][col].setMonsterVisible(false);

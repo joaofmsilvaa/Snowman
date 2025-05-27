@@ -20,7 +20,12 @@ public class Monster extends MobileElement {
         Snowball snowball = board.snowballInPosition(newRow, newCol);
 
         if (snowball != null) {
-            if (!board.moveSnowball(direction, snowball)) {
+            if(board.isSnowballStack(snowball)) {
+                board.unstackSnowballs(snowball, direction);
+
+                return false;
+            }
+            else if (!board.moveSnowball(direction, snowball)){
                 return false;
             }
         }
