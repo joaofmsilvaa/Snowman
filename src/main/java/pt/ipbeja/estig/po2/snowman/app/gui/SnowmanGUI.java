@@ -9,10 +9,6 @@ import pt.ipbeja.estig.po2.snowman.app.model.BoardModel;
 
 public class SnowmanGUI extends Application {
 
-    public static void main(String[] args) {
-        launch();
-    }
-
     @Override
     public void start(Stage stage) {
         SnowmanBoard board = new SnowmanBoard();
@@ -23,6 +19,7 @@ public class SnowmanGUI extends Application {
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setTitle("Snowman Game");
         stage.show();
     }
 }
