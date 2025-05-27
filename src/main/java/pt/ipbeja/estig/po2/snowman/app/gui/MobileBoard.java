@@ -13,8 +13,8 @@ public class MobileBoard extends GridPane implements View{
     private EntityButton[][] buttons = new EntityButton[board.SIZE][board.SIZE];
 
     // Construtor que inicializa o SnowmanBoard com o modelo do tabuleiro
-    public MobileBoard() {
-        this.board = new BoardModel();
+    public MobileBoard(BoardModel boardModel) {
+        this.board = boardModel;
         this.buttons = new EntityButton[BoardModel.SIZE][BoardModel.SIZE];
 
         this.board.setView(this);

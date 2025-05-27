@@ -6,14 +6,14 @@ import pt.ipbeja.estig.po2.snowman.app.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SnowmanBoard extends GridPane{
-    private BoardModel board;
-    private BoardButton[][] buttons = new BoardButton[BoardModel.SIZE][BoardModel.SIZE];
+public class SnowmanBoard extends GridPane {
+    private final BoardModel board;
+    private final BoardButton[][] buttons;
 
-    public SnowmanBoard() {
-        this.board = new BoardModel();
+    public SnowmanBoard(BoardModel boardModel) {
+        this.board = boardModel;
+        this.buttons = new BoardButton[BoardModel.SIZE][BoardModel.SIZE];
         drawBoard();
-
     }
 
     public void drawBoard() {
@@ -27,5 +27,4 @@ public class SnowmanBoard extends GridPane{
             }
         }
     }
-
 }
