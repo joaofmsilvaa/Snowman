@@ -35,28 +35,7 @@ public class Monster extends MobileElement {
         row = newRow;
         col = newCol;
 
-        // Verificar o snowman nas posições adjacentes relevantes
-        checkPotentialSnowman(board, direction);
         return true;
-    }
-
-
-    private void checkPotentialSnowman(BoardModel board, Direction direction) {
-        // Verifica na posição oposta ao movimento
-        switch (direction) {
-            case UP:
-                board.checkCompleteSnowman(row+1, col); // Verificar abaixo
-                break;
-            case DOWN:
-                board.checkCompleteSnowman(row-1, col); // Verificar acima
-                break;
-            case LEFT:
-                board.checkCompleteSnowman(row, col+1); // Verificar à direita
-                break;
-            case RIGHT:
-                board.checkCompleteSnowman(row, col-1); // Verificar à esquerda
-                break;
-        }
     }
 
 

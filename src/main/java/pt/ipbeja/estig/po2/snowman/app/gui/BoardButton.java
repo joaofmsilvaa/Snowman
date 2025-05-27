@@ -21,7 +21,7 @@ public class BoardButton extends Button {
             backgroundImage = new Image("/grass.png");
         }
 
-        ImageView imageView = new ImageView(backgroundImage);
+        imageView = new ImageView(backgroundImage);
         imageView.setFitWidth(size);
         imageView.setFitHeight(size);
         imageView.setPreserveRatio(false);

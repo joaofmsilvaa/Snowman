@@ -40,30 +40,10 @@ public class EntityButton extends Button {
         this.setMinSize(size, size);
         this.setMaxSize(size, size);
         this.setPrefSize(size, size);
+
         this.setPadding(javafx.geometry.Insets.EMPTY);
         this.setStyle("-fx-background-color: transparent; -fx-border-width: 0; -fx-padding: 0;");
         this.setFocusTraversable(false);
-    }
-
-    public void setEntity(MobileEntity entity) {
-        Image image = null;
-
-        switch (entity) {
-            case SNOWBALL -> image = new Image("/snowball.png");
-            case MONSTER -> image = new Image("/monster1.png");
-            case EMPTY -> {
-            }
-        }
-
-        if (image != null) {
-            ImageView imageView = new ImageView(image);
-            imageView.setFitWidth(size);
-            imageView.setFitHeight(size);
-            imageView.setPreserveRatio(false);
-            this.setGraphic(imageView);
-        } else {
-            this.setGraphic(null);
-        }
     }
 
     public void clearEntity() {
