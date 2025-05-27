@@ -8,34 +8,41 @@ import pt.ipbeja.estig.po2.snowman.app.model.PositionContent;
 
 public class BoardButton extends Button {
 
-    private static Image backgroundImage;
-
-    private ImageView imageView;
-    private int size = 100;
+    private static final int SIZE = 100;
 
     public BoardButton(PositionContent content) {
-        if(content == PositionContent.SNOW){
-            backgroundImage = new Image("/snow.png");
+        Image image = loadImageForContent(content);
+
+        if (image != null) {
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(SIZE);
+            imageView.setFitHeight(SIZE);
+            imageView.setPreserveRatio(false);
+            this.setGraphic(imageView);
+        } else {
+            this.setGraphic(null);
         }
-        else{
-            backgroundImage = new Image("/grass.png");
-        }
 
-        ImageView imageView = new ImageView(backgroundImage);
-        imageView.setFitWidth(size);
-        imageView.setFitHeight(size);
-        imageView.setPreserveRatio(false);
-
-        this.setGraphic(imageView);
-        this.setMinSize(size, size);
-        this.setMaxSize(size, size);
-        this.setPrefSize(size, size);
-
-        this.setPadding(javafx.geometry.Insets.EMPTY);
+        this.setMinSize(SIZE, SIZE);
+        this.setMaxSize(SIZE, SIZE);
+        this.setPrefSize(SIZE, SIZE);
         this.setStyle("-fx-background-color: transparent; -fx-border-width: 0; -fx-padding: 0;");
-
-        // Remove qualquer foco visual que apareça ao clicar
         this.setFocusTraversable(false);
     }
 
+    private Image loadImageForContent(PositionContent content) {
+        String imagePath = switch (content) {
+            case NO_SNOW -> "/grass.png";
+            case SNOW -> "/snow.png";
+            case BLOCK -> "/block.png";
+            case SNOWMAN -> "/snowman.png";
+        };
+
+        try {
+            return new Image(getClass().getResourceAsStream(imagePath));
+        } catch (Exception e) {
+            System.err.println("Erro ao carregar imagem: " + imagePath);
+            return null;
+        }
+    }
 }
