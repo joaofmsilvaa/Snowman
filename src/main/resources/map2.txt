@@ -1,0 +1,5 @@
+M X B B X
+X X X X X
+X S S S X
+X SB SB SB X
+X X X X X

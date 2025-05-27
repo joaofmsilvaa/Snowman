@@ -23,6 +23,7 @@ public class EntityButton extends Button {
             backgroundImage = new Image("/monster1.png");
             imageView = new ImageView(backgroundImage);
         } else if (content == MobileEntity.SNOWBALL) {
+
             backgroundImage = new Image("/ballsmall.png");
             imageView = new ImageView(backgroundImage);
         }
@@ -79,10 +80,6 @@ public class EntityButton extends Button {
         updateGraphic();
     }
 
-    public void setSnowballVisible(boolean visible) {
-        this.hasSnowball = visible;
-        updateGraphic();
-    }
     private String getImagePathForType(SnowballType type) {
         return switch (type) {
             case SMALL -> "/ballsmall.png";
