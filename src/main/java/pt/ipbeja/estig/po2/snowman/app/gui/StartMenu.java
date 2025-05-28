@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import  javafx.scene.control.TextField;
 
 public class StartMenu {
 
@@ -25,8 +26,13 @@ public class StartMenu {
         level2.setStyle("-fx-font-size: 16px; -fx-padding: 10 20;");
 
 
-        level1.setOnAction(e -> startLevel("map1.txt"));
-        level2.setOnAction(e -> startLevel("map2.txt"));
+        TextField name = new TextField();
+        name.setPromptText("Nome: ");
+        name.setMaxWidth(120);
+
+
+        level1.setOnAction(e -> startLevel("map1.txt", name.getText()));
+        level2.setOnAction(e -> startLevel("map2.txt", name.getText()));
 
 
 
@@ -52,7 +58,7 @@ public class StartMenu {
         layout.setAlignment(Pos.CENTER);
         layout.setStyle("-fx-background-color: white;");
 
-        layout.getChildren().addAll(title, buttons, Images);
+        layout.getChildren().addAll(title, buttons, Images, name);
 
 
         Scene scene = new Scene(new StackPane(layout), 600, 600);
@@ -60,9 +66,9 @@ public class StartMenu {
         stage.setTitle("Snowman - Menu");
         stage.show();
     }
-    private static void startLevel(String fileName){
+    private static void startLevel(String fileName, String playerName){
 
-        SnowmanGUI gui = new SnowmanGUI(fileName);
+        SnowmanGUI gui = new SnowmanGUI(fileName, playerName );
         gui.start(new Stage());
     }
 }

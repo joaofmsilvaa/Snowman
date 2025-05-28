@@ -8,6 +8,9 @@ public class BoardModel {
     private Monster monster;
     private List<Snowball> snowballs;
     private View view;
+    private int moveCount = 0;
+    private String playerName;
+
 
     public BoardModel() {
         boardContent = new ArrayList<>();
@@ -57,6 +60,26 @@ public class BoardModel {
         return boardContent.get(row).get(col);
     }
 
+    public Monster getMonster() {
+        return monster;
+    }
+
+    public int getMoveCount() {
+        return moveCount;
+    }
+
+    public void incrementMoveCount() {
+        moveCount++;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String name) {
+        this.playerName = name;
+    }
+
     public boolean validPosition(int newRow, int newCol) {
         try {
             return getPositionContent(newRow, newCol) != PositionContent.BLOCK;
@@ -102,6 +125,8 @@ public class BoardModel {
         if (moved && view != null) {
             view.onMonsterCleared(oldRow, oldCol);
             view.onMonsterMoved(monster.getRow(), monster.getCol());
+           // monster.move(direction);
+            //incrementMoveCount();
 
             if (snowball != null) {
                 view.onSnowballMoved(snowball, oldSnowballRow, oldSnowballCol);
@@ -200,7 +225,5 @@ public class BoardModel {
         return type == null ? null : new Snowball(position.getRow(), position.getCol(), type);
     }
 
-    public Monster getMonster() {
-        return monster;
-    }
+
 }
