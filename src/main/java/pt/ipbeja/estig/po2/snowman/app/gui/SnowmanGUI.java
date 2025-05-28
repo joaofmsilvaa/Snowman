@@ -10,11 +10,16 @@ import pt.ipbeja.estig.po2.snowman.app.model.MapReader;
 
 
 public class SnowmanGUI extends Application {
+    private final String mapFileName;
+
+    SnowmanGUI(String mapFileName) {
+        this.mapFileName = mapFileName;
+    }
 
     @Override
     public void start(Stage stage) {
         MapReader reader = new MapReader();
-        BoardModel boardModel = reader.loadMapFromFile("/map2.txt");
+        BoardModel boardModel = reader.loadMapFromFile("/" + this.mapFileName);
 
         SnowmanBoard board = new SnowmanBoard(boardModel);
         MobileBoard mobileBoard = new MobileBoard(boardModel);

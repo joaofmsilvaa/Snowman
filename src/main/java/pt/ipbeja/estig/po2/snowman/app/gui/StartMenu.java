@@ -15,17 +15,21 @@ public class StartMenu {
 
     public static void show(Stage stage) {
 
-        Label title = new Label("Snow is hard to build");
+        Label title = new Label("A good Snow is hard to build");
         title.setStyle("-fx-font-size: 36px; -fx-font-weight: bold;");
 
-        Button startButton = new Button("Start Game");
-        startButton.setStyle("-fx-font-size: 16px; -fx-padding: 10 20;");
+        Button level1 = new Button("Level 1");
+        level1.setStyle("-fx-font-size: 16px; -fx-padding: 10 20;");
 
-        startButton.setOnAction(e -> {
-            SnowmanGUI game = new SnowmanGUI();
-            game.start(stage);  // Inicia o jogo atual
+        Button level2 = new Button("Level 2");
+        level2.setStyle("-fx-font-size: 16px; -fx-padding: 10 20;");
 
-        });
+
+        level1.setOnAction(e -> startLevel("map1.txt"));
+        level2.setOnAction(e -> startLevel("map2.txt"));
+
+
+
         ImageView monsterView = new ImageView(new Image("/monster1.png"));
         monsterView.setFitWidth(80);
         monsterView.setFitHeight(80);
@@ -33,6 +37,11 @@ public class StartMenu {
         ImageView snowmanView = new ImageView(new Image("/snowman.png"));
         snowmanView.setFitWidth(80);
         snowmanView.setFitHeight(80);
+
+        HBox buttons = new HBox(40);
+        buttons.setAlignment(Pos.CENTER);
+        buttons.setStyle("-fx-background-color: white;");
+        buttons.getChildren().addAll(level1, level2);
 
         HBox Images = new HBox(40);
         Images.setAlignment(Pos.CENTER);
@@ -43,11 +52,17 @@ public class StartMenu {
         layout.setAlignment(Pos.CENTER);
         layout.setStyle("-fx-background-color: white;");
 
-        layout.getChildren().addAll(title, startButton, Images);
+        layout.getChildren().addAll(title, buttons, Images);
+
 
         Scene scene = new Scene(new StackPane(layout), 600, 600);
         stage.setScene(scene);
         stage.setTitle("Snowman - Menu");
         stage.show();
+    }
+    private static void startLevel(String fileName){
+
+        SnowmanGUI gui = new SnowmanGUI(fileName);
+        gui.start(new Stage());
     }
 }
