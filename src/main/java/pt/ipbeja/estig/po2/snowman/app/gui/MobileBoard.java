@@ -104,7 +104,8 @@ public class MobileBoard extends GridPane implements View {
 
             // Voltar ao menu principal
             Stage primaryStage = (Stage) this.getScene().getWindow();
-            StartMenu.show(primaryStage);
+            primaryStage.close();
+
         });
     }
 
@@ -142,6 +143,7 @@ public class MobileBoard extends GridPane implements View {
 
     @Override
     public void onMonsterCleared(int row, int col) {
+        
         buttons[row][col].setMonsterVisible(false);
     }
 }
