@@ -23,6 +23,20 @@ public class Position {
         return new Position(newRow, newCol);
     }
 
+    public String convertToLetter(int value){
+        return String.valueOf((char) ('A' + value));
+    }
+
+    public String formatDetails(int previousRow, int previousCol, int currentRow, int currentCol){
+        String colLetter = convertToLetter(currentCol);
+        String previousColLetter = convertToLetter(previousCol);
+
+        String previous = "(" + previousRow + "," + previousColLetter + ")";
+        String current = "(" + currentRow + "," + colLetter + ")";
+
+        return previous + " -> " + current + "\n";
+    }
+
     public int getRow() {
         return row;
     }

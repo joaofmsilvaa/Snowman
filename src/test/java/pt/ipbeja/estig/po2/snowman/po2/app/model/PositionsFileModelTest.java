@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import pt.ipbeja.estig.po2.snowman.app.model.Position;
 import pt.ipbeja.estig.po2.snowman.app.model.PositionsFile;
 
 import java.io.File;
@@ -17,12 +18,17 @@ public class PositionsFileModelTest {
 
     private File tempFile;
     private PositionsFile data;
+    private Position previous;
+    private Position current;
 
     @BeforeEach
     void setUp() throws IOException {
         tempFile = File.createTempFile("test_positions", ".txt");
         tempFile.delete();
         data = new PositionsFile(tempFile.getAbsolutePath());
+
+        previous = new Position(1,1);
+        current = new Position(1,2);
     }
 
     @AfterEach
@@ -42,7 +48,9 @@ public class PositionsFileModelTest {
     @Test
     @DisplayName("Store position in file")
     void testStorePosition() throws IOException {
-        data.storePosition(1, 1, 1,2);
+        previous = new Position(1,0);
+        current = new Position(1,1);
+        data.storePosition(previous, current);
 
         List<String> lines = Files.readAllLines(new File(data.getPositionsFileName()).toPath());
         assertEquals(1, lines.size());
@@ -52,25 +60,26 @@ public class PositionsFileModelTest {
     @Test
     @DisplayName("Store multiple positions in file")
     void testStoreMultiplePositions() throws IOException {
-        data.storePosition(1, 1, 1, 2);
+        data.storePosition(previous, current);
 
         List<String> lines = Files.readAllLines(new File(data.getPositionsFileName()).toPath());
-        assertEquals("(1,A) -> (1,B)", lines.get(0).trim());
+        assertEquals("(1,B) -> (1,C)", lines.get(0).trim());
         System.out.println(lines.get(0).trim());
 
-        data.storePosition(1, 2, 2, 2);
+        Position newPosition = new Position(2,2);
+        data.storePosition(current, newPosition);
 
         lines = Files.readAllLines(new File(data.getPositionsFileName()).toPath());
         assertEquals(2, lines.size());
-        assertEquals("(1,A) -> (1,B)", lines.get(0).trim());
-        assertEquals("(1,B) -> (2,B)", lines.get(1).trim());
+        assertEquals("(1,B) -> (1,C)", lines.get(0).trim());
+        assertEquals("(1,C) -> (2,C)", lines.get(1).trim());
         System.out.println(lines.get(1).trim());
     }
 
     @Test
     @DisplayName("Convert position to letter")
     void testConvertPositionToLetter() {
-        String letter = data.convertToLetter(1);
+        String letter = current.convertToLetter(1);
 
         assertEquals("A", letter);
     }
