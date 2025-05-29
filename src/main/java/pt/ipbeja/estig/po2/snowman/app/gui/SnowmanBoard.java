@@ -20,11 +20,19 @@ public class SnowmanBoard extends GridPane {
         int rows = board.getRowCount();
         int cols = board.getColCount();
 
+        for (int col = 0; col < cols; col++) {
+            PositionText letter = new PositionText(String.valueOf((char) ('A' + col)));
+            this.add(letter, col + 1, 0); // offset +1 por causa da coluna de números
+        }
+
         for (int row = 0; row < rows; row++) {
+            PositionText number = new PositionText(String.valueOf(row + 1));
+            this.add(number, 0, row + 1);
+
             for (int col = 0; col < cols; col++) {
                 PositionContent terrain = board.getPositionContent(row, col);
                 BoardButton button = new BoardButton(terrain);
-                this.add(button, col, row);
+                this.add(button, col + 1, row + 1);
                 buttons[row][col] = button;
             }
         }

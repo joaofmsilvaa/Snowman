@@ -47,7 +47,15 @@ public class MobileBoard extends GridPane implements View {
         int rows = board.getRowCount();
         int cols = board.getColCount();
 
+        for (int col = 0; col < cols; col++) {
+            PositionText letter = new PositionText(Character.toString((char) ('A' + col)));
+            this.add(letter, col + 1, 0);
+        }
+
         for (int row = 0; row < rows; row++) {
+            PositionText number = new PositionText(String.valueOf(row + 1));
+            this.add(number, 0, row + 1);
+
             for (int col = 0; col < cols; col++) {
                 Monster monster = board.getMonster();
                 MobileEntity entity = MobileEntity.EMPTY;
@@ -61,10 +69,14 @@ public class MobileBoard extends GridPane implements View {
                 }
 
                 EntityButton button = new EntityButton(entity);
-                this.add(button, col, row);
+                this.add(button, col + 1, row + 1);
                 buttons[row][col] = button;
             }
         }
+    }
+
+    public void incrementMoveCount() {
+        moveCount++;
     }
 
     public void setPlayerName(String name) {
@@ -73,10 +85,6 @@ public class MobileBoard extends GridPane implements View {
 
     public String getPlayerName() {
         return playerName;
-    }
-
-    public void incrementMoveCount() {
-        moveCount++;
     }
 
     public int getMoveCount() {
@@ -113,13 +121,11 @@ public class MobileBoard extends GridPane implements View {
         String name = board.getPlayerName();
         int moves = board.getMoveCount();
         buttons[row][col].setSnowballType(SnowballType.COMPLETE);
-        System.out.println("Boneco de neve criado em: " + row + ", " + col);
 
         // Mostrar alerta Game Over
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Game Over");
-            alert.setHeaderText(null);
             alert.setContentText("Parabéns! O boneco de neve foi criado. " +
                     "\nJogador: " + name + "\nMovimentos: " + moves);
             alert.showAndWait();
@@ -138,7 +144,6 @@ public class MobileBoard extends GridPane implements View {
         if (monster.getRow() == row && monster.getCol() == col) {
             buttons[row][col].setMonsterVisible(true);
         }
-        System.out.println("Empilhamento na posição: " + row + ", " + col + " -> " + newType);
     }
 
     @Override

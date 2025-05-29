@@ -19,7 +19,7 @@ public class PositionsFile {
     }
 
     public String convertToLetter(int value){
-        return value > 0 && value < 27 ? String.valueOf((char)(value + 64)) : null;
+        return String.valueOf((char) ('A' + value));
     }
 
     public String formatDetails(int previousRow, int previousCol, int row, int col){

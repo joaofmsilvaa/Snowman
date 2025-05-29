@@ -19,8 +19,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        playBackgroundMusic(); // Música de fundo
-        show(primaryStage);    // Mostra o menu
+        playBackgroundMusic();
+        show(primaryStage);
     }
 
     private void playBackgroundMusic() {
