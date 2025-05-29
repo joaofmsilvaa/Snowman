@@ -4,9 +4,10 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import pt.ipbeja.estig.po2.snowman.app.model.BoardModel;
-import pt.ipbeja.estig.po2.snowman.app.model.MapReader;
+import pt.ipbeja.estig.po2.snowman.app.model.*;
 
 
 public class SnowmanGUI extends Application {
@@ -24,15 +25,21 @@ public class SnowmanGUI extends Application {
         BoardModel boardModel = reader.loadMapFromFile("/" + this.mapFileName);
         boardModel.setPlayerName(this.playerName);
 
+        MoveHistoryPane moveHistoryPane = new MoveHistoryPane();
+        boardModel.setMoveListener(moveHistoryPane);
+
         SnowmanBoard board = new SnowmanBoard(boardModel);
         MobileBoard mobileBoard = new MobileBoard(boardModel);
 
         StackPane root = new StackPane();
-        root.getChildren().addAll(board, mobileBoard);
 
-        Scene scene = new Scene(root);
+        root.getChildren().addAll(board, mobileBoard);
+        VBox vBox = new VBox(root,moveHistoryPane);
+
+        Scene scene = new Scene(vBox);
         stage.setScene(scene);
         stage.setTitle("Snowman Game");
         stage.show();
     }
+
 }

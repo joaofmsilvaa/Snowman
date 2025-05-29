@@ -1,5 +1,8 @@
 package pt.ipbeja.estig.po2.snowman.app.model;
 
+import pt.ipbeja.estig.po2.snowman.app.model.interfaces.MoveListener;
+import pt.ipbeja.estig.po2.snowman.app.model.interfaces.View;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +11,7 @@ public class BoardModel {
     private Monster monster;
     private List<Snowball> snowballs;
     private View view;
+    private MoveListener moveListener;
     private int moveCount = 0;
     private String playerName;
 
@@ -26,6 +30,10 @@ public class BoardModel {
 
     public void setView(View view) {
         this.view = view;
+    }
+
+    public void setMoveListener(MoveListener moveListener) {
+        this.moveListener = moveListener;
     }
 
     public void startGame() {
@@ -110,27 +118,30 @@ public class BoardModel {
     }
 
     public boolean moveMonster(Direction direction) {
-        int oldRow = monster.getRow();
-        int oldCol = monster.getCol();
+        Position oldPosition = new Position(monster.getRow(), monster.getCol());
 
         Snowball snowball = snowballInFrontOfMonster(direction);
-        int oldSnowballRow = -1, oldSnowballCol = -1;
+        Position oldSnowballPosition = new Position(-1,-1);
         if (snowball != null) {
-            oldSnowballRow = snowball.getRow();
-            oldSnowballCol = snowball.getCol();
+            oldSnowballPosition = new Position(snowball.getRow(), snowball.getCol());
         }
 
         boolean moved = monster.move(direction, this);
 
         if (moved && view != null) {
-            view.onMonsterCleared(oldRow, oldCol);
-            view.onMonsterMoved(monster.getRow(), monster.getCol());
+            Position currentPosition = new Position(monster.getRow(), monster.getCol());
+
+            view.onMonsterCleared(oldPosition);
+            view.onMonsterMoved(currentPosition);
            // monster.move(direction);
             //incrementMoveCount();
 
             if (snowball != null) {
-                view.onSnowballMoved(snowball, oldSnowballRow, oldSnowballCol);
+                view.onSnowballMoved(snowball, oldSnowballPosition);
             }
+
+
+            moveListener.onMove(oldPosition,currentPosition);
         }
 
         return moved;
@@ -150,14 +161,15 @@ public class BoardModel {
         Snowball stacked = new Snowball(bottom.getRow(), bottom.getCol(), newType);
         snowballs.add(stacked);
 
+        Position bottomPos = new Position(bottom.getRow(), bottom.getCol());
         if (view != null) {
-            view.onSnowballStacked(bottom.getRow(), bottom.getCol(), newType);
+            view.onSnowballStacked(bottomPos, newType);
         }
 
         if (newType == SnowballType.COMPLETE) {
             boardContent.get(bottom.getRow()).set(bottom.getCol(), PositionContent.SNOWMAN);
             if (view != null) {
-                view.onSnowmanCreated(bottom.getRow(), bottom.getCol(), newType);
+                view.onSnowmanCreated(bottomPos, newType);
             }
         }
 
@@ -187,22 +199,22 @@ public class BoardModel {
         return snowball.isSnowballStack();
     }
 
-    void checkCompleteSnowman(int row, int col) {
-        Snowball base = snowballInPosition(row, col);
+    void checkCompleteSnowman(Position snowmanPos) {
+        Snowball base = snowballInPosition(snowmanPos.getRow(), snowmanPos.getCol());
         if (base == null || base.getType() != SnowballType.BIG_MID) return;
 
-        Snowball top = snowballInPosition(row - 1, col);
+        Snowball top = snowballInPosition(snowmanPos.getRow() - 1, snowmanPos.getCol());
         if (top != null && top.getType() == SnowballType.SMALL) {
             snowballs.remove(base);
             snowballs.remove(top);
 
-            Snowball snowman = new Snowball(row, col, SnowballType.COMPLETE);
+            Snowball snowman = new Snowball(snowmanPos.getRow(), snowmanPos.getCol(), SnowballType.COMPLETE);
             snowballs.add(snowman);
 
-            boardContent.get(row).set(col, PositionContent.SNOWMAN);
+            boardContent.get(snowmanPos.getRow()).set(snowmanPos.getCol(), PositionContent.SNOWMAN);
 
             if (view != null) {
-                view.onSnowmanCreated(row, col, SnowballType.COMPLETE);
+                view.onSnowmanCreated(snowmanPos, SnowballType.COMPLETE);
             }
         }
     }

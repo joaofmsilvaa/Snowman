@@ -18,23 +18,9 @@ public class PositionsFile {
         }
     }
 
-    public String convertToLetter(int value){
-        return String.valueOf((char) ('A' + value));
-    }
-
-    public String formatDetails(int previousRow, int previousCol, int row, int col){
-        String colLetter = convertToLetter(col);
-        String previousColLetter = convertToLetter(previousCol);
-
-        String previous = "(" + previousRow + "," + previousColLetter + ")";
-        String current = "(" + row + "," + colLetter + ")";
-
-        return previous + " -> " + current + "\n";
-    }
-
-    public void storePosition(int previousRow, int previousCol, int row, int col) {
+    public void storePosition(Position previous, Position current) {
         try (FileWriter myWriter = new FileWriter(positionsFileName, true)) {
-            myWriter.write(formatDetails(previousRow, previousCol, row, col));
+            myWriter.write(current.formatDetails(previous.getRow(), previous.getCol(), current.getRow(), current.getCol()));
         } catch (IOException e) {
             e.printStackTrace();
         }

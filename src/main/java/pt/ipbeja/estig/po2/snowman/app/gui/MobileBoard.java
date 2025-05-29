@@ -5,6 +5,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import pt.ipbeja.estig.po2.snowman.app.model.*;
+import pt.ipbeja.estig.po2.snowman.app.model.interfaces.View;
 
 public class MobileBoard extends GridPane implements View {
 
@@ -92,19 +93,19 @@ public class MobileBoard extends GridPane implements View {
     }
 
     @Override
-    public void onMonsterMoved(int row, int col) {
+    public void onMonsterMoved(Position monsterPosition) {
         Monster monster = board.getMonster();
         buttons[monster.getPrevRow()][monster.getPrevCol()].setMonsterVisible(false);
-        buttons[row][col].setMonsterVisible(true);
+        buttons[monsterPosition.getRow()][monsterPosition.getCol()].setMonsterVisible(true);
         incrementMoveCount();
     }
 
     @Override
-    public void onSnowballMoved(Snowball snowball, int oldRow, int oldCol) {
-        buttons[oldRow][oldCol].clearEntity();
+    public void onSnowballMoved(Snowball snowball, Position oldPosition) {
+        buttons[oldPosition.getRow()][oldPosition.getCol()].clearEntity();
 
-        if (board.getMonster().getRow() == oldRow && board.getMonster().getCol() == oldCol) {
-            buttons[oldRow][oldCol].setMonsterVisible(true);
+        if (board.getMonster().getRow() == oldPosition.getRow() && board.getMonster().getCol() == oldPosition.getCol()) {
+            buttons[oldPosition.getRow()][oldPosition.getCol()].setMonsterVisible(true);
         }
 
         int newRow = snowball.getRow();
@@ -117,15 +118,16 @@ public class MobileBoard extends GridPane implements View {
     }
 
     @Override
-    public void onSnowmanCreated(int row, int col, SnowballType newType) {
+    public void onSnowmanCreated(Position snowmanPos, SnowballType newType) {
         String name = board.getPlayerName();
         int moves = board.getMoveCount();
-        buttons[row][col].setSnowballType(SnowballType.COMPLETE);
+        buttons[snowmanPos.getRow()][snowmanPos.getCol()].setSnowballType(SnowballType.COMPLETE);
 
         // Mostrar alerta Game Over
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Game Over");
+            alert.setHeaderText("Game Over");
             alert.setContentText("Parabéns! O boneco de neve foi criado. " +
                     "\nJogador: " + name + "\nMovimentos: " + moves);
             alert.showAndWait();
@@ -138,11 +140,11 @@ public class MobileBoard extends GridPane implements View {
     }
 
     @Override
-    public void onSnowballStacked(int row, int col, SnowballType newType) {
-        buttons[row][col].setSnowballType(newType);
+    public void onSnowballStacked(Position snowballPos, SnowballType newType) {
+        buttons[snowballPos.getRow()][snowballPos.getCol()].setSnowballType(newType);
         Monster monster = board.getMonster();
-        if (monster.getRow() == row && monster.getCol() == col) {
-            buttons[row][col].setMonsterVisible(true);
+        if (monster.getRow() == snowballPos.getRow() && monster.getCol() == snowballPos.getCol()) {
+            buttons[snowballPos.getRow()][snowballPos.getCol()].setMonsterVisible(true);
         }
     }
 
@@ -169,11 +171,9 @@ public class MobileBoard extends GridPane implements View {
     }
 
     @Override
-    public void onMonsterCleared(int row, int col) {
+    public void onMonsterCleared(Position monsterPosition) {
 
-        buttons[row][col].setMonsterVisible(false);
+        buttons[monsterPosition.getRow()][monsterPosition.getCol()].setMonsterVisible(false);
     }
-
-
 
 }
