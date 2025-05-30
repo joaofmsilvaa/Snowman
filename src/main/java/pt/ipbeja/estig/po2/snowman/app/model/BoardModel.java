@@ -129,12 +129,13 @@ public class BoardModel {
         boolean moved = monster.move(direction, this);
 
         if (moved && view != null) {
+            incrementMoveCount();
             Position currentPosition = new Position(monster.getRow(), monster.getCol());
 
             view.onMonsterCleared(oldPosition);
             view.onMonsterMoved(currentPosition);
            // monster.move(direction);
-            //incrementMoveCount();
+            
 
             if (snowball != null) {
                 view.onSnowballMoved(snowball, oldSnowballPosition);

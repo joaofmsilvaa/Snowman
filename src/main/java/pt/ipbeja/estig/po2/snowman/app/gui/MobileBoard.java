@@ -7,6 +7,9 @@ import javafx.stage.Stage;
 import pt.ipbeja.estig.po2.snowman.app.model.*;
 import pt.ipbeja.estig.po2.snowman.app.model.interfaces.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MobileBoard extends GridPane implements View {
 
     private final BoardModel board;
@@ -121,7 +124,9 @@ public class MobileBoard extends GridPane implements View {
     public void onSnowmanCreated(Position snowmanPos, SnowballType newType) {
         String name = board.getPlayerName();
         int moves = board.getMoveCount();
-        buttons[snowmanPos.getRow()][snowmanPos.getCol()].setSnowballType(SnowballType.COMPLETE);
+        buttons[snowmanPos.getRow()][snowmanPos.getCol()]
+                .setSnowballType(SnowballType.COMPLETE);
+
 
         // Mostrar alerta Game Over
         Platform.runLater(() -> {
