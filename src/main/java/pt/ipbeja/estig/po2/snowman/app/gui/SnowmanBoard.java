@@ -6,19 +6,19 @@ import pt.ipbeja.estig.po2.snowman.app.model.*;
 public class SnowmanBoard extends GridPane {
     private final BoardModel board;
     private final BoardButton[][] buttons;
+    private int rows;
+    private int cols;
 
     public SnowmanBoard(BoardModel boardModel) {
         this.board = boardModel;
-        int rows = board.getRowCount();
-        int cols = board.getColCount();
+        rows = board.getRowCount();
+        cols = board.getColCount();
         this.buttons = new BoardButton[rows][cols];
         drawBoard();
     }
 
     public void drawBoard() {
         this.getChildren().clear();
-        int rows = board.getRowCount();
-        int cols = board.getColCount();
 
         for (int col = 0; col < cols; col++) {
             PositionText letter = new PositionText(String.valueOf((char) ('A' + col)));

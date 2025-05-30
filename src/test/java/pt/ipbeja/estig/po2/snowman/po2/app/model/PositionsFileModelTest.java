@@ -25,7 +25,9 @@ public class PositionsFileModelTest {
     void setUp() throws IOException {
         tempFile = File.createTempFile("test_positions", ".txt");
         tempFile.delete();
-        data = new PositionsFile(tempFile.getAbsolutePath());
+        data = new PositionsFile();
+        data.setFilename(tempFile.getAbsolutePath());
+        data.createFile();
 
         previous = new Position(1,1);
         current = new Position(1,2);
@@ -42,7 +44,7 @@ public class PositionsFileModelTest {
     @DisplayName("Create file to store the position")
     void testCreateFile() {
         assertTrue(data.isFileCreated());
-        assertTrue(new File(data.getPositionsFileName()).exists());
+        assertTrue(new File(data.getFileName()).exists());
     }
 
     @Test
@@ -52,7 +54,7 @@ public class PositionsFileModelTest {
         current = new Position(1,1);
         data.storePosition(previous, current);
 
-        List<String> lines = Files.readAllLines(new File(data.getPositionsFileName()).toPath());
+        List<String> lines = Files.readAllLines(new File(data.getFileName()).toPath());
         assertEquals(1, lines.size());
         assertEquals("(1,A) -> (1,B)", lines.get(0).trim());
     }
@@ -62,14 +64,14 @@ public class PositionsFileModelTest {
     void testStoreMultiplePositions() throws IOException {
         data.storePosition(previous, current);
 
-        List<String> lines = Files.readAllLines(new File(data.getPositionsFileName()).toPath());
+        List<String> lines = Files.readAllLines(new File(data.getFileName()).toPath());
         assertEquals("(1,B) -> (1,C)", lines.get(0).trim());
         System.out.println(lines.get(0).trim());
 
         Position newPosition = new Position(2,2);
         data.storePosition(current, newPosition);
 
-        lines = Files.readAllLines(new File(data.getPositionsFileName()).toPath());
+        lines = Files.readAllLines(new File(data.getFileName()).toPath());
         assertEquals(2, lines.size());
         assertEquals("(1,B) -> (1,C)", lines.get(0).trim());
         assertEquals("(1,C) -> (2,C)", lines.get(1).trim());
