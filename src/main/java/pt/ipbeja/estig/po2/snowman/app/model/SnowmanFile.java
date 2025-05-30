@@ -1,6 +1,6 @@
 package pt.ipbeja.estig.po2.snowman.app.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class SnowmanFile extends DetailsFile{
@@ -10,10 +10,9 @@ public class SnowmanFile extends DetailsFile{
     }
 
     public String getCurrentDate(){
-        LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-
-        return currentDate.format(myFormatObj);
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        return currentDateTime.format(formatter);
     }
 
 }

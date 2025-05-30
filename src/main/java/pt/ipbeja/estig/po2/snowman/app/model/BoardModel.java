@@ -170,10 +170,20 @@ public class BoardModel {
             boardContent.get(bottom.getRow()).set(bottom.getCol(), PositionContent.SNOWMAN);
             if (view != null) {
                 view.onSnowmanCreated(bottomPos, newType);
+                Position snowmanPos = new Position(bottom.getRow() + 1, bottom.getCol()); // Offset da coluna de coordenadas
+                storeGameDetails(snowmanPos);
             }
         }
 
         return true;
+    }
+
+    public void storeGameDetails(Position snowmanPosition) {
+        SnowmanFile snowmanFile = new SnowmanFile();
+        snowmanFile.setFilename("Snowman" + snowmanFile.getCurrentDate() + ".txt");
+        snowmanFile.createFile();
+        String[] moves = {"2a -> 2b"};
+        snowmanFile.writeFile("map name", moves, getMoveCount(),snowmanPosition );
     }
 
     public boolean unstackSnowballs(Snowball stacked, Direction direction) {

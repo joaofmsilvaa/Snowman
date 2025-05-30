@@ -23,16 +23,16 @@ public abstract class DetailsFile {
 
     public void writeFile(String map, String[] moves, int moveCount, Position snowmanPosition) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-            writer.write("Mapa: " + map + "\n");
-            writer.write("Movimentos:\n");
+            writer.write("Mapa: " + map);
+            writer.write("\n" +"Movimentos:\n");
 
             for (String move : moves) {
                 writer.write(move);
             }
-            writer.write("Total de jogadas: " + moveCount + "\n");
+            writer.write("\n" + "Total de jogadas: " + moveCount);
 
             String colLetter = snowmanPosition.convertToLetter(snowmanPosition.getCol());
-            writer.write("Posição final do boneco de neve: (" + snowmanPosition.getRow() + "," + colLetter + ")\n");
+            writer.write("\n" + "Posição final do boneco de neve: (" + snowmanPosition.getRow() + "," + colLetter + ")\n");
 
         } catch (IOException e) {
             System.err.println("Erro ao escrever no ficheiro: " + e.getMessage());
