@@ -13,8 +13,9 @@ import java.io.InputStream;
 public class EntityButton extends Button {
 
     private static Image backgroundImage;
-
     private int size = 100;
+    private boolean hasMonster = false;
+    private boolean hasSnowball = false;
 
     public EntityButton(MobileEntity content) {
         ImageView imageView = null;
@@ -23,7 +24,6 @@ public class EntityButton extends Button {
             backgroundImage = new Image("/monster1.png");
             imageView = new ImageView(backgroundImage);
         } else if (content == MobileEntity.SNOWBALL) {
-
             backgroundImage = new Image("/ballsmall.png");
             imageView = new ImageView(backgroundImage);
         }
@@ -35,7 +35,7 @@ public class EntityButton extends Button {
 
             this.setGraphic(imageView);
         } else {
-            this.setGraphic(null); // Remove qualquer gráfico existente
+            this.setGraphic(null);
         }
 
         this.setMinSize(size, size);
@@ -46,34 +46,9 @@ public class EntityButton extends Button {
         this.setFocusTraversable(false);
     }
 
-    public void setEntity(MobileEntity entity) {
-        Image image = null;
-
-        switch (entity) {
-            case SNOWBALL -> image = new Image("/snowball.png");
-            case MONSTER -> image = new Image("/monster1.png");
-            case EMPTY -> {
-            }
-        }
-
-        if (image != null) {
-            ImageView imageView = new ImageView(image);
-            imageView.setFitWidth(size);
-            imageView.setFitHeight(size);
-            imageView.setPreserveRatio(false);
-            this.setGraphic(imageView);
-        } else {
-            this.setGraphic(null);
-        }
-    }
-
     public void clearEntity() {
-
         this.setGraphic(null);
     }
-
-    private boolean hasMonster = false;
-    private boolean hasSnowball = false;
 
     public void setMonsterVisible(boolean visible) {
         this.hasMonster = visible;
@@ -94,7 +69,6 @@ public class EntityButton extends Button {
 
     public void setSnowballType(SnowballType type) {
         String imagePath = getImagePathForType(type);
-        System.out.println("Tentando carregar: " + imagePath); // Debug
 
         try {
             InputStream stream = getClass().getResourceAsStream(imagePath);
@@ -109,7 +83,7 @@ public class EntityButton extends Button {
             imageView.setFitHeight(size);
             this.setGraphic(imageView);
         } catch (Exception e) {
-            System.out.println("Erro ao carregar imagem: " + imagePath);
+            System.err.println("Erro ao carregar imagem:: " + e);
         }
     }
 
