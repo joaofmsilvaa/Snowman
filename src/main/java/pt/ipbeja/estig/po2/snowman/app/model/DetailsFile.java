@@ -4,6 +4,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * DetailsFile é abstrata e serve de base para gravar em ficheiro
+ * as informações do nível quando o boneco é completado.
+ * Contém métodos para criar o ficheiro e escrever o mapa, movimentos,
+ * contagem total e posição final do boneco.
+ */
 public abstract class DetailsFile {
 
     private String fileName;
@@ -12,6 +18,22 @@ public abstract class DetailsFile {
     public DetailsFile() {
     }
 
+    public String getFileName() {
+
+        return fileName;
+    }
+
+    public boolean isFileCreated() {
+
+        return fileCreated;
+    }
+
+    public void setFilename(String filename) {
+
+        this.fileName = filename;
+    }
+
+    /// Cria um ficheiro vazio com o nome definido em fileName.
     public void createFile() {
         try {
             File myObj = new File(fileName);
@@ -20,7 +42,8 @@ public abstract class DetailsFile {
             fileCreated = false;
         }
     }
-
+    /// Escreve um ficheiro com o Mapa utilizado, os movimentos, o total de jogadas e a
+    /// posição final do boneco de neve
     public void writeFile(String map, String[] moves, int moveCount, Position snowmanPosition) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             writer.write("Mapa: " + map);
@@ -31,6 +54,7 @@ public abstract class DetailsFile {
             }
             writer.write("\n" + "Total de jogadas: " + moveCount);
 
+            /// Converte a coluna numa letra e escreve a posição final
             String colLetter = snowmanPosition.convertToLetter(snowmanPosition.getCol());
             writer.write("\n" + "Posição final do boneco de neve: (" + snowmanPosition.getRow() + "," + colLetter + ")\n");
 
@@ -39,15 +63,5 @@ public abstract class DetailsFile {
         }
     }
 
-    public String getFileName() {
-        return fileName;
-    }
 
-    public boolean isFileCreated() {
-        return fileCreated;
-    }
-
-    public void setFilename(String filename) {
-        this.fileName = filename;
-    }
 }
