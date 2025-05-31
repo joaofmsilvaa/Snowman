@@ -46,7 +46,7 @@ public abstract class DetailsFile {
     }
 
 
-    public void writeFile(String map, String[] moves, int moveCount, String playerName, Position snowmanPosition) {
+    public void writeFile(String map, String[] mapPanel, String[] moves, int moveCount, String playerName, Position snowmanPosition) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             writer.write("Mapa: " + map);
             writer.write("\n" +"Movimentos:\n");
@@ -60,6 +60,11 @@ public abstract class DetailsFile {
             /// Convert the column index to a letter and write the final position
             String colLetter = snowmanPosition.convertToLetter(snowmanPosition.getCol());
             writer.write("\n" + "Posição final do boneco de neve: (" + snowmanPosition.getRow() + "," + colLetter + ")\n");
+
+            writer.write("\n\nMapa final:\n");
+            for (String line : mapPanel) {
+                writer.write(line + "\n");
+            }
 
         } catch (IOException e) {
             System.err.println("Erro ao escrever no ficheiro: " + e.getMessage());

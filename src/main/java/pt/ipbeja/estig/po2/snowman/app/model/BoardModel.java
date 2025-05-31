@@ -30,8 +30,6 @@ public class BoardModel {
     private MoveLogger moveLogger;
 
     private int moveCount = 0;
-    private String playerName;
-    private String levelName;
     private Consumer<Score> scoreConsumer;
     private String mapName;
 
@@ -83,6 +81,10 @@ public class BoardModel {
 
     public void setMoveLogger(MoveLogger moveLogger) {
         this.moveLogger = moveLogger;
+    }
+
+    public void setPlayerName(String playerName) {
+        game.setPlayerName(playerName);
     }
 
     public void startGame() {
@@ -305,7 +307,7 @@ public class BoardModel {
             }
 
             if (scoreConsumer != null) {
-                Score score = new Score(playerName, levelName, moveCount);
+                Score score = new Score(game.getPlayerName(), mapName, moveCount);
                 scoreConsumer.accept(score);
             }
         }
@@ -327,13 +329,65 @@ public class BoardModel {
         snowmanFile.setFilename("Snowman" + snowmanFile.getCurrentDate() + ".txt");
         snowmanFile.createFile();
 
-        snowmanFile.writeFile(mapName, moveLogger.getMoveHistoryArray(), getMoveCount(), playerName,snowmanPosition);
+        snowmanFile.writeFile(mapName, generateMapString(), moveLogger.getMoveHistoryArray(), getMoveCount(), game.getPlayerName(),snowmanPosition);
 
         // Criar e notificar pontuação
-        Score score = new Score(playerName, mapName, moveCount);
+        Score score = new Score(game.getPlayerName(), mapName, moveCount);
         if (scoreListener != null) {
             scoreListener.onScore(score);
         }
+    }
+
+    /**
+     * Gera uma representação textual do mapa atual,
+     * usando letras simples para BLOCO, SNOW, NO_SNOW, MONSTRO e SNOWMAN.
+     *
+     * @return Array de strings, cada uma representando uma linha do mapa.
+     */
+    public String[] generateMapString() {
+        String[] mapLines = new String[getRowCount()];
+        Position snowmanPosition = null;
+
+        // Encontrar a posição do boneco de neve completo (caso exista)
+        for (int row = 0; row < getRowCount(); row++) {
+            for (int col = 0; col < getColCount(); col++) {
+                if (boardContent.get(row).get(col) == PositionContent.SNOWMAN) {
+                    snowmanPosition = new Position(row, col);
+                    break;
+                }
+            }
+        }
+
+        for (int row = 0; row < getRowCount(); row++) {
+            StringBuilder line = getStringBuilder(row, snowmanPosition);
+
+            mapLines[row] = line.toString();
+        }
+
+        return mapLines;
+    }
+
+    private StringBuilder getStringBuilder(int row, Position snowmanPosition) {
+        StringBuilder line = new StringBuilder();
+
+        for (int col = 0; col < getColCount(); col++) {
+            Position current = new Position(row, col);
+
+            if (monster.getRow() == row && monster.getCol() == col) {
+                line.append("\t\uD83D\uDC79\t");
+            } else if (snowmanPosition.equals(current)) {
+                line.append(" SM ");
+            } else {
+                PositionContent content = boardContent.get(row).get(col);
+                switch (content) {
+                    case BLOCK -> line.append("\tB\t");
+                    case SNOW -> line.append("\tS\t");
+                    case NO_SNOW -> line.append("\tX\t");
+                    default -> line.append("\t☃️\t");
+                }
+            }
+        }
+        return line;
     }
 
     /**
@@ -403,7 +457,7 @@ public class BoardModel {
             }
 
             if (scoreConsumer != null) {
-                Score score = new Score(playerName, levelName, moveCount);
+                Score score = new Score(game.getPlayerName(), mapName, moveCount);
                 scoreConsumer.accept(score);
             }
         }
