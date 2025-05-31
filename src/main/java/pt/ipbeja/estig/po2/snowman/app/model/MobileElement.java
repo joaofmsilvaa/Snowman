@@ -1,5 +1,12 @@
 package pt.ipbeja.estig.po2.snowman.app.model;
 
+/**
+ * MobileElement é uma classe abstrata que representa qualquer objeto móvel
+ * no tabuleiro Monster e Snowball. Guarda a posição atual
+ * (row, col) e a posição anterior (prevRow, prevCol) para efeitos de animação
+ * ou “undo”.
+ */
+
 public abstract class MobileElement {
     protected int row;
     protected int col;
