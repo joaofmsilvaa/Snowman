@@ -1,48 +1,45 @@
 package pt.ipbeja.estig.po2.snowman.app.model;
 
 public class Score implements Comparable<Score> {
-    private final String name;
-    private final int points;
+    private final String playerName;  // máx 3 letras
     private final String levelName;
-    private boolean top;          // nova flag
+    private final int moves;
+    private boolean isTop;
 
-    public Score(String name, int points, String levelName) {
-        this.name = name;
-        this.points = points;
+    public Score(String playerName, String levelName, int moves) {
+        this.playerName = playerName;
         this.levelName = levelName;
-        this.top = false;
+        this.moves = moves;
+        this.isTop = false;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public int getPoints() {
-        return points;
+    public String getPlayerName() {
+        return playerName;
     }
 
     public String getLevelName() {
         return levelName;
     }
 
+    public int getMoves() {
+        return moves;
+    }
+
     public boolean isTop() {
-        return top;
+        return isTop;
     }
 
     public void setTop(boolean top) {
-        this.top = top;
+        isTop = top;
     }
 
     @Override
     public int compareTo(Score other) {
-        return Integer.compare(this.points, other.points);
+        return Integer.compare(this.moves, other.moves); // menor é melhor
     }
 
-    public String getDisplayString() {
-        String s = name + " - " + points + " moves [" + levelName + "]";
-        if (top) {
-            s += " TOP";
-        }
-        return s;
+    @Override
+    public String toString() {
+        return String.format("%s - %s - %d %s", playerName, levelName, moves, isTop ? "TOP" : "");
     }
 }

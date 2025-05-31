@@ -1,0 +1,6 @@
+Mapa: map name
+Movimentos:
+2a -> 2b
+Jogador: JON
+Total de jogadas: 18
+Posição final do boneco de neve: (3,D)
