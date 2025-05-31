@@ -22,10 +22,8 @@ public class SnowmanGUI extends Application {
     public void start(Stage stage) {
         MapReader reader = new MapReader();
         BoardModel boardModel = reader.loadMapFromFile("/" + this.mapFileName);
-        Game game = new Game(this.playerName);
+        Game game = new Game(this.playerName, reader.getMapName());
         boardModel.setGame(game);
-        boardModel.setPlayerName(this.playerName);
-        boardModel.setMoveLogger(new MoveLogger());
 
         // ScoreBoard
         ScoreBoard scoreBoard = new ScoreBoard();

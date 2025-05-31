@@ -44,7 +44,7 @@ public class SnowballTest {
     @Test
     @DisplayName("Move snowball to the left")
     void testMoveSnowballToTheLeft() {
-        Snowball snowball = board.snowballInPosition(1, 1);
+        Snowball snowball = board.getSnowballInPosition(1, 1);
         snowball.move(Direction.LEFT, board);
 
         assertEquals(1, snowball.getRow());
@@ -55,7 +55,7 @@ public class SnowballTest {
     @Test
     @DisplayName("Move the snowball up")
     void testMoveSnowballToUp() {
-        Snowball snowball = board.snowballInPosition(1, 1);
+        Snowball snowball = board.getSnowballInPosition(1, 1);
         snowball.move(Direction.UP, board);
 
         assertEquals(0, snowball.getRow());
@@ -66,7 +66,7 @@ public class SnowballTest {
     @Test
     @DisplayName("Create average snowball")
     void testCreateAverageSnowball() {
-        Snowball snowball = board.snowballInPosition(1, 1);
+        Snowball snowball = board.getSnowballInPosition(1, 1);
         snowball.move(Direction.UP, board);
 
         assertEquals(0, snowball.getRow());
@@ -77,7 +77,7 @@ public class SnowballTest {
     @Test
     @DisplayName("Test invalid snowball move")
     void testSnowballInvalidMove() {
-        Snowball snowball = board.snowballInPosition(1, 1);
+        Snowball snowball = board.getSnowballInPosition(1, 1);
         boolean status = snowball.move(Direction.UP, board);
 
         assertEquals(0, snowball.getRow());
