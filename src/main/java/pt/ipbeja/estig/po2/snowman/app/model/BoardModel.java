@@ -23,10 +23,7 @@ public class BoardModel {
     private List<Snowball> snowballs;
     private View view;
     private MoveListener moveListener;
-    private int moveCount = 0;
-    private String playerName;
-    private final ScoreManager scoreManager = new ScoreManager();
-
+    private Game game;
 
     public BoardModel() {
         boardContent = new ArrayList<>();
@@ -40,27 +37,6 @@ public class BoardModel {
         this.monster = monster;
         this.snowballs = snowballs;
         this.boardContent = content;
-    }
-
-    /// Define que a view sera notificada
-    public void setView(View view) {
-
-        this.view = view;
-    }
-
-    /// Define o MoveListener para receber eventos de movimento
-    public void setMoveListener(MoveListener moveListener) {
-
-        this.moveListener = moveListener;
-    }
-
-    public void recordScore(String playerName, int moves, String levelName) {
-        Score s = new Score(playerName, moves, levelName);
-        scoreManager.addScore(s);
-    }
-
-    public List<Score> getTopScores() {
-        return scoreManager.getTopScores();
     }
 
     /// Configura o estado inicial do jogo (tabuleiro 5x5 e 3 bolas pequenas)
@@ -85,52 +61,52 @@ public class BoardModel {
         snowballs.add(new Snowball(2, 3, SnowballType.SMALL));
     }
 
+    ///  Define o objeto Game onde estão o nome do jogador e a quantidade de movimentos
+    public void setGame(Game game) {
+        this.game = game;
+
+        this.game.setPlayerName(game.getPlayerName());
+    }
+
+    /// Define que a view sera notificada
+    public void setView(View view) {
+        this.view = view;
+    }
+
+    /// Define o MoveListener para receber eventos de movimento
+    public void setMoveListener(MoveListener moveListener) {
+
+        this.moveListener = moveListener;
+    }
+
     /// Numero de linhas do tabuleiro
     public int getRowCount() {
-
         return boardContent.size();
     }
 
     /// Numero de colunas do tabuleiro
-
     public int getColCount() {
-
         return boardContent.isEmpty() ? 0 : boardContent.get(0).size();
     }
 
     /// Devolve o conteudo de uma célula específica do tabuleiro
     public PositionContent getPositionContent(int row, int col) {
-
         return boardContent.get(row).get(col);
     }
 
     /// Obtem a posiçao do monstro
     public Monster getMonster() {
-
         return monster;
     }
 
-    /// Retorna o número de movimentos realizados
-    public int getMoveCount() {
-
-        return moveCount;
-    }
-
-    /// Incrementa o contador de movimentos
-    public void incrementMoveCount() {
-
-        moveCount++;
-    }
-
-    /// Retorna o nome do jogador atual
+    ///  Retorna o nome do jogador da classe game
     public String getPlayerName() {
-        return playerName;
+        return game.getPlayerName();
     }
 
-    /// Define o nome do jogado
-    public void setPlayerName(String name) {
-
-        this.playerName = name;
+    ///  retorna a quantidade de jogadas
+    public int getMoveCount(){
+        return game.getMoveCount();
     }
 
     /// Verifica se uma posição é válida (dentro dos limites e não é BLOCK)
@@ -171,7 +147,7 @@ public class BoardModel {
 
         /// Verifica se há bola em frente ao monstro
         Snowball snowball = snowballInFrontOfMonster(direction);
-        Position oldSnowballPosition = new Position(-1,-1);
+        Position oldSnowballPosition = new Position(0,0);
         if (snowball != null) {
             oldSnowballPosition = new Position(snowball.getRow(), snowball.getCol());
         }
@@ -181,7 +157,7 @@ public class BoardModel {
 
         if (moved && view != null) {
             /// Atualiza contagem de movimentos
-            incrementMoveCount();
+            game.incrementMoveCount();
 
             Position currentPosition = new Position(monster.getRow(), monster.getCol());
 
@@ -204,7 +180,6 @@ public class BoardModel {
 
     /// Move uma bola de neve numa determinada direção
     public boolean moveSnowball(Direction direction, Snowball snowball) {
-
         return snowball.move(direction, this);
     }
 
@@ -243,7 +218,7 @@ public class BoardModel {
         snowmanFile.setFilename("Snowman" + snowmanFile.getCurrentDate() + ".txt");
         snowmanFile.createFile();
         String[] moves = {"2a -> 2b"};
-        snowmanFile.writeFile("map name", moves, getMoveCount(),snowmanPosition );
+        snowmanFile.writeFile("map name", moves, game.getMoveCount(),snowmanPosition );
     }
 
     /// Desfaz o stack de bolas, validando a posição e notificando a View

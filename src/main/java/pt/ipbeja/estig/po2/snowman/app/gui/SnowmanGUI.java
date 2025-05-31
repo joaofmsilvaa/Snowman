@@ -2,10 +2,8 @@ package pt.ipbeja.estig.po2.snowman.app.gui;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import pt.ipbeja.estig.po2.snowman.app.model.*;
 
@@ -23,7 +21,8 @@ public class SnowmanGUI extends Application {
     public void start(Stage stage) {
         MapReader reader = new MapReader();
         BoardModel boardModel = reader.loadMapFromFile("/" + this.mapFileName);
-        boardModel.setPlayerName(this.playerName);
+        Game game = new Game(this.playerName);
+        boardModel.setGame(game);
 
         MoveHistoryPane moveHistoryPane = new MoveHistoryPane();
         boardModel.setMoveListener(moveHistoryPane);

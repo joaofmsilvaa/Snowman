@@ -42,8 +42,11 @@ public abstract class DetailsFile {
             fileCreated = false;
         }
     }
-    /// Escreve um ficheiro com o Mapa utilizado, os movimentos, o total de jogadas e a
-    /// posição final do boneco de neve
+
+    /*
+        Escreve um ficheiro com o Mapa utilizado, os movimentos, o total de jogadas e a
+        posição final do boneco de neve
+     */
     public void writeFile(String map, String[] moves, int moveCount, Position snowmanPosition) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             writer.write("Mapa: " + map);
