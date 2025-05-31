@@ -1,8 +1,5 @@
 package pt.ipbeja.estig.po2.snowman.app.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Score implements Comparable<Score> {
     private final String playerName;  // máx 3 letras
     private final String levelName;
@@ -26,10 +23,6 @@ public class Score implements Comparable<Score> {
 
     public int getMoves() {
         return moves;
-    }
-
-    public boolean isTop() {
-        return isTop;
     }
 
     public void setTop(boolean top) {
