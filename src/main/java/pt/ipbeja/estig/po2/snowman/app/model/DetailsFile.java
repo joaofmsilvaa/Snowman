@@ -14,21 +14,22 @@ public abstract class DetailsFile {
 
     public void createFile() {
         try {
-            File myObj = new File(fileName);
+            File myObj = new File("/saves/" + fileName);
             fileCreated = myObj.createNewFile();
         } catch (IOException e) {
             fileCreated = false;
         }
     }
 
-    public void writeFile(String map, String[] moves, int moveCount, Position snowmanPosition) {
+    public void writeFile(String map, String[] moves, int moveCount, String playerName, Position snowmanPosition) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             writer.write("Mapa: " + map);
             writer.write("\n" +"Movimentos:\n");
-
             for (String move : moves) {
                 writer.write(move);
             }
+
+            writer.write("\nJogador: " + playerName);
             writer.write("\n" + "Total de jogadas: " + moveCount);
 
             String colLetter = snowmanPosition.convertToLetter(snowmanPosition.getCol());

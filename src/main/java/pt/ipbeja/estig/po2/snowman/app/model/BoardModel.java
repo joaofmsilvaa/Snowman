@@ -1,10 +1,12 @@
 package pt.ipbeja.estig.po2.snowman.app.model;
 
 import pt.ipbeja.estig.po2.snowman.app.model.interfaces.MoveListener;
+import pt.ipbeja.estig.po2.snowman.app.model.interfaces.ScoreListener;
 import pt.ipbeja.estig.po2.snowman.app.model.interfaces.View;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class BoardModel {
     private List<List<PositionContent>> boardContent;
@@ -12,9 +14,11 @@ public class BoardModel {
     private List<Snowball> snowballs;
     private View view;
     private MoveListener moveListener;
+    private ScoreListener scoreListener;
     private int moveCount = 0;
     private String playerName;
-
+    private String levelName;
+    private Consumer<Score> scoreConsumer;
 
     public BoardModel() {
         boardContent = new ArrayList<>();
@@ -34,6 +38,10 @@ public class BoardModel {
 
     public void setMoveListener(MoveListener moveListener) {
         this.moveListener = moveListener;
+    }
+
+    public void setScoreListener(ScoreListener listener) {
+        this.scoreListener = listener;
     }
 
     public void startGame() {
@@ -88,6 +96,18 @@ public class BoardModel {
         this.playerName = name;
     }
 
+    public String getLevelName() {
+        return levelName;
+    }
+
+    public void setLevelName(String levelName) {
+        this.levelName = levelName;
+    }
+
+    public void setScoreConsumer(Consumer<Score> consumer) {
+        this.scoreConsumer = consumer;
+    }
+
     public boolean validPosition(int newRow, int newCol) {
         try {
             return getPositionContent(newRow, newCol) != PositionContent.BLOCK;
@@ -121,7 +141,7 @@ public class BoardModel {
         Position oldPosition = new Position(monster.getRow(), monster.getCol());
 
         Snowball snowball = snowballInFrontOfMonster(direction);
-        Position oldSnowballPosition = new Position(-1,-1);
+        Position oldSnowballPosition = new Position(-1, -1);
         if (snowball != null) {
             oldSnowballPosition = new Position(snowball.getRow(), snowball.getCol());
         }
@@ -134,15 +154,12 @@ public class BoardModel {
 
             view.onMonsterCleared(oldPosition);
             view.onMonsterMoved(currentPosition);
-           // monster.move(direction);
-            
 
             if (snowball != null) {
                 view.onSnowballMoved(snowball, oldSnowballPosition);
             }
 
-
-            moveListener.onMove(oldPosition,currentPosition);
+            moveListener.onMove(oldPosition, currentPosition);
         }
 
         return moved;
@@ -169,10 +186,16 @@ public class BoardModel {
 
         if (newType == SnowballType.COMPLETE) {
             boardContent.get(bottom.getRow()).set(bottom.getCol(), PositionContent.SNOWMAN);
+
             if (view != null) {
                 view.onSnowmanCreated(bottomPos, newType);
-                Position snowmanPos = new Position(bottom.getRow() + 1, bottom.getCol()); // Offset da coluna de coordenadas
+                Position snowmanPos = new Position(bottom.getRow() + 1, bottom.getCol());
                 storeGameDetails(snowmanPos);
+            }
+
+            if (scoreConsumer != null) {
+                Score score = new Score(playerName, levelName, moveCount);
+                scoreConsumer.accept(score);
             }
         }
 
@@ -184,7 +207,13 @@ public class BoardModel {
         snowmanFile.setFilename("Snowman" + snowmanFile.getCurrentDate() + ".txt");
         snowmanFile.createFile();
         String[] moves = {"2a -> 2b"};
-        snowmanFile.writeFile("map name", moves, getMoveCount(),snowmanPosition );
+        snowmanFile.writeFile("map name", moves, getMoveCount(), playerName,snowmanPosition);
+
+        // Criar e notificar pontuação
+        Score score = new Score(playerName, "map name", moveCount);
+        if (scoreListener != null) {
+            scoreListener.onScore(score);
+        }
     }
 
     public boolean unstackSnowballs(Snowball stacked, Direction direction) {
@@ -227,6 +256,11 @@ public class BoardModel {
             if (view != null) {
                 view.onSnowmanCreated(snowmanPos, SnowballType.COMPLETE);
             }
+
+            if (scoreConsumer != null) {
+                Score score = new Score(playerName, levelName, moveCount);
+                scoreConsumer.accept(score);
+            }
         }
     }
 
@@ -247,6 +281,4 @@ public class BoardModel {
         };
         return type == null ? null : new Snowball(position.getRow(), position.getCol(), type);
     }
-
-
 }

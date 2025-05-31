@@ -1,0 +1,6 @@
+Mapa: map name
+Movimentos:
+2a -> 2b
+Jogador: 
+Total de jogadas: 14
+Posição final do boneco de neve: (3,D)
