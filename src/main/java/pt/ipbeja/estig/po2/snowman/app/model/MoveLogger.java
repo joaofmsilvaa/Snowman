@@ -5,13 +5,12 @@ import pt.ipbeja.estig.po2.snowman.app.model.interfaces.MoveListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MoveLogger implements MoveListener {
+public class MoveLogger {
 
     private final List<String> moveHistory = new ArrayList<>();
 
-    @Override
     public void onMove(Position from, Position to) {
-        moveHistory.add(to.formatDetails(from.getRow(), from.getCol(), to.getRow(), to.getCol()));
+        moveHistory.add(to.formatDetails(from.getRow() + 1, from.getCol(), to.getRow() + 1, to.getCol()));
     }
 
     public String[] getMoveHistoryArray() {

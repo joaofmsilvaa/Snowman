@@ -1,10 +1,12 @@
 package pt.ipbeja.estig.po2.snowman.app.model;
 
 import pt.ipbeja.estig.po2.snowman.app.model.interfaces.MoveListener;
+import pt.ipbeja.estig.po2.snowman.app.model.interfaces.ScoreListener;
 import pt.ipbeja.estig.po2.snowman.app.model.interfaces.View;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * BoardModel manages all game logic:
@@ -23,10 +25,15 @@ public class BoardModel {
     private List<Snowball> snowballs;
     private View view;
     private MoveListener moveListener;
+    private Game game;
+    private ScoreListener scoreListener;
+    private MoveLogger moveLogger;
+
     private int moveCount = 0;
     private String playerName;
-    private final ScoreManager scoreManager = new ScoreManager();
-
+    private String levelName;
+    private Consumer<Score> scoreConsumer;
+    private String mapName;
 
     /**
      * Default constructor: initializes data structures and calls startGame()
@@ -60,18 +67,7 @@ public class BoardModel {
 
     /// Registers the MoveListener that receives notifications of every monster move
     public void setMoveListener(MoveListener moveListener) {
-
         this.moveListener = moveListener;
-    }
-
-    public void recordScore(String playerName, int moves, String levelName) {
-        Score s = new Score(playerName, moves, levelName);
-        scoreManager.addScore(s);
-    }
-
-    public List<Score> getTopScores() {
-
-        return scoreManager.getTopScores();
     }
 
     /**
@@ -80,6 +76,15 @@ public class BoardModel {
      * - Monster placed at (2,0)
      * - Three small snowballs at positions (2,1), (2,2), and (2,3)
      */
+
+    public void setScoreListener(ScoreListener listener) {
+        this.scoreListener = listener;
+    }
+
+    public void setMoveLogger(MoveLogger moveLogger) {
+        this.moveLogger = moveLogger;
+    }
+
     public void startGame() {
         monster = new Monster(2, 0);
 
@@ -101,15 +106,21 @@ public class BoardModel {
         snowballs.add(new Snowball(2, 3, SnowballType.SMALL));
     }
 
-    /// number of rows
-    public int getRowCount() {
+    ///  Define o objeto Game onde estão o nome do jogador e a quantidade de movimentos
+    public void setGame(Game game) {
+        this.game = game;
 
+        this.game.setPlayerName(game.getPlayerName());
+    }
+
+
+    /// Number of rows
+    public int getRowCount() {
         return boardContent.size();
     }
 
-    /// number of columns
+    /// Mumber of columns
     public int getColCount() {
-
         return boardContent.isEmpty() ? 0 : boardContent.get(0).size();
     }
 
@@ -121,37 +132,20 @@ public class BoardModel {
      * @return PositionContent at the specified cell
      */
     public PositionContent getPositionContent(int row, int col) {
-
         return boardContent.get(row).get(col);
     }
 
     ///Returns the Monster instance
     public Monster getMonster() {
-
         return monster;
     }
 
-    /// Returns the number of moves made so far.
-    public int getMoveCount() {
-
-        return moveCount;
-    }
-
-    /// Increments the move count by 1.
-    public void incrementMoveCount() {
-
-        moveCount++;
-    }
-
-
     public String getPlayerName() {
-        return playerName;
+        return game.getPlayerName();
     }
 
-
-    public void setPlayerName(String name) {
-
-        this.playerName = name;
+    public int getMoveCount(){
+        return game.getMoveCount();
     }
 
     /**
@@ -161,6 +155,10 @@ public class BoardModel {
      * @param newCol column index to check
      * @return true if the cell is not BLOCK and is inside the board; false otherwise
      */
+    public void setMapName(String mapName) {
+        this.mapName = mapName;
+    }
+
     public boolean validPosition(int newRow, int newCol) {
         try {
             return getPositionContent(newRow, newCol) != PositionContent.BLOCK;
@@ -169,6 +167,7 @@ public class BoardModel {
         }
     }
 
+
     /**
      * Finds a snowball at the specified cell, if any.
      *
@@ -176,7 +175,13 @@ public class BoardModel {
      * @param col column index
      * @return the Snowball at that position, or null if none exists
      */
-    public Snowball snowballInPosition(int row, int col) {
+
+  public boolean canUnstack(int newRow, int newCol){
+        return validPosition(newRow, newCol) && snowballInPosition(newRow, newCol) == null;
+    }
+
+
+  public Snowball snowballInPosition(int row, int col) {
         for (Snowball snowball : snowballs) {
             if (snowball.getRow() == row && snowball.getCol() == col) {
                 return snowball;
@@ -216,7 +221,8 @@ public class BoardModel {
 
         /// Check if there is a snowball in front of the monster
         Snowball snowball = snowballInFrontOfMonster(direction);
-        Position oldSnowballPosition = new Position(-1,-1);
+        Position oldSnowballPosition = new Position(0,0);
+
         if (snowball != null) {
             oldSnowballPosition = new Position(snowball.getRow(), snowball.getCol());
         }
@@ -224,30 +230,32 @@ public class BoardModel {
         /// Attempt to move the monster and also pushes a snowball if present
         boolean moved = monster.move(direction, this);
 
-        if (moved && view != null) {
-            /// Increment move count after a successful move or push
-            incrementMoveCount();
 
+        if (moved) {
+            incrementMoveCount();
             Position currentPosition = new Position(monster.getRow(), monster.getCol());
 
-            /// Inform the view to clear and redraw the monster
-            view.onMonsterCleared(oldPosition);
-            view.onMonsterMoved(currentPosition);
+            if (view != null) {
+                view.onMonsterCleared(oldPosition);
+                view.onMonsterMoved(currentPosition);
 
-
-            /// If a snowball was pushed, inform the view to redraw it
-            if (snowball != null) {
-                view.onSnowballMoved(snowball, oldSnowballPosition);
+                if (snowball != null) {
+                    view.onSnowballMoved(snowball, oldSnowballPosition);
+                }
             }
 
-            /// Notify external listener about the monster's move
-            moveListener.onMove(oldPosition,currentPosition);
+            if (moveListener != null) {
+                moveListener.onMove(oldPosition, currentPosition);
+            }
+            if (moveLogger != null) {
+                moveLogger.onMove(oldPosition, currentPosition);
+            }
         }
-
         return moved;
     }
 
-    /**
+
+  /**
      * Moves a snowball in a given direction. Returns false if the move fails.
      *
      * @param direction direction to move the snowball
@@ -255,7 +263,6 @@ public class BoardModel {
      * @return true if the snowball moved or stacked; false otherwise
      */
     public boolean moveSnowball(Direction direction, Snowball snowball) {
-
         return snowball.move(direction, this);
     }
 
@@ -287,12 +294,20 @@ public class BoardModel {
         /// If the new type is COMPLETE, a full snowman is formed
         if (newType == SnowballType.COMPLETE) {
             boardContent.get(bottom.getRow()).set(bottom.getCol(), PositionContent.SNOWMAN);
+
             if (view != null) {
                 /// Notify the view that a complete snowman is created
                 view.onSnowmanCreated(bottomPos, newType);
-                /// Determine position below for snowman details
+
+              /// Determine position below for snowman details
                 Position snowmanPos = new Position(bottom.getRow() + 1, bottom.getCol()); // Offset da coluna de coordenadas
+
                 storeGameDetails(snowmanPos);
+            }
+
+            if (scoreConsumer != null) {
+                Score score = new Score(playerName, levelName, moveCount);
+                scoreConsumer.accept(score);
             }
         }
 
@@ -312,8 +327,14 @@ public class BoardModel {
         SnowmanFile snowmanFile = new SnowmanFile();
         snowmanFile.setFilename("Snowman" + snowmanFile.getCurrentDate() + ".txt");
         snowmanFile.createFile();
-        String[] moves = {"2a -> 2b"};
-        snowmanFile.writeFile("map name", moves, getMoveCount(),snowmanPosition );
+
+        snowmanFile.writeFile(mapName, moveLogger.getMoveHistoryArray(), getMoveCount(), playerName,snowmanPosition);
+
+        // Criar e notificar pontuação
+        Score score = new Score(playerName, mapName, moveCount);
+        if (scoreListener != null) {
+            scoreListener.onScore(score);
+        }
     }
 
     /**
@@ -328,8 +349,7 @@ public class BoardModel {
         Snowball bottom = getBottom(stacked);
         Snowball top = getTop(stacked, direction);
 
-        if (validPosition(top.getRow(), top.getCol())) {
-            /// Remove the stacked ball and add the two separate balls
+        if (canUnstack(top.getRow(), top.getCol())) {
             snowballs.remove(stacked);
             snowballs.add(top);
             snowballs.add(bottom);
@@ -382,6 +402,11 @@ public class BoardModel {
                 /// Notify the view of a newly created complete snowman
                 view.onSnowmanCreated(snowmanPos, SnowballType.COMPLETE);
             }
+
+            if (scoreConsumer != null) {
+                Score score = new Score(playerName, levelName, moveCount);
+                scoreConsumer.accept(score);
+            }
         }
     }
 
@@ -416,6 +441,4 @@ public class BoardModel {
         };
         return type == null ? null : new Snowball(position.getRow(), position.getCol(), type);
     }
-
-
 }

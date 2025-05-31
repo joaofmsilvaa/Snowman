@@ -25,35 +25,34 @@ public class MapReader {
             throw new RuntimeException("Mapa não encontrado: " + resourcePath);
         }
 
+        String mapName = "";
         List<String[]> lines = new ArrayList<>();
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
             String line;
-            /// Read each line and split it by whitespace into symbols
+
+            // Lê o nome do mapa da primeira linha
+            mapName = reader.readLine();
+            if (mapName == null) {
+                throw new RuntimeException("Ficheiro de mapa vazio ou inválido: " + resourcePath);
+            }
+
+            // Lê as linhas do mapa a partir da segunda linha
             while ((line = reader.readLine()) != null) {
-                lines.add(line.split("\\s+"));
+                if (!line.trim().isEmpty()) {
+                    lines.add(line.trim().split("\\s+"));
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException("Erro ao ler o mapa: " + e.getMessage());
         }
 
         String[][] map = lines.toArray(new String[0][]);
-        return parseMap(map);
+        return parseMap(map, mapName);
     }
 
-    /**
-     * Turns a 2D array of symbols into a BoardModel. Each symbol is read as:
-     *
-     *   "S"  = a cell with snow (PositionContent.SNOW)
-     *   "B"  = an impassable block (PositionContent.BLOCK)
-     *   "M"  = the monster's start position (PositionContent.NO_SNOW + new Monster)
-     *   "SB" = a small snowball (PositionContent.NO_SNOW + new Snowball of type SMALL
-     *   any other symbol = a normal cell with no snow (PositionContent.NO_SNOW)
-     *
-     *
-     * @param map a 2D array of strings where each string is a symbol
-     * @return a BoardModel that contains the board layout, the monster, and the snowballs
-     */
-    public BoardModel parseMap(String[][] map) {
+
+    public BoardModel parseMap(String[][] map, String mapName) {
         List<List<PositionContent>> boardContent = new ArrayList<>();
         List<Snowball> snowballs = new ArrayList<>();
         Monster monster = null;
@@ -79,6 +78,9 @@ public class MapReader {
             boardContent.add(line);
         }
 
-        return new BoardModel(boardContent, monster, snowballs);
+        BoardModel boardModel = new BoardModel(boardContent, monster, snowballs);
+        boardModel.setMapName(mapName); // ← guardar o nome do mapa
+        return boardModel;
     }
+
 }

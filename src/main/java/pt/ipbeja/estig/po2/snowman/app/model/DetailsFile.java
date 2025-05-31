@@ -44,23 +44,17 @@ public abstract class DetailsFile {
             fileCreated = false;
         }
     }
-    /**
-     * Writes level details to the file: the map name, the list of moves, the total
-     * number of moves, and the final snowman position.
-     *
-     * @param map             name or identifier of the level/map
-     * @param moves           array of strings describing each move (e.g., "(2,B) -> (2,C)")
-     * @param moveCount       total number of moves performed
-     * @param snowmanPosition Position object indicating where the snowman was completed
-     */
-    public void writeFile(String map, String[] moves, int moveCount, Position snowmanPosition) {
+
+
+    public void writeFile(String map, String[] moves, int moveCount, String playerName, Position snowmanPosition) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             writer.write("Mapa: " + map);
             writer.write("\n" +"Movimentos:\n");
-
             for (String move : moves) {
                 writer.write(move);
             }
+
+            writer.write("\nJogador: " + playerName);
             writer.write("\n" + "Total de jogadas: " + moveCount);
 
             /// Convert the column index to a letter and write the final position
