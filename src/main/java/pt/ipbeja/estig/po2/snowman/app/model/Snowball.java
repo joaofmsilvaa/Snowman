@@ -1,18 +1,20 @@
 package pt.ipbeja.estig.po2.snowman.app.model;
 
+/**
+ * Snowball represents a snowball on the board. It extends MobileElement
+ * and manages its type (size or stack). It can move, grow over snow,
+ * and stack with other snowballs.
+ */
 public class Snowball extends MobileElement {
     private SnowballType type;
 
-    /**
-     * Construtor
-     * @param type - Tipo/tamanho inicial
-     */
+    /// Constructs a Snowball at the given row and column with a specific type.
     public Snowball(int row, int col, SnowballType type) {
         super(row, col);
         this.type = type;
     }
 
-    // Getters e setters
+
     public SnowballType getType() {
         return type;
     }
@@ -21,7 +23,7 @@ public class Snowball extends MobileElement {
         this.type = type;
     }
 
-
+    /// Increases the snowball's type  SMALL → MID → BIG.
     public void increaseSnowballType() {
         switch (type) {
             case SMALL -> setType(SnowballType.MID);
@@ -30,7 +32,14 @@ public class Snowball extends MobileElement {
     }
 
 
-    //Verifica se esta bola pode ser empilhada sobre outra bola
+    /**
+     * Checks if this snowball can stack on another snowball.
+     * SMALL can stack on MID or BIG (or BIG_MID).
+     * MID can stack on BIG. BIG cannot stack on anything.
+     *
+     * @param other the snowball to stack on
+     * @return true if stacking is allowed; false otherwise
+     */
     public boolean canStackOn(Snowball other) {
         switch (this.type) {
             case SMALL:
@@ -45,7 +54,18 @@ public class Snowball extends MobileElement {
         return false;
     }
 
-    // Dar Stack as bolas de neve
+    /**
+     * Determines the resulting stack type when this snowball is stacked
+     * on the given other snowball. Returns null if stacking is not allowed.
+     * Possible results:
+     * - SMALL on MID → MID_SMALL
+     * - SMALL on BIG → BIG_SMALL
+     * - MID on BIG → BIG_MID
+     * - SMALL on BIG_MID → COMPLETE (full snowman)
+     *
+     * @param other the snowball on which to stack
+     * @return the new stack type, or null if not allowed
+     */
     public SnowballType stackOn(Snowball other) {
         if (!canStackOn(other)) {
             return null; // Não pode empilhar
@@ -69,11 +89,13 @@ public class Snowball extends MobileElement {
 
 
     /**
-     * Implementação do movimento da bola de neve
-     * @param direction - Direção do movimento
-     * @param board - Referência ao tabuleiro
-     * @return true se o movimento foi bem sucedido
-     */
+    * Attempts to move the snowball one cell in the given direction.
+    * If a complete snowman (COMPLETE) type, it cannot move.
+    *
+    * @param direction direction to move (UP, DOWN, LEFT, RIGHT)
+    * @param board     reference to the BoardModel for validation and updates
+    * @return true if the move or stack was successful; false otherwise
+    */
     @Override
     public boolean move(Direction direction, BoardModel board) {
         // Snowman completo não pode mover
@@ -111,10 +133,15 @@ public class Snowball extends MobileElement {
         return true;
     }
 
-
+    /**
+     * Checks if this snowball is a partial stack (MID_SMALL, BIG_MID, or BIG_SMALL).
+     *
+     * @return true if the type represents a partial stack, if not false
+     */
     public boolean isSnowballStack(){
         SnowballType type = this.getType();
-        if(type == SnowballType.BIG_MID || type == SnowballType.MID_SMALL || type == SnowballType.BIG_SMALL) {
+        if(type == SnowballType.BIG_MID || type == SnowballType.MID_SMALL ||
+                type == SnowballType.BIG_SMALL) {
             return true;
         }
 
