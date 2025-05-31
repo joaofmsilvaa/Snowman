@@ -39,7 +39,7 @@ public class Monster extends MobileElement {
         }
 
         /// Check if there is a snowball in the target cell
-        Snowball snowball = board.snowballInPosition(newRow, newCol);
+        Snowball snowball = board.getSnowballInPosition(newRow, newCol);
         if (snowball != null) {
             if(board.isSnowballStack(snowball)) {
                 board.unstackSnowballs(snowball, direction);
