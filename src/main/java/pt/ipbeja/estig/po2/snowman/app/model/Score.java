@@ -1,34 +1,48 @@
 package pt.ipbeja.estig.po2.snowman.app.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Score implements Comparable<Score>{
+public class Score implements Comparable<Score> {
     private final String name;
     private final int points;
-    private final List<Score> scores = new ArrayList<>();
+    private final String levelName;
+    private boolean top;          // nova flag
 
-
-    public Score(String name, int points){
+    public Score(String name, int points, String levelName) {
         this.name = name;
         this.points = points;
+        this.levelName = levelName;
+        this.top = false;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
     public int getPoints() {
         return points;
     }
-    @Override
-    public String toString(){
-        return name + " - " + points + " Movimentos";
+
+    public String getLevelName() {
+        return levelName;
+    }
+
+    public boolean isTop() {
+        return top;
+    }
+
+    public void setTop(boolean top) {
+        this.top = top;
     }
 
     @Override
-    public int compareTo(Score o) {
-        return this.points - o.points;
+    public int compareTo(Score other) {
+        return Integer.compare(this.points, other.points);
     }
 
+    public String getDisplayString() {
+        String s = name + " - " + points + " moves [" + levelName + "]";
+        if (top) {
+            s += " TOP";
+        }
+        return s;
+    }
 }

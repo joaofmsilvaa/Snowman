@@ -14,6 +14,7 @@ public class BoardModel {
     private MoveListener moveListener;
     private int moveCount = 0;
     private String playerName;
+    private final ScoreManager scoreManager = new ScoreManager();
 
 
     public BoardModel() {
@@ -36,6 +37,14 @@ public class BoardModel {
         this.moveListener = moveListener;
     }
 
+    public void recordScore(String playerName, int moves, String levelName) {
+        Score s = new Score(playerName, moves, levelName);
+        scoreManager.addScore(s);
+    }
+
+    public List<Score> getTopScores() {
+        return scoreManager.getTopScores();
+    }
     public void startGame() {
         monster = new Monster(2, 0);
 
