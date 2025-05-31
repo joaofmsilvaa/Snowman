@@ -5,10 +5,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * DetailsFile é abstrata e serve de base para gravar em ficheiro
- * as informações do nível quando o boneco é completado.
- * Contém métodos para criar o ficheiro e escrever o mapa, movimentos,
- * contagem total e posição final do boneco.
+ * DetailsFile is an abstract base class for writing level information to a file
+ * when a snowman is completed. It provides methods to create the file and write
+ * the map name, move list, total moves, and final snowman position.
  */
 public abstract class DetailsFile {
 
@@ -33,7 +32,10 @@ public abstract class DetailsFile {
         this.fileName = filename;
     }
 
-    /// Cria um ficheiro vazio com o nome definido em fileName.
+    /**
+     * Attempts to create an empty file with the name specified in fileName.
+     * If the file already exists or an error occurs, fileCreated is set to false.
+     */
     public void createFile() {
         try {
             File myObj = new File(fileName);
@@ -42,8 +44,15 @@ public abstract class DetailsFile {
             fileCreated = false;
         }
     }
-    /// Escreve um ficheiro com o Mapa utilizado, os movimentos, o total de jogadas e a
-    /// posição final do boneco de neve
+    /**
+     * Writes level details to the file: the map name, the list of moves, the total
+     * number of moves, and the final snowman position.
+     *
+     * @param map             name or identifier of the level/map
+     * @param moves           array of strings describing each move (e.g., "(2,B) -> (2,C)")
+     * @param moveCount       total number of moves performed
+     * @param snowmanPosition Position object indicating where the snowman was completed
+     */
     public void writeFile(String map, String[] moves, int moveCount, Position snowmanPosition) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             writer.write("Mapa: " + map);
@@ -54,7 +63,7 @@ public abstract class DetailsFile {
             }
             writer.write("\n" + "Total de jogadas: " + moveCount);
 
-            /// Converte a coluna numa letra e escreve a posição final
+            /// Convert the column index to a letter and write the final position
             String colLetter = snowmanPosition.convertToLetter(snowmanPosition.getCol());
             writer.write("\n" + "Posição final do boneco de neve: (" + snowmanPosition.getRow() + "," + colLetter + ")\n");
 
