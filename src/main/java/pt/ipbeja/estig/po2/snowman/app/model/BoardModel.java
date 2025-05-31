@@ -329,7 +329,7 @@ public class BoardModel {
         snowmanFile.setFilename("Snowman" + snowmanFile.getCurrentDate() + ".txt");
         snowmanFile.createFile();
 
-        snowmanFile.writeFile(mapName, generateMapString(), moveLogger.getMoveHistoryArray(), getMoveCount(), game.getPlayerName(),snowmanPosition);
+        snowmanFile.writeFile(mapName, generateMapString(), moveLogger.getMoveHistoryArray(), game.getMoveCount(), game.getPlayerName(),snowmanPosition);
 
         // Criar e notificar pontuação
         Score score = new Score(game.getPlayerName(), mapName, moveCount);
