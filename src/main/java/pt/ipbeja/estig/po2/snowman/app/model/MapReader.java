@@ -4,8 +4,21 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * MapReader reads a text file that describes the game map and creates
+ * a BoardModel object. Each symbol in the file stands for a cell or
+ * object type (snow, block, monster, small snowball).
+ */
 public class MapReader {
 
+    /// Le um ficheiro de mapa e devolve um BoardModel /**
+    ///      * Reads a map file from the resources folder and returns a BoardModel.
+    ///      * The file must have lines of symbols separated by spaces, such as "S B M SB".
+    ///      *
+    ///      * @param resourcePath the path to the map file inside resources (e.g., "/maps/level1.txt")
+    ///      * @return a BoardModel built from the symbols in the file
+    ///      * @throws RuntimeException if the file is not found or cannot be read
+    ///      */
     public BoardModel loadMapFromFile(String resourcePath) {
         InputStream stream = getClass().getResourceAsStream(resourcePath);
         if (stream == null) {
@@ -37,6 +50,7 @@ public class MapReader {
         String[][] map = lines.toArray(new String[0][]);
         return parseMap(map, mapName);
     }
+
 
     public BoardModel parseMap(String[][] map, String mapName) {
         List<List<PositionContent>> boardContent = new ArrayList<>();
