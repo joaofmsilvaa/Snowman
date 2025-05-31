@@ -1,8 +1,5 @@
 package pt.ipbeja.estig.po2.snowman.app.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Score implements Comparable<Score> {
     private final String playerName;  // máx 3 letras
     private final String levelName;
