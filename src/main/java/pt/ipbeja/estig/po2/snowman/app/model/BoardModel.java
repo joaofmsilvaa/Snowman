@@ -15,6 +15,8 @@ public class BoardModel {
     private View view;
     private MoveListener moveListener;
     private ScoreListener scoreListener;
+    private MoveLogger moveLogger;
+
     private int moveCount = 0;
     private String playerName;
     private String levelName;
@@ -43,6 +45,10 @@ public class BoardModel {
 
     public void setScoreListener(ScoreListener listener) {
         this.scoreListener = listener;
+    }
+
+    public void setMoveLogger(MoveLogger moveLogger) {
+        this.moveLogger = moveLogger;
     }
 
     public void startGame() {
@@ -97,24 +103,8 @@ public class BoardModel {
         this.playerName = name;
     }
 
-    public String getLevelName() {
-        return levelName;
-    }
-
-    public void setLevelName(String levelName) {
-        this.levelName = levelName;
-    }
-
-    public void setScoreConsumer(Consumer<Score> consumer) {
-        this.scoreConsumer = consumer;
-    }
-
     public void setMapName(String mapName) {
         this.mapName = mapName;
-    }
-
-    public String getMapName() {
-        return mapName;
     }
 
     public boolean validPosition(int newRow, int newCol) {
@@ -161,22 +151,29 @@ public class BoardModel {
 
         boolean moved = monster.move(direction, this);
 
-        if (moved && view != null) {
+        if (moved) {
             incrementMoveCount();
             Position currentPosition = new Position(monster.getRow(), monster.getCol());
 
-            view.onMonsterCleared(oldPosition);
-            view.onMonsterMoved(currentPosition);
+            if (view != null) {
+                view.onMonsterCleared(oldPosition);
+                view.onMonsterMoved(currentPosition);
 
-            if (snowball != null) {
-                view.onSnowballMoved(snowball, oldSnowballPosition);
+                if (snowball != null) {
+                    view.onSnowballMoved(snowball, oldSnowballPosition);
+                }
             }
 
-            moveListener.onMove(oldPosition, currentPosition);
+            if (moveListener != null) {
+                moveListener.onMove(oldPosition, currentPosition);
+            }
+            if (moveLogger != null) {
+                moveLogger.onMove(oldPosition, currentPosition);
+            }
         }
-
         return moved;
     }
+
 
     public boolean moveSnowball(Direction direction, Snowball snowball) {
         return snowball.move(direction, this);
@@ -219,8 +216,7 @@ public class BoardModel {
         SnowmanFile snowmanFile = new SnowmanFile();
         snowmanFile.setFilename("Snowman" + snowmanFile.getCurrentDate() + ".txt");
         snowmanFile.createFile();
-        String[] moves = {"2a -> 2b"};
-        snowmanFile.writeFile(mapName, moves, getMoveCount(), playerName,snowmanPosition);
+        snowmanFile.writeFile(mapName, moveLogger.getMoveHistoryArray(), getMoveCount(), playerName,snowmanPosition);
 
         // Criar e notificar pontuação
         Score score = new Score(playerName, mapName, moveCount);

@@ -23,6 +23,7 @@ public class SnowmanGUI extends Application {
         MapReader reader = new MapReader();
         BoardModel boardModel = reader.loadMapFromFile("/" + this.mapFileName);
         boardModel.setPlayerName(this.playerName);
+        boardModel.setMoveLogger(new MoveLogger());
 
         // ScoreBoard
         ScoreBoard scoreBoard = new ScoreBoard();
