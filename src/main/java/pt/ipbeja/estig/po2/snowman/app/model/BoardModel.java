@@ -148,6 +148,10 @@ public class BoardModel {
         return game.getMoveCount();
     }
 
+
+    public void setMapName(String mapName) {
+        this.mapName = mapName;
+    }
     /**
      * Checks if a given position is valid: within bounds and not a BLOCK.
      *
@@ -155,10 +159,6 @@ public class BoardModel {
      * @param newCol column index to check
      * @return true if the cell is not BLOCK and is inside the board; false otherwise
      */
-    public void setMapName(String mapName) {
-        this.mapName = mapName;
-    }
-
     public boolean validPosition(int newRow, int newCol) {
         try {
             return getPositionContent(newRow, newCol) != PositionContent.BLOCK;
@@ -168,6 +168,11 @@ public class BoardModel {
     }
 
 
+
+  public boolean canUnstack(int newRow, int newCol){
+        return validPosition(newRow, newCol) && snowballInPosition(newRow, newCol) == null;
+    }
+
     /**
      * Finds a snowball at the specified cell, if any.
      *
@@ -175,12 +180,6 @@ public class BoardModel {
      * @param col column index
      * @return the Snowball at that position, or null if none exists
      */
-
-  public boolean canUnstack(int newRow, int newCol){
-        return validPosition(newRow, newCol) && snowballInPosition(newRow, newCol) == null;
-    }
-
-
   public Snowball snowballInPosition(int row, int col) {
         for (Snowball snowball : snowballs) {
             if (snowball.getRow() == row && snowball.getCol() == col) {
@@ -232,7 +231,7 @@ public class BoardModel {
 
 
         if (moved) {
-            incrementMoveCount();
+            game.incrementMoveCount();
             Position currentPosition = new Position(monster.getRow(), monster.getCol());
 
             if (view != null) {
