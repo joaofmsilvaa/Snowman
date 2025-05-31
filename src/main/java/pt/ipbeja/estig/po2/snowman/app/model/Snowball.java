@@ -89,13 +89,23 @@ public class Snowball extends MobileElement {
 
 
     /**
-    * Attempts to move the snowball one cell in the given direction.
-    * If a complete snowman (COMPLETE) type, it cannot move.
-    *
-    * @param direction direction to move (UP, DOWN, LEFT, RIGHT)
-    * @param board     reference to the BoardModel for validation and updates
-    * @return true if the move or stack was successful; false otherwise
-    */
+     * Attempts to move the snowball one cell in the given direction.
+     * If a complete snowman (COMPLETE) type, it cannot move.
+     * Steps:
+     * 1. Reject move if type is COMPLETE.
+     * 2. Compute target cell coordinates.
+     * 3. If invalid (blocked or out of bounds), return false.
+     * 4. If another snowball is in target:
+     *    - Attempt to stack (board.tryStackSnowballs).
+     *    - Return result of stacking attempt.
+     * 5. If target cell has snow, call increaseSnowballType().
+     * 6. Update row and col to target, return true.
+     *
+     * @param direction direction to move (UP, DOWN, LEFT, RIGHT)
+     * @param board     reference to the BoardModel for validation and updates
+     * @return true if the move or stack was successful; false otherwise
+     */
+
     @Override
     public boolean move(Direction direction, BoardModel board) {
         // Snowman completo não pode mover
