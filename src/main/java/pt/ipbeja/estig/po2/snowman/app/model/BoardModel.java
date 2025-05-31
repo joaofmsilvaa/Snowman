@@ -169,13 +169,14 @@ public class BoardModel {
     public boolean moveMonster(Direction direction) {
         Position oldPosition = new Position(monster.getRow(), monster.getCol());
 
+        /// Verifica se há bola em frente ao monstro
         Snowball snowball = snowballInFrontOfMonster(direction);
         Position oldSnowballPosition = new Position(-1,-1);
-
         if (snowball != null) {
             oldSnowballPosition = new Position(snowball.getRow(), snowball.getCol());
         }
 
+        /// O metodo monster.move valida para mover ou empurrar bola)
         boolean moved = monster.move(direction, this);
 
         if (moved && view != null) {
@@ -187,9 +188,9 @@ public class BoardModel {
             /// Notifica a View para redesenhar monstro e bola se necessário
             view.onMonsterCleared(oldPosition);
             view.onMonsterMoved(currentPosition);
-           // monster.move(direction);
-            
 
+
+            /// Se havia bola em frente, notifica a View que essa bola mudou
             if (snowball != null) {
                 view.onSnowballMoved(snowball, oldSnowballPosition);
             }
@@ -212,9 +213,9 @@ public class BoardModel {
         SnowballType newType = top.stackOn(bottom);
         if (newType == null) return false;
 
+        /// Remove as bolas originais e cria a nova bola stack na posição de bottom
         snowballs.remove(top);
         snowballs.remove(bottom);
-
         Snowball stacked = new Snowball(bottom.getRow(), bottom.getCol(), newType);
         snowballs.add(stacked);
 
@@ -223,7 +224,7 @@ public class BoardModel {
             view.onSnowballStacked(bottomPos, newType);
         }
 
-        /// Se for um boneco completo, altera tabuleiro e grava detalhes do jogo
+        /// Se resultou num boneco completo, atualiza o tabuleiro e grava ficheiro
         if (newType == SnowballType.COMPLETE) {
             boardContent.get(bottom.getRow()).set(bottom.getCol(), PositionContent.SNOWMAN);
             if (view != null) {
