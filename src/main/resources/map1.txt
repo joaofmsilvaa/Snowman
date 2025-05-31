@@ -1,3 +1,4 @@
+Snowy garden
 B B B B B
 M X X X X
 X SB S S X

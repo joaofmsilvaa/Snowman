@@ -45,18 +45,16 @@ public abstract class DetailsFile {
         }
     }
 
-    /*
-        Escreve um ficheiro com o Mapa utilizado, os movimentos, o total de jogadas e a
-        posição final do boneco de neve
-    */
-    public void writeFile(String map, String[] moves, int moveCount, Position snowmanPosition) {
+
+    public void writeFile(String map, String[] moves, int moveCount, String playerName, Position snowmanPosition) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             writer.write("Mapa: " + map);
             writer.write("\n" +"Movimentos:\n");
-
             for (String move : moves) {
                 writer.write(move);
             }
+
+            writer.write("\nJogador: " + playerName);
             writer.write("\n" + "Total de jogadas: " + moveCount);
 
             /// Convert the column index to a letter and write the final position
