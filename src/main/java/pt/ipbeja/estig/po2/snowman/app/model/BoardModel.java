@@ -116,6 +116,10 @@ public class BoardModel {
         }
     }
 
+    public boolean canUnstack(int newRow, int newCol){
+        return validPosition(newRow, newCol) && snowballInPosition(newRow, newCol) == null;
+    }
+
     public Snowball snowballInPosition(int row, int col) {
         for (Snowball snowball : snowballs) {
             if (snowball.getRow() == row && snowball.getCol() == col) {
@@ -220,7 +224,7 @@ public class BoardModel {
         Snowball bottom = getBottom(stacked);
         Snowball top = getTop(stacked, direction);
 
-        if (validPosition(top.getRow(), top.getCol())) {
+        if (canUnstack(top.getRow(), top.getCol())) {
             snowballs.remove(stacked);
             snowballs.add(top);
             snowballs.add(bottom);
