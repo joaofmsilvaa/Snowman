@@ -14,7 +14,7 @@ public abstract class DetailsFile {
 
     public void createFile() {
         try {
-            File myObj = new File("/saves/" + fileName);
+            File myObj = new File(fileName);
             fileCreated = myObj.createNewFile();
         } catch (IOException e) {
             fileCreated = false;
