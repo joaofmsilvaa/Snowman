@@ -122,7 +122,7 @@ public class Snowball extends MobileElement {
             return false;
         }
         // Verifica se há outra bola no destino
-        Snowball target = board.snowballInPosition(newRow, newCol);
+        Snowball target = board.getSnowballInPosition(newRow, newCol);
         if (target != null) {
 
             return board.tryStackSnowballs(this, target);
@@ -156,6 +156,38 @@ public class Snowball extends MobileElement {
         }
 
         return false;
+    }
+
+    /**
+     * Given a partial stack (MID_SMALL, BIG_MID, or BIG_SMALL), returns the bottom ball.
+     *
+     * @param stack snowball of a stack type
+     * @return new Snowball instance representing the bottom ball, or null if invalid
+     */
+    public Snowball getBottom() {
+        return switch (this.type) {
+            case MID_SMALL -> new Snowball(this.row, this.col, SnowballType.MID);
+            case BIG_MID, BIG_SMALL -> new Snowball(this.row, this.col, SnowballType.BIG);
+            default -> null;
+        };
+    }
+
+    /**
+     * Given a partial stack and a direction, returns the top ball that would
+     * result from unstacking in that direction.
+     *
+     * @param stack     snowball of a stack type
+     * @param direction direction in which the top ball will be placed
+     * @return new Snowball instance representing the top ball, or null if invalid
+     */
+    public Snowball getTop(Snowball stack, Direction direction) {
+        Position position = new Position(stack.getRow(), stack.getCol()).changePosition(direction);
+        SnowballType type = switch (stack.getType()) {
+            case MID_SMALL, BIG_SMALL -> SnowballType.SMALL;
+            case BIG_MID -> SnowballType.MID;
+            default -> null;
+        };
+        return type == null ? null : new Snowball(position.getRow(), position.getCol(), type);
     }
 
 }

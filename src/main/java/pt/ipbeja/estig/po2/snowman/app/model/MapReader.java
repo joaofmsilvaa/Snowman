@@ -11,6 +11,8 @@ import java.util.List;
  */
 public class MapReader {
 
+    String mapName;
+
     /// Le um ficheiro de mapa e devolve um BoardModel /**
     ///      * Reads a map file from the resources folder and returns a BoardModel.
     ///      * The file must have lines of symbols separated by spaces, such as "S B M SB".
@@ -79,8 +81,15 @@ public class MapReader {
         }
 
         BoardModel boardModel = new BoardModel(boardContent, monster, snowballs);
-        boardModel.setMapName(mapName); // ← guardar o nome do mapa
+        setMapName(mapName);
         return boardModel;
     }
 
+    public String getMapName() {
+        return mapName;
+    }
+
+    public void setMapName(String mapName) {
+        this.mapName = mapName;
+    }
 }

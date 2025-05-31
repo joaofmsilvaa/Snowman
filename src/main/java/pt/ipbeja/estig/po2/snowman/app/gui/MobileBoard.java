@@ -7,9 +7,6 @@ import javafx.stage.Stage;
 import pt.ipbeja.estig.po2.snowman.app.model.*;
 import pt.ipbeja.estig.po2.snowman.app.model.interfaces.View;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MobileBoard extends GridPane implements View {
 
     private final BoardModel board;
@@ -63,7 +60,7 @@ public class MobileBoard extends GridPane implements View {
             for (int col = 0; col < cols; col++) {
                 Monster monster = board.getMonster();
                 MobileEntity entity = MobileEntity.EMPTY;
-                Snowball snowball = board.snowballInPosition(row, col);
+                Snowball snowball = board.getSnowballInPosition(row, col);
                 boolean hasMonster = monster.getRow() == row && monster.getCol() == col;
 
                 if (hasMonster) {
