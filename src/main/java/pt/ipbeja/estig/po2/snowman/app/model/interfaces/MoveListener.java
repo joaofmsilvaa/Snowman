@@ -4,6 +4,6 @@ import pt.ipbeja.estig.po2.snowman.app.model.Position;
 
 public interface MoveListener {
 
-    /// Chamado sempre que o monstro efetua um movimento bem-sucedido.
+    /// Called whenever the monster move is done
     void onMove(Position from, Position to);
 }
