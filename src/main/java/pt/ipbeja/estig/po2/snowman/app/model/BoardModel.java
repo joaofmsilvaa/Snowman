@@ -19,6 +19,7 @@ public class BoardModel {
     private String playerName;
     private String levelName;
     private Consumer<Score> scoreConsumer;
+    private String mapName;
 
     public BoardModel() {
         boardContent = new ArrayList<>();
@@ -106,6 +107,14 @@ public class BoardModel {
 
     public void setScoreConsumer(Consumer<Score> consumer) {
         this.scoreConsumer = consumer;
+    }
+
+    public void setMapName(String mapName) {
+        this.mapName = mapName;
+    }
+
+    public String getMapName() {
+        return mapName;
     }
 
     public boolean validPosition(int newRow, int newCol) {
@@ -211,10 +220,10 @@ public class BoardModel {
         snowmanFile.setFilename("Snowman" + snowmanFile.getCurrentDate() + ".txt");
         snowmanFile.createFile();
         String[] moves = {"2a -> 2b"};
-        snowmanFile.writeFile("map name", moves, getMoveCount(), playerName,snowmanPosition);
+        snowmanFile.writeFile(mapName, moves, getMoveCount(), playerName,snowmanPosition);
 
         // Criar e notificar pontuação
-        Score score = new Score(playerName, "map name", moveCount);
+        Score score = new Score(playerName, mapName, moveCount);
         if (scoreListener != null) {
             scoreListener.onScore(score);
         }
