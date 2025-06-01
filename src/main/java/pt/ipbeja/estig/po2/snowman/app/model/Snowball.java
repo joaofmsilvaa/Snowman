@@ -158,12 +158,6 @@ public class Snowball extends MobileElement {
         return false;
     }
 
-    /**
-     * Given a partial stack (MID_SMALL, BIG_MID, or BIG_SMALL), returns the bottom ball.
-     *
-     * @param stack snowball of a stack type
-     * @return new Snowball instance representing the bottom ball, or null if invalid
-     */
     public Snowball getBottom() {
         return switch (this.type) {
             case MID_SMALL -> new Snowball(this.row, this.col, SnowballType.MID);

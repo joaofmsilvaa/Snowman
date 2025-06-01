@@ -1,7 +1,5 @@
 package pt.ipbeja.estig.po2.snowman.app.model;
 
-import pt.ipbeja.estig.po2.snowman.app.model.interfaces.ScoreListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,29 +15,6 @@ public class Game {
 
     public void onMove(Position from, Position to) {
         moveHistory.add(to.formatDetails(from.getRow() + 1, from.getCol(), to.getRow() + 1, to.getCol()));
-    }
-
-    /**
-     * Writes game information to a file when a snowman is completed:
-     * - Level name ("map name")
-     * - Move list (placeholder example, should use actual moves)
-     * - Total move count
-     * - Final snowman position
-     *
-     * @param snowmanPosition final position of the snowman (row and column)
-     */
-    public void storeGameDetails(Position snowmanPosition, ScoreListener scoreListener) {
-        SnowmanFile snowmanFile = new SnowmanFile();
-        snowmanFile.setFilename("Snowman" + snowmanFile.getCurrentDate() + ".txt");
-        snowmanFile.createFile();
-
-        snowmanFile.writeFile(mapName, getMoveHistoryArray(), getMoveCount(), getPlayerName(), snowmanPosition);
-
-        // Criar e notificar pontuação
-        Score score = new Score(getPlayerName(), mapName, getMoveCount());
-        if (scoreListener != null) {
-            scoreListener.onScore(score);
-        }
     }
 
     /// Retorna o número de movimentos realizados
