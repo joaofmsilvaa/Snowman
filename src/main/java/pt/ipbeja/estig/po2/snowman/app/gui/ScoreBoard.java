@@ -10,11 +10,18 @@ import pt.ipbeja.estig.po2.snowman.app.model.interfaces.ScoreListener;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * ScoreBoard is a VBox that displays the current game’s score and the top-3 high scores.
+ * It implements ScoreListener to receive notifications when a new Score is earned.
+ */
 public class ScoreBoard extends VBox implements ScoreListener {
     private final Label currentScoreLabel;
     private final Label highScoresLabel;
     private final List<Score> allScores;
 
+
+    ///  Constructs a ScoreBoard by setting padding and spacing, initializing labels,
+    ///   and loading all previously saved scores via ScoreLoader.
     public ScoreBoard() {
         setPadding(new Insets(15));
         setSpacing(15);
@@ -25,39 +32,57 @@ public class ScoreBoard extends VBox implements ScoreListener {
         currentScoreLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
         highScoresLabel.setStyle("-fx-font-size: 13px;");
 
+        // Add both labels to the VBox layout
         this.getChildren().addAll(currentScoreLabel, highScoresLabel);
         this.allScores = ScoreLoader.loadAllScores(); // ← carrega scores guardados
     }
 
+    /**
+     * Updates the ScoreBoard panel with the given currentScore:
+     * - Displays the current player's name, level, and move count.
+     * - Inserts the new score into the allScores list, sorts it,
+     *   and displays the top 3 scores, marking the current score if it is in the top 3.
+     *
+     * @param currentScore the Score object representing the latest game result
+     */
     private void updatePanel(Score currentScore) {
-        // Atualizar pontuação atual com destaque
+        // Update the current score label with player, level, and moves
         currentScoreLabel.setText(String.format("""
-                Pontuação Atual 🎯
+                Pontuação Atual: 
                 ----------------------
                 Jogador: %s
                 Nível: %s
                 Movimentos: %d
                 """,
+
                 currentScore.getPlayerName(),
                 currentScore.getLevelName(),
                 currentScore.getMoves())
         );
 
-        // Atualizar top 3
+        // Add the new score to the list and sort in natural order
         allScores.add(currentScore);
         Collections.sort(allScores);
 
+        // Determine how many scores to show
         int topLimit = Math.min(3, allScores.size());
-        StringBuilder builder = new StringBuilder("🏆 TOP 3 MELHORES PONTUAÇÕES\n----------------------------\n");
+        StringBuilder builder = new StringBuilder(" TOP 3 MELHORES PONTUAÇÕES\n----------------------------\n");
         for (int i = 0; i < topLimit; i++) {
             Score s = allScores.get(i);
+            // Mark the current score if it matches
             s.setTop(s.equals(currentScore));
             builder.append(String.format("%d. %s\n", i + 1, s));
         }
 
+        // Set the high scores label text
         highScoresLabel.setText(builder.toString());
     }
 
+    /**
+     * Called when a new Score has been generated. Triggers the panel update.
+     *
+     * @param score the newly earned Score
+     */
     @Override
     public void onScore(Score score) {
         updatePanel(score);

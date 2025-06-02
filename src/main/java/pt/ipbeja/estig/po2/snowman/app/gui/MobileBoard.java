@@ -7,6 +7,11 @@ import javafx.stage.Stage;
 import pt.ipbeja.estig.po2.snowman.app.model.*;
 import pt.ipbeja.estig.po2.snowman.app.model.interfaces.View;
 
+/**
+ * MobileBoard extends GridPane and implements View to render and update
+ * the game board dynamically. It listens for key presses (W/A/S/D) to move
+ * the monster, and updates buttons when the model notifies events.
+ */
 public class MobileBoard extends GridPane implements View {
 
     private final BoardModel board;
@@ -14,6 +19,13 @@ public class MobileBoard extends GridPane implements View {
     private String playerName;
     private int moveCount = 0;
 
+    /**
+     * Constructs a MobileBoard tied to the given BoardModel.
+     * Registers itself as the View, draws the initial grid of buttons,
+     * and sets up a key listener for monster movement.
+     *
+     * @param boardModel the BoardModel containing game logic
+     */
     public MobileBoard(BoardModel boardModel) {
         this.board = boardModel;
 
@@ -42,17 +54,20 @@ public class MobileBoard extends GridPane implements View {
         });
     }
 
-
+    ///Draws the entire board: adds column labels, row labels,
+    /// and creates an EntityButton for each cell
     public void drawBoard() {
         this.getChildren().clear();
         int rows = board.getRowCount();
         int cols = board.getColCount();
 
+        // add column labels
         for (int col = 0; col < cols; col++) {
             PositionText letter = new PositionText(Character.toString((char) ('A' + col)));
             this.add(letter, col + 1, 0);
         }
 
+        // for each row, add a row label and buttons for the columns
         for (int row = 0; row < rows; row++) {
             PositionText number = new PositionText(String.valueOf(row + 1));
             this.add(number, 0, row + 1);
@@ -76,56 +91,78 @@ public class MobileBoard extends GridPane implements View {
         }
     }
 
+    /// Increments the local move count when called.
     public void incrementMoveCount() {
         moveCount++;
     }
 
-    public void setPlayerName(String name) {
-        this.playerName = name;
-    }
 
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public int getMoveCount() {
-        return moveCount;
-    }
-
+    /**
+     * Called when the monster has moved from one position to another.
+     * Clears the monster graphic at its previous position and shows it
+     * at the new position. Also increments move count.
+     *
+     * @param monsterPosition new position of the monster
+     */
     @Override
     public void onMonsterMoved(Position monsterPosition) {
         Monster monster = board.getMonster();
+        // Clear monster from its previous button
         buttons[monster.getPrevRow()][monster.getPrevCol()].setMonsterVisible(false);
+        // Show monster on its new button
         buttons[monsterPosition.getRow()][monsterPosition.getCol()].setMonsterVisible(true);
         incrementMoveCount();
     }
 
+    /**
+     * Called when a snowball has moved from oldPosition to its updated
+     * position. Clears the old cell, updates the new cell with the correct
+     * snowball image, and if the monster is on either cell, makes it visible.
+     *
+     * @param snowball    the Snowball object that moved
+     * @param oldPosition the previous Position of the snowball
+     */
     @Override
     public void onSnowballMoved(Snowball snowball, Position oldPosition) {
+        // Clear the graphic at old position
         buttons[oldPosition.getRow()][oldPosition.getCol()].clearEntity();
 
+        // If the monster was in that old cell, re-show the monster
         if (board.getMonster().getRow() == oldPosition.getRow() && board.getMonster().getCol() == oldPosition.getCol()) {
             buttons[oldPosition.getRow()][oldPosition.getCol()].setMonsterVisible(true);
         }
 
+        // Show the snowball at its new cell
         int newRow = snowball.getRow();
         int newCol = snowball.getCol();
         buttons[newRow][newCol].setSnowballType(snowball.getType());
 
+
+        // If the monster is now on top of the moved snowball, show it
         if (board.getMonster().getRow() == newRow && board.getMonster().getCol() == newCol) {
             buttons[newRow][newCol].setMonsterVisible(true);
         }
     }
 
+    /**
+     * Called when a complete snowman is formed at snowmanPos.
+     * Updates that button to show the complete snowman graphic,
+     * then displays a Game Over alert and closes the stage.
+     *
+     * @param snowmanPos the Position where the snowman was created
+     * @param newType    the SnowballType.COMPLETE
+     */
     @Override
     public void onSnowmanCreated(Position snowmanPos, SnowballType newType) {
         String name = board.getPlayerName();
         int moves = board.getMoveCount();
+
+        // Update the button to show a complete snowman
         buttons[snowmanPos.getRow()][snowmanPos.getCol()]
                 .setSnowballType(SnowballType.COMPLETE);
 
 
-        // Mostrar alerta Game Over
+        // Show an information alert Game Over
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Game Over");
@@ -134,13 +171,21 @@ public class MobileBoard extends GridPane implements View {
                     "\nJogador: " + name + "\nMovimentos: " + moves);
             alert.showAndWait();
 
-            // Voltar ao menu principal
+            // Close the current window (return to main menu)
             Stage primaryStage = (Stage) this.getScene().getWindow();
             primaryStage.close();
 
         });
     }
 
+    /**
+     * Called when two snowballs have been stacked at snowballPos.
+     * Updates that button to show the new stacked snowball type.
+     * If the monster is also on that cell, makes it visible.
+     *
+     * @param snowballPos the Position where stacking occurred
+     * @param newType     the resulting SnowballType after stacking
+     */
     @Override
     public void onSnowballStacked(Position snowballPos, SnowballType newType) {
         buttons[snowballPos.getRow()][snowballPos.getCol()].setSnowballType(newType);
@@ -150,6 +195,14 @@ public class MobileBoard extends GridPane implements View {
         }
     }
 
+    /**
+     * Called when a stacked snowball has been unstacked into two separate snowballs.
+     * Clears both top and bottom cells, then sets each cell’s graphic based on the new types.
+     * If the monster occupies either cell, makes it visible.
+     *
+     * @param top    the Snowball that moves to a new cell
+     * @param bottom the Snowball that remains in the original cell
+     */
     @Override
     public void onSnowballUnstacked(Snowball top, Snowball bottom) {
         int topRow = top.getRow();
@@ -157,21 +210,33 @@ public class MobileBoard extends GridPane implements View {
         int bottomRow = bottom.getRow();
         int bottomCol = bottom.getCol();
 
+        // Clear any existing graphics at both positions
         buttons[topRow][topCol].clearEntity();
         buttons[bottomRow][bottomCol].clearEntity();
 
+        // Set each cell’s new snowball image
         buttons[topRow][topCol].setSnowballType(top.getType());
         buttons[bottomRow][bottomCol].setSnowballType(bottom.getType());
 
         Monster monster = board.getMonster();
+
+        // If the monster is in the top cell, show it
         if (monster.getRow() == topRow && monster.getCol() == topCol) {
             buttons[topRow][topCol].setMonsterVisible(true);
         }
+
+        // If the monster is in the bottom cell, show it
         if (monster.getRow() == bottomRow && monster.getCol() == bottomCol) {
             buttons[bottomRow][bottomCol].setMonsterVisible(true);
         }
     }
 
+    /**
+     * Called before the monster is redrawn at a new position. Hides
+     * the monster graphic at the specified position.
+     *
+     * @param monsterPosition the Position where the monster was previously
+     */
     @Override
     public void onMonsterCleared(Position monsterPosition) {
 

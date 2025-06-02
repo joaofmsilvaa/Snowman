@@ -12,37 +12,66 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import  javafx.scene.control.TextField;
 
+/**
+ * StartMenu displays the initial menu for the game, allowing the player
+ * to enter their name and choose between two levels. It shows two title lines,
+ * a credits line, level-selection buttons, decorative images, and a name field.
+ */
 public class StartMenu {
 
+    /**
+     * Builds and shows the start menu on the provided Stage. The menu includes:
+     * - Two title labels ("A Good Snowman Is Hard To Build" and "PO2 edition")
+     * - A credits label ("Made by: João Silva and Paulo Neves")
+     * - Two level buttons ("Level 1" and "Level 2")
+     * - Two images (monster and snowman) for decoration
+     * - A TextField for the player to enter their name
+     *
+     * @param stage the Stage on which to display the start menu
+     */
     public static void show(Stage stage) {
 
-        Label title = new Label("A good Snow is hard to build");
-        title.setStyle("-fx-font-size: 36px; -fx-font-weight: bold;");
+        //title Labels
+        Label title1 = new Label("A Good Snowman Is Hard To Build");
+        title1.setStyle("-fx-font-size: 36px; -fx-font-weight: bold;");
+        Label title2 = new Label("PO2 edition");
+        title2.setStyle("-fx-font-size: 36px; -fx-font-weight: bold;");
 
+        //credits label
+        Label credits = new Label("Made by: João Silva and Paulo Neves");
+        credits.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+
+        //Levels buttons
         Button level1 = new Button("Level 1");
         level1.setStyle("-fx-font-size: 16px; -fx-padding: 10 20;");
 
         Button level2 = new Button("Level 2");
         level2.setStyle("-fx-font-size: 16px; -fx-padding: 10 20;");
 
-
+        // Text field for the name
         TextField name = new TextField();
         name.setPromptText("Nome: ");
         name.setMaxWidth(120);
 
-
+        //Action event for the buttons launch the map
         level1.setOnAction(e -> startLevel("map1.txt", name.getText()));
         level2.setOnAction(e -> startLevel("map2.txt", name.getText()));
 
 
-
+        // monster
         ImageView monsterView = new ImageView(new Image("/monster1.png"));
         monsterView.setFitWidth(80);
         monsterView.setFitHeight(80);
 
+        // snowman
         ImageView snowmanView = new ImageView(new Image("/snowman.png"));
         snowmanView.setFitWidth(80);
         snowmanView.setFitHeight(80);
+
+        VBox title = new VBox(20);
+        title.setAlignment(Pos.CENTER);
+        title.setStyle("-fx-background-color: white;");
+        title.getChildren().addAll(title1, title2);
 
         HBox buttons = new HBox(40);
         buttons.setAlignment(Pos.CENTER);
@@ -58,7 +87,8 @@ public class StartMenu {
         layout.setAlignment(Pos.CENTER);
         layout.setStyle("-fx-background-color: white;");
 
-        layout.getChildren().addAll(title, buttons, Images, name);
+        //overall layout
+        layout.getChildren().addAll(title, buttons, Images, name, credits);
 
 
         Scene scene = new Scene(new StackPane(layout), 600, 600);
@@ -66,8 +96,15 @@ public class StartMenu {
         stage.setTitle("Snowman - Menu");
         stage.show();
     }
-    private static void startLevel(String fileName, String playerName){
 
+    /**
+     * Helper method that creates a new SnowmanGUI instance and starts it
+     * on a new Stage, using the specified map file and player name.
+     *
+     * @param fileName   the map file to load ex: "map1.txt"
+     * @param playerName the name entered by the player
+     */
+    private static void startLevel(String fileName, String playerName){
         SnowmanGUI gui = new SnowmanGUI(fileName, playerName );
         gui.start(new Stage());
     }
