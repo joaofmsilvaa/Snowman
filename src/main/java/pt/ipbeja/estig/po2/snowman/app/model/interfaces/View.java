@@ -9,7 +9,7 @@ public interface View {
     /// Called when a complete snowman is formed (type COMPLETE).
     void onSnowmanCreated(Position snowballPosition, SnowballType newType);
 
-    ///  Called whenever two snowballs partially stack (e.g., SMALL + MID = MID_SMALL).
+    ///  Called whenever two snowballs partially stack ( SMALL + MID = MID_SMALL).
     void onSnowballStacked(Position snowballPosition, SnowballType newType);
 
     /// Called when a snowball stack is undone.
