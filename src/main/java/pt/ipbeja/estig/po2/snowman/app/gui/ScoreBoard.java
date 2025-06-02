@@ -15,7 +15,7 @@ public class ScoreBoard extends VBox implements ScoreListener {
     private final Label highScoresLabel;
     private final List<Score> allScores;
 
-    public ScoreBoard() {
+    public ScoreBoard(String mapName) {
         setPadding(new Insets(15));
         setSpacing(15);
 
@@ -26,7 +26,7 @@ public class ScoreBoard extends VBox implements ScoreListener {
         highScoresLabel.setStyle("-fx-font-size: 13px;");
 
         this.getChildren().addAll(currentScoreLabel, highScoresLabel);
-        this.allScores = ScoreLoader.loadAllScores(); // ← carrega scores guardados
+        this.allScores = ScoreLoader.loadScoresForMap(mapName);
     }
 
     private void updatePanel(Score currentScore) {

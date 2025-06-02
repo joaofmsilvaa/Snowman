@@ -6,9 +6,9 @@ import java.util.List;
 
 public class ScoreLoader {
 
-    private static final String DIRECTORY = "."; // ou onde os ficheiros são guardados
+    private static final String DIRECTORY = ".";
 
-    public static List<Score> loadAllScores() {
+    public static List<Score> loadScoresForMap(String mapNameToFilter) {
         File folder = new File(DIRECTORY);
         File[] files = folder.listFiles((dir, name) -> name.startsWith("Snowman") && name.endsWith(".txt"));
 
@@ -17,7 +17,7 @@ public class ScoreLoader {
         if (files != null) {
             for (File file : files) {
                 Score score = extractScoreFromFile(file);
-                if (score != null) {
+                if (score != null && score.getLevelName().equals(mapNameToFilter)) {
                     scores.add(score);
                 }
             }
@@ -25,6 +25,7 @@ public class ScoreLoader {
 
         return scores;
     }
+
 
     private static Score extractScoreFromFile(File file) {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
