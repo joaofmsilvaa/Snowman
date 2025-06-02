@@ -14,11 +14,11 @@ public class ScoreManager {
     }
 
     private void updateTop() {
-        // limpar flags
+        // Clean flags
         for (Score s : scores) {
             s.setTop(false);
         }
-        // marcar top-3
+        // store top-3
         for (int i = 0; i < Math.min(3, scores.size()); i++) {
             scores.get(i).setTop(true);
         }
