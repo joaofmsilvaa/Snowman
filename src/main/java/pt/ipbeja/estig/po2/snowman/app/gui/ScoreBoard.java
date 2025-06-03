@@ -19,10 +19,7 @@ public class ScoreBoard extends VBox implements ScoreListener {
     private final Label highScoresLabel;
     private final List<Score> allScores;
 
-
-    ///  Constructs a ScoreBoard by setting padding and spacing, initializing labels,
-    ///   and loading all previously saved scores via ScoreLoader.
-    public ScoreBoard() {
+    public ScoreBoard(String mapName) {
         setPadding(new Insets(15));
         setSpacing(15);
 
@@ -34,7 +31,7 @@ public class ScoreBoard extends VBox implements ScoreListener {
 
         // Add both labels to the VBox layout
         this.getChildren().addAll(currentScoreLabel, highScoresLabel);
-        this.allScores = ScoreLoader.loadAllScores(); // ← carrega scores guardados
+        this.allScores = ScoreLoader.loadScoresForMap(mapName);
     }
 
     /**

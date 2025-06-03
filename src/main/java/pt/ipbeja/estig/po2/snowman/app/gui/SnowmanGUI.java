@@ -43,7 +43,7 @@ public class SnowmanGUI extends Application {
         boardModel.setGame(game);
 
         // ScoreBoard
-        ScoreBoard scoreBoard = new ScoreBoard();
+        ScoreBoard scoreBoard = new ScoreBoard(game.getMapName());
         boardModel.setScoreListener(scoreBoard); // permite ao modelo atualizar o painel
 
         // Set up the ScoreBoard and register it as a listener for scores

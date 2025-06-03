@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class ScoreLoader {
 
-    private static final String DIRECTORY = "."; // ou onde os ficheiros são guardados
+    private static final String DIRECTORY = ".";
 
     /**
      * Scans the DIRECTORY for files whose names start with "Snowman" and end with ".txt".
@@ -21,7 +21,7 @@ public class ScoreLoader {
      * @return a List of Score objects extracted from all matching files;
      *         returns an empty list if no files are found or if all extractions fail.
      */
-    public static List<Score> loadAllScores() {
+    public static List<Score> loadScoresForMap(String mapNameToFilter) {
         File folder = new File(DIRECTORY);
         // Filter files: name starts with "Snowman" and ends with ".txt"
         File[] files = folder.listFiles((dir, name) -> name.startsWith("Snowman") && name.endsWith(".txt"));
@@ -32,7 +32,7 @@ public class ScoreLoader {
             for (File file : files) {
                 //each file into a Score object
                 Score score = extractScoreFromFile(file);
-                if (score != null) {
+                if (score != null && score.getLevelName().equals(mapNameToFilter)) {
                     scores.add(score);
                 }
             }
@@ -40,6 +40,7 @@ public class ScoreLoader {
 
         return scores;
     }
+
 
     /**
      * Opens the given file and reads its contents to extract:
