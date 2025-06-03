@@ -6,10 +6,20 @@ import javafx.scene.image.ImageView;
 import pt.ipbeja.estig.po2.snowman.app.model.BoardModel;
 import pt.ipbeja.estig.po2.snowman.app.model.PositionContent;
 
+/**
+ * BoardButton is a custom Button that displays an image
+ * corresponding to the PositionContent (grass, snow, block, or snowman).
+ */
 public class BoardButton extends Button {
 
     private static final int SIZE = 100;
 
+    /**
+     * Constructs a BoardButton by loading the appropriate image for the given content.
+     * If the image is found, sets it as the button's graphic; otherwise leaves it empty.
+     *
+     * @param content enum PositionContent (NO_SNOW, SNOW, BLOCK, SNOWMAN)
+     */
     public BoardButton(PositionContent content) {
         Image image = loadImageForContent(content);
 
@@ -30,6 +40,7 @@ public class BoardButton extends Button {
         this.setFocusTraversable(false);
     }
 
+    /// Loads the image resource corresponding to the given PositionContent.
     private Image loadImageForContent(PositionContent content) {
         String imagePath = switch (content) {
             case NO_SNOW -> "/grass.png";

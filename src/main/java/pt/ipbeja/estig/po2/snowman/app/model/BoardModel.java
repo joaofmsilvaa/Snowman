@@ -64,13 +64,8 @@ public class BoardModel {
         this.moveListener = moveListener;
     }
 
-    /**
-     * Sets up the initial game state:
-     * - A 5×5 board with the first row filled with SNOW and the rest with NO_SNOW
-     * - Monster placed at (2,0)
-     * - Three small snowballs at positions (2,1), (2,2), and (2,3)
-     */
 
+    /// Registers the ScoreListener that will be notified of new scores.
     public void setScoreListener(ScoreListener listener) {
         this.scoreListener = listener;
     }
@@ -79,6 +74,12 @@ public class BoardModel {
         game.setPlayerName(playerName);
     }
 
+    /**
+     * Sets up the initial game state:
+     * - A 5×5 board with the first row filled with SNOW and the rest with NO_SNOW
+     * - Monster placed at (2,0)
+     * - Three small snowballs at positions (2,1), (2,2), and (2,3)
+     */
     public void startGame() {
         monster = new Monster(2, 0);
 
@@ -100,7 +101,7 @@ public class BoardModel {
         snowballs.add(new Snowball(2, 3, SnowballType.SMALL));
     }
 
-    ///  Define o objeto Game onde estão o nome do jogador e a quantidade de movimentos
+    ///  Defines the Game object where the player name and move count are stored.
     public void setGame(Game game) {
         this.game = game;
 
@@ -134,10 +135,12 @@ public class BoardModel {
         return monster;
     }
 
+    /// Returns player name
     public String getPlayerName() {
         return game.getPlayerName();
     }
 
+    /// Returns the current move count
     public int getMoveCount(){
         return game.getMoveCount();
     }
@@ -146,6 +149,7 @@ public class BoardModel {
     public void setMapName(String mapName) {
         game.setMapName(mapName);
     }
+
     /**
      * Checks if a given position is valid: within bounds and not a BLOCK.
      *
@@ -223,23 +227,28 @@ public class BoardModel {
         /// Attempt to move the monster and also pushes a snowball if present
         boolean moved = monster.move(direction, this);
 
-
+        /// If a View is registered, notify it to clear and redraw the monster and snowball
         if (moved) {
             Position currentPosition = new Position(monster.getRow(), monster.getCol());
 
             if (view != null) {
+                /// Tell the view to clear the monster's old cell
                 view.onMonsterCleared(oldPosition);
+                /// Tell the view to draw the monster in its new cell
                 view.onMonsterMoved(currentPosition);
 
                 if (snowball != null) {
+                    /// Tell the view to update the pushed snowball
                     view.onSnowballMoved(snowball, oldSnowballPosition);
                 }
             }
 
             if (moveListener != null) {
+                /// Notify the view about the monster’s move
                 moveListener.onMove(oldPosition, currentPosition);
             }
             if (game != null) {
+                /// Inform the Game object about the move (for logging or state)
                 game.onMove(oldPosition, currentPosition);
             }
         }
@@ -325,16 +334,16 @@ public class BoardModel {
     }
 
     /**
-     * Gera uma representação textual do mapa atual,
-     * usando letras simples para BLOCO, SNOW, NO_SNOW, MONSTRO e SNOWMAN.
+     * Generates a textual representation of the current map,
+     * using simple symbols for BLOCK, SNOW, NO_SNOW, MONSTER, and SNOWMAN.
      *
-     * @return Array de strings, cada uma representando uma linha do mapa.
+     * @return array of strings, each representing one row of the map
      */
     public String[] generateMapString() {
         String[] mapLines = new String[getRowCount()];
         Position snowmanPosition = null;
 
-        // Encontrar a posição do boneco de neve completo (caso exista)
+        /// Find the position of the complete snowman, if it exists
         for (int row = 0; row < getRowCount(); row++) {
             for (int col = 0; col < getColCount(); col++) {
                 if (boardContent.get(row).get(col) == PositionContent.SNOWMAN) {
@@ -344,6 +353,7 @@ public class BoardModel {
             }
         }
 
+        /// Build each row’s string using getStringBuilder
         for (int row = 0; row < getRowCount(); row++) {
             StringBuilder line = getStringBuilder(row, snowmanPosition);
 
@@ -353,6 +363,13 @@ public class BoardModel {
         return mapLines;
     }
 
+    /**
+     * Builds one row of the map string, marking the monster, snowman, or cell content.
+     *
+     * @param row             the row index to build
+     * @param snowmanPosition position of the complete snowman (may be null)
+     * @return a StringBuilder containing that row’s textual representation
+     */
     private StringBuilder getStringBuilder(int row, Position snowmanPosition) {
         StringBuilder line = new StringBuilder();
 
@@ -360,16 +377,16 @@ public class BoardModel {
             Position current = new Position(row, col);
 
             if (monster.getRow() == row && monster.getCol() == col) {
-                line.append("\t\uD83D\uDC79\t");
+                line.append("\t\uD83D\uDC79\t"); // Monster symbol
             } else if (snowmanPosition.equals(current)) {
-                line.append(" SM ");
+                line.append(" SM "); // Complete snowman marker
             } else {
                 PositionContent content = boardContent.get(row).get(col);
                 switch (content) {
                     case BLOCK -> line.append("\tB\t");
                     case SNOW -> line.append("\tS\t");
                     case NO_SNOW -> line.append("\tX\t");
-                    default -> line.append("\t☃️\t");
+                    default -> line.append("\t☃️\t"); // Partial stack or other
                 }
             }
         }

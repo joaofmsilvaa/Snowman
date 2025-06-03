@@ -30,12 +30,10 @@ public abstract class MobileElement {
 
 
     /// Metodos to get an row and an column of the element.
-    public int getRow() {
-        return row;
+    public int getRow() {return row;
     }
 
-    public int getCol() {
-        return col;
+    public int getCol() {return col;
     }
 
     public int getPrevRow() {
