@@ -41,7 +41,7 @@ public class SnowmanGUI extends Application {
         //Create a Game instance for tracking moves and player info
         Game game = new Game(this.playerName, reader.getMapName());
         boardModel.setGame(game);
-
+        boardModel.setMapFileName(this.mapFileName);
         // ScoreBoard
         ScoreBoard scoreBoard = new ScoreBoard(game.getMapName());
         boardModel.setScoreListener(scoreBoard); // permite ao modelo atualizar o painel

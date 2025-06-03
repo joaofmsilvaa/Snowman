@@ -27,6 +27,7 @@ public class BoardModel {
     private MoveListener moveListener;
     private Game game;
     private ScoreListener scoreListener;
+    private String mapFileName;
 
 
     /**
@@ -64,6 +65,9 @@ public class BoardModel {
         this.moveListener = moveListener;
     }
 
+    public void setMapFileName(String mapFileName) {
+        this.mapFileName = mapFileName;
+    }
 
     /// Registers the ScoreListener that will be notified of new scores.
     public void setScoreListener(ScoreListener listener) {
@@ -109,6 +113,11 @@ public class BoardModel {
     }
 
 
+    /// Getter to obtain the name of the map
+    public String getMapFileName() {
+        return this.mapFileName;
+    }
+
     /// Number of rows
     public int getRowCount() {
         return boardContent.size();
@@ -145,7 +154,12 @@ public class BoardModel {
         return game.getMoveCount();
     }
 
+    /// Get the status game for the restartLevel()
+    public Game getGame() {
+        return this.game;
+    }
 
+    /// set to save the name of the file name
     public void setMapName(String mapName) {
         game.setMapName(mapName);
     }

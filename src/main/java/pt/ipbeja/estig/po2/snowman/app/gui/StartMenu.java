@@ -41,12 +41,9 @@ public class StartMenu {
         Label credits = new Label("Made by: João Silva and Paulo Neves");
         credits.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
-        //Levels buttons
-        Button level1 = new Button("Level 1");
-        level1.setStyle("-fx-font-size: 16px; -fx-padding: 10 20;");
-
-        Button level2 = new Button("Level 2");
-        level2.setStyle("-fx-font-size: 16px; -fx-padding: 10 20;");
+        //Start buttons
+        Button startgame = new Button("Start Game");
+        startgame.setStyle("-fx-font-size: 16px; -fx-padding: 10 20;");
 
         // Text field for the name
         TextField name = new TextField();
@@ -54,8 +51,8 @@ public class StartMenu {
         name.setMaxWidth(120);
 
         //Action event for the buttons launch the map
-        level1.setOnAction(e -> startLevel("map1.txt", name.getText()));
-        level2.setOnAction(e -> startLevel("map2.txt", name.getText()));
+        startgame.setOnAction(e -> startLevel("map1.txt", name.getText()));
+
 
 
         // monster
@@ -73,10 +70,6 @@ public class StartMenu {
         title.setStyle("-fx-background-color: white;");
         title.getChildren().addAll(title1, title2);
 
-        HBox buttons = new HBox(40);
-        buttons.setAlignment(Pos.CENTER);
-        buttons.setStyle("-fx-background-color: white;");
-        buttons.getChildren().addAll(level1, level2);
 
         HBox Images = new HBox(40);
         Images.setAlignment(Pos.CENTER);
@@ -88,7 +81,7 @@ public class StartMenu {
         layout.setStyle("-fx-background-color: white;");
 
         //overall layout
-        layout.getChildren().addAll(title, buttons, Images, name, credits);
+        layout.getChildren().addAll(title, startgame, Images, name, credits);
 
 
         Scene scene = new Scene(new StackPane(layout), 600, 600);

@@ -2,10 +2,14 @@ package pt.ipbeja.estig.po2.snowman.app.gui;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import pt.ipbeja.estig.po2.snowman.app.model.*;
 import pt.ipbeja.estig.po2.snowman.app.model.interfaces.View;
+
+import java.util.Optional;
 
 /**
  * MobileBoard extends GridPane and implements View to render and update
@@ -164,17 +168,33 @@ public class MobileBoard extends GridPane implements View {
 
         // Show an information alert Game Over
         Platform.runLater(() -> {
+            ButtonType restartLevel = new ButtonType("Recomeçar Nível", ButtonBar.ButtonData.LEFT);
+            ButtonType chooseLevel  = new ButtonType("Escolher Outro Nível", ButtonBar.ButtonData.LEFT);
+            ButtonType cancel       = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Game Over");
             alert.setHeaderText("Game Over");
             alert.setContentText("Parabéns! O boneco de neve foi criado. " +
                     "\nJogador: " + name + "\nMovimentos: " + moves);
-            alert.showAndWait();
-
-            // Close the current window (return to main menu)
-            Stage primaryStage = (Stage) this.getScene().getWindow();
-            primaryStage.close();
-
+            alert.getButtonTypes().setAll(restartLevel, chooseLevel, cancel);
+            Stage current = (Stage) this.getScene().getWindow();
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent()) {
+                if (result.get() == restartLevel) {
+                    // Chamado para reiniciar o mesmo nível
+                    restartLevel();
+                } else if (result.get() == chooseLevel) {
+                    // Fechar esta janela e abrir ecrã de seleção de níveis
+                    current.close();
+                    new SnowmanGUI("map2.txt", name).start(new Stage());
+                } else {
+                    // Se cancelar, só fecha o diálogo
+                    current.close();
+                }
+            }
         });
     }
 
@@ -241,6 +261,19 @@ public class MobileBoard extends GridPane implements View {
     public void onMonsterCleared(Position monsterPosition) {
 
         buttons[monsterPosition.getRow()][monsterPosition.getCol()].setMonsterVisible(false);
+    }
+
+    /**
+     * Fecha a janela atual e relança um novo SnowmanGUI
+     * com o mesmo ficheiro de mapa e nome de jogador.
+     */
+    private void restartLevel() {
+        Stage current = (Stage) this.getScene().getWindow();
+        current.close();
+        // Usa agora o mapFileName que guardámos no BoardModel
+        String mapName = board.getMapFileName();
+        String player  = board.getGame().getPlayerName();
+        new SnowmanGUI(mapName, player).start(new Stage());
     }
 
 }
