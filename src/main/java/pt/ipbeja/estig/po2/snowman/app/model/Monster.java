@@ -1,69 +1,94 @@
 package pt.ipbeja.estig.po2.snowman.app.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
 /**
  * The Monster represents the player-controlled character. It extends MobileElement
  * and implements all the movement logic, including pushing snowballs and detecting if the
  * snowmen was completed.
  */
+import java.util.Stack;
+
 public class Monster extends MobileElement {
+    private final Stack<Position> undoStack = new Stack<>();
+    private final Stack<Position> redoStack = new Stack<>();
+    private int moveCount = 0;
 
     public Monster(int row, int col) {
         super(row, col);
+        undoStack.push(new Position(row, col));
     }
 
-
-    /**
-     * Attempts to move the monster in the specified direction. The method:
-     * 1. Calculates the target cell.
-     * 2. Checks if that cell is valid (not a BLOCK).
-     * 3. If a snowball is in the target cell:
-     *    a. If it is part of a stack, try to unstack; if unstacked, movement fails.
-     *    b. Otherwise, attempt to push the snowball. If push fails, movement fails.
-     * 4. Records the previous position, updates row/col to the new position.
-     * 5. Checks if a complete snowman is formed beyond the new position.
-     *
-     * @param direction the direction to move (UP, DOWN, LEFT, RIGHT)
-     * @param board     the game model to query and update
-     * @return true if the monster moved (and possibly pushed a snowball); false otherwise
-     */
     @Override
     public boolean move(Direction direction, BoardModel board) {
-        /// Calculate the adjacent cell in the desired direction
-        Position position = new Position(row, col);
-        position = position.changePosition(direction);
-        int newRow = position.getRow();
-        int newCol = position.getCol();
+        Position target = new Position(row, col).changePosition(direction);
+        int newRow = target.getRow(), newCol = target.getCol();
 
-        if (!board.validPosition(newRow, newCol)) {
-            return false;
-        }
+        if (!board.validPosition(newRow, newCol)) return false;
 
-        /// Check if there is a snowball in the target cell
         Snowball snowball = board.getSnowballInPosition(newRow, newCol);
         if (snowball != null) {
-            if(board.isSnowballStack(snowball)) {
+            if (board.isSnowballStack(snowball)) {
                 board.unstackSnowballs(snowball, direction);
-
                 return false;
-            }
-            /// if not, will attempt to push the snowball. If push fails, cancel move
-            else if (!board.moveSnowball(direction, snowball)){
+            } else if (!board.moveSnowball(direction, snowball)) {
                 return false;
             }
         }
 
-        /// Save the previous coordinates before updating
         setPrevRow(row);
         setPrevCol(col);
         row = newRow;
         col = newCol;
 
-        /// After moving, check for a complete snowman one cell further in same direction
-        Position checkposition = new Position(row, col).changePosition(direction);
-        board.checkCompleteSnowman(checkposition);
+        board.checkCompleteSnowman(target.changePosition(direction));
 
+        undoStack.push(new Position(row, col));
+        redoStack.clear(); // reset redo history after any new move
+        moveCount++;
         return true;
     }
 
+    public Position undo() {
+        if (undoStack.size() > 1) {
+            Position last = undoStack.pop();
+            redoStack.push(last);
 
+            Position prev = undoStack.peek();
+            setPrevRow(row); // <-- importante!
+            setPrevCol(col);
+            this.row = prev.getRow();
+            this.col = prev.getCol();
+            moveCount--;
+
+            return prev;
+        }
+
+        return getPosition();
+    }
+
+    public Position redo() {
+        if (!redoStack.isEmpty()) {
+            Position redoPos = redoStack.pop();
+            setPrevRow(row); // <-- importante!
+            setPrevCol(col);
+            undoStack.push(redoPos);
+
+            this.row = redoPos.getRow();
+            this.col = redoPos.getCol();
+            moveCount++;
+            return redoPos;
+        }
+        return getPosition();
+    }
+
+    public Position getPosition() {
+        return new Position(row, col);
+    }
+
+    public int getMoveCount(){
+        return moveCount;
+    }
 }

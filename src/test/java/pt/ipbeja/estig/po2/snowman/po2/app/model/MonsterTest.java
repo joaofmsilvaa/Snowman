@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import pt.ipbeja.estig.po2.snowman.app.model.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,12 +18,12 @@ public class MonsterTest {
     List<Snowball> snowballs = new ArrayList<>();
     BoardModel board;
 
-    int rows = 3;
-    int cols = 3;
+    int rows = 5;
+    int cols = 5;
 
     @BeforeEach
     public void setUp() {
-        monster = new Monster(2,2);
+        monster = new Monster(2,0);
 
         for (int i = 0; i < rows; i++) {
             List<PositionContent> row = new ArrayList<>();
@@ -70,5 +71,35 @@ public class MonsterTest {
         assertEquals(2, monster.getCol());
 
         assertFalse(validMove);
+    }
+
+    @Test
+    @DisplayName("Test undo move")
+    void testUndoMove(){
+
+        monster.move(Direction.RIGHT, board);
+        assertEquals(2, monster.getPosition().getRow());
+        assertEquals(1, monster.getPosition().getCol());
+
+        monster.undo();
+        assertEquals(2, monster.getPosition().getRow());
+        assertEquals(0, monster.getPosition().getCol());
+    }
+
+    @Test
+    @DisplayName("Test redo move")
+    void testRedoMove(){
+
+        monster.move(Direction.RIGHT, board);
+        assertEquals(2, monster.getPosition().getRow());
+        assertEquals(1, monster.getPosition().getCol());
+
+        monster.undo();
+        assertEquals(2, monster.getPosition().getRow());
+        assertEquals(0, monster.getPosition().getCol());
+
+        monster.redo();
+        assertEquals(2, monster.getPosition().getRow());
+        assertEquals(1, monster.getPosition().getCol());
     }
 }

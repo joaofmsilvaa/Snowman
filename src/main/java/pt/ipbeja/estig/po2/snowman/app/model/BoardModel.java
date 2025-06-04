@@ -142,7 +142,7 @@ public class BoardModel {
 
     /// Returns the current move count
     public int getMoveCount(){
-        return game.getMoveCount();
+        return monster.getMoveCount();
     }
 
 
@@ -195,8 +195,8 @@ public class BoardModel {
      * @return the Snowball in that cell, or null if no snowball is present
      */
     public Snowball snowballInFrontOfMonster(Direction direction) {
-        int row = monster.getRow();
-        int col = monster.getCol();
+        int row = monster.getPosition().getRow();
+        int col = monster.getPosition().getCol();
 
         return switch (direction) {
             case UP -> getSnowballInPosition(row - 1, col);
@@ -214,7 +214,7 @@ public class BoardModel {
      * @return true if the monster (or snowball) moved successfully; false otherwise
      */
     public boolean moveMonster(Direction direction) {
-        Position oldPosition = new Position(monster.getRow(), monster.getCol());
+        Position oldPosition = new Position(monster.getPosition().getRow(), monster.getPosition().getCol());
 
         /// Check if there is a snowball in front of the monster
         Snowball snowball = snowballInFrontOfMonster(direction);
@@ -229,7 +229,7 @@ public class BoardModel {
 
         /// If a View is registered, notify it to clear and redraw the monster and snowball
         if (moved) {
-            Position currentPosition = new Position(monster.getRow(), monster.getCol());
+            Position currentPosition = new Position(monster.getPosition().getRow(), monster.getPosition().getCol());
 
             if (view != null) {
                 /// Tell the view to clear the monster's old cell
@@ -324,10 +324,10 @@ public class BoardModel {
         snowmanFile.setFilename("Snowman" + snowmanFile.getCurrentDate() + ".txt");
         snowmanFile.createFile();
 
-        snowmanFile.writeFile(game.getMapName(), generateMapString(), game.getMoveHistoryArray(), game.getMoveCount(), game.getPlayerName(),snowmanPosition);
+        snowmanFile.writeFile(game.getMapName(), generateMapString(), game.getMoveHistoryArray(), monster.getMoveCount(), game.getPlayerName(),snowmanPosition);
 
         // Criar e notificar pontuação
-        Score score = new Score(game.getPlayerName(), game.getMapName(), game.getMoveCount());
+        Score score = new Score(game.getPlayerName(), game.getMapName(), monster.getMoveCount());
         if (scoreListener != null) {
             scoreListener.onScore(score);
         }
@@ -376,7 +376,7 @@ public class BoardModel {
         for (int col = 0; col < getColCount(); col++) {
             Position current = new Position(row, col);
 
-            if (monster.getRow() == row && monster.getCol() == col) {
+            if (monster.getPosition().getRow() == row && monster.getPosition().getCol() == col) {
                 line.append("\t\uD83D\uDC79\t"); // Monster symbol
             } else if (snowmanPosition.equals(current)) {
                 line.append(" SM "); // Complete snowman marker
@@ -491,5 +491,29 @@ public class BoardModel {
             default -> null;
         };
         return type == null ? null : new Snowball(position.getRow(), position.getCol(), type);
+    }
+
+    public void undoMove() {
+        Position oldPosition = new Position(monster.getPosition().getRow(), monster.getPosition().getCol());
+        Position newPosition = monster.undo();
+
+        if (!oldPosition.equals(newPosition)) {
+            if(view != null){
+                view.onMonsterCleared(oldPosition);
+                view.onMonsterMoved(newPosition);
+            }
+        }
+    }
+
+    public void redoMove() {
+        Position oldPosition = new Position(monster.getPosition().getRow(), monster.getPosition().getCol());
+        Position newPosition = monster.redo();
+
+        if (!oldPosition.equals(newPosition)) {
+            if(view != null){
+                view.onMonsterCleared(oldPosition);
+                view.onMonsterMoved(newPosition);
+            }
+        }
     }
 }

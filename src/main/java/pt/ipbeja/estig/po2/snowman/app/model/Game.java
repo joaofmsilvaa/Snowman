@@ -36,12 +36,6 @@ public class Game {
         );
     }
 
-    /// Returns the total number of moves made so far,
-    /// which corresponds to the size of moveHistory.
-    public int getMoveCount() {
-        return moveHistory.size();
-    }
-
     /// Returns the name of the current player.
     public String getPlayerName() {
         return playerName;

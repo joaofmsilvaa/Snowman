@@ -3,6 +3,7 @@ package pt.ipbeja.estig.po2.snowman.app.gui;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -56,7 +57,7 @@ public class SnowmanGUI extends Application {
 
         //Stack the static terrain and the mobile overlay on top of each other
         StackPane boardPane = new StackPane(board, mobileBoard);
-
+        
         //Create a VBox on the left: board + move history
         VBox leftPane = new VBox(boardPane, moveHistoryPane);
         leftPane.setSpacing(10);
