@@ -135,6 +135,7 @@ public class Snowball extends MobileElement {
         }
 
         if (destination == PositionContent.SNOW) {
+            board.setPositionContent(newRow, newCol, PositionContent.NO_SNOW);
             increaseSnowballType();
         }
 

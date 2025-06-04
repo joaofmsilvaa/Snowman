@@ -13,6 +13,7 @@ import pt.ipbeja.estig.po2.snowman.app.model.PositionContent;
 public class BoardButton extends Button {
 
     private static final int SIZE = 100;
+    private PositionContent content;
 
     /**
      * Constructs a BoardButton by loading the appropriate image for the given content.
@@ -21,39 +22,36 @@ public class BoardButton extends Button {
      * @param content enum PositionContent (NO_SNOW, SNOW, BLOCK, SNOWMAN)
      */
     public BoardButton(PositionContent content) {
-        Image image = loadImageForContent(content);
-
-        if (image != null) {
-            ImageView imageView = new ImageView(image);
-            imageView.setFitWidth(SIZE);
-            imageView.setFitHeight(SIZE);
-            imageView.setPreserveRatio(false);
-            this.setGraphic(imageView);
-        } else {
-            this.setGraphic(null);
-        }
-
-        this.setMinSize(SIZE, SIZE);
-        this.setMaxSize(SIZE, SIZE);
-        this.setPrefSize(SIZE, SIZE);
-        this.setStyle("-fx-background-color: transparent; -fx-border-width: 0; -fx-padding: 0;");
-        this.setFocusTraversable(false);
+        this.content = content;
+        loadImageForContent();
+        setMinSize(SIZE, SIZE);
+        setMaxSize(SIZE, SIZE);
+        setPrefSize(SIZE, SIZE);
+        setStyle("-fx-background-color: transparent; -fx-border-width: 0; -fx-padding: 0;");
+        setFocusTraversable(false);
+    }
+    public void setContent(PositionContent content) {
+        this.content = content;
+        loadImageForContent();
     }
 
     /// Loads the image resource corresponding to the given PositionContent.
-    private Image loadImageForContent(PositionContent content) {
+    private void loadImageForContent() {
         String imagePath = switch (content) {
             case NO_SNOW -> "/grass.png";
-            case SNOW -> "/snow.png";
-            case BLOCK -> "/block.png";
+            case SNOW    -> "/snow.png";
+            case BLOCK   -> "/block.png";
             case SNOWMAN -> "/snowman.png";
         };
 
         try {
-            return new Image(getClass().getResourceAsStream(imagePath));
+            ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream(imagePath)));
+            imageView.setFitWidth(SIZE);
+            imageView.setFitHeight(SIZE);
+            imageView.setPreserveRatio(false);
+            setGraphic(imageView);
         } catch (Exception e) {
-            System.err.println("Erro ao carregar imagem: " + imagePath);
-            return null;
+            setGraphic(null);
         }
     }
 }
