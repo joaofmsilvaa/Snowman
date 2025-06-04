@@ -2,6 +2,7 @@ package pt.ipbeja.estig.po2.snowman.app.gui;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -37,23 +38,37 @@ public class StartMenu {
         Label title2 = new Label("PO2 edition");
         title2.setStyle("-fx-font-size: 36px; -fx-font-weight: bold;");
 
+        // text field label
+        Label textFieldLabel = new Label("Player Name:");
+        textFieldLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+
         //credits label
         Label credits = new Label("Made by: João Silva and Paulo Neves");
         credits.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
         //Start buttons
-        Button startgame = new Button("Start Game");
-        startgame.setStyle("-fx-font-size: 16px; -fx-padding: 10 20;");
+        Button startGame = new Button("Start Game");
+        startGame.setStyle("-fx-font-size: 16px; -fx-padding: 10 20;");
 
         // Text field for the name
         TextField name = new TextField();
-        name.setPromptText("Nome: ");
+        name.setPromptText("Nome (3 chars): ");
         name.setMaxWidth(120);
 
-        //Action event for the buttons launch the map
-        startgame.setOnAction(e -> startLevel("map1.txt", name.getText()));
-
-
+        // Action event for the buttons launch the map
+        startGame.setOnAction(e -> {
+            String playerName = name.getText().trim().toUpperCase();
+            if (playerName.length() != 3 ){
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Error");
+                alert.setHeaderText("You must use only 3 character");
+                alert.setContentText("Please, insert only 3 character");
+                alert.showAndWait();
+            }
+            else {
+                startLevel("map1.txt", name.getText());
+            }
+        });
 
         // monster
         ImageView monsterView = new ImageView(new Image("/monster1.png"));
@@ -76,12 +91,17 @@ public class StartMenu {
         Images.setStyle("-fx-background-color: white;");
         Images.getChildren().addAll(monsterView, snowmanView);
 
+        HBox playerName = new HBox(5);
+        playerName.setAlignment(Pos.CENTER);
+        playerName.setStyle("-fx-background-color: white;");
+        playerName.getChildren().addAll(textFieldLabel, name);
+
         VBox layout = new VBox(40);
         layout.setAlignment(Pos.CENTER);
         layout.setStyle("-fx-background-color: white;");
 
         //overall layout
-        layout.getChildren().addAll(title, startgame, Images, name, credits);
+        layout.getChildren().addAll(title, startGame, Images, playerName, credits);
 
 
         Scene scene = new Scene(new StackPane(layout), 600, 600);

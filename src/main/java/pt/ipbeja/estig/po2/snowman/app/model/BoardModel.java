@@ -1,12 +1,12 @@
 package pt.ipbeja.estig.po2.snowman.app.model;
 
+import pt.ipbeja.estig.po2.snowman.app.model.interfaces.BoardListener;
 import pt.ipbeja.estig.po2.snowman.app.model.interfaces.MoveListener;
 import pt.ipbeja.estig.po2.snowman.app.model.interfaces.ScoreListener;
 import pt.ipbeja.estig.po2.snowman.app.model.interfaces.View;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * BoardModel manages all game logic:
@@ -25,6 +25,7 @@ public class BoardModel {
     private List<Snowball> snowballs;
     private View view;
     private MoveListener moveListener;
+    private BoardListener boardListener;
     private Game game;
     private ScoreListener scoreListener;
     private String mapFileName;
@@ -53,7 +54,7 @@ public class BoardModel {
         this.monster = monster;
         this.snowballs = snowballs;
         this.boardContent = content;
-
+        this.boardListener = boardListener;
     }
 
     /// Define the View that should be notified of graphical updates.
@@ -65,6 +66,10 @@ public class BoardModel {
     /// Registers the MoveListener that receives notifications of every monster move
     public void setMoveListener(MoveListener moveListener) {
         this.moveListener = moveListener;
+    }
+
+    public void setBoardListener(BoardListener boardListener) {
+        this.boardListener = boardListener;
     }
 
     public void setMapFileName(String mapFileName) {
@@ -573,4 +578,13 @@ public class BoardModel {
 
         monster = new Monster(state.monster().getRow(), state.monster().getCol());
     }
+  
+  public void setPositionContent(int row, int col, PositionContent content) {
+        boardContent.get(row).set(col, content);
+
+        if (boardListener != null) {
+            boardListener.onTerrainChanged(row, col, PositionContent.NO_SNOW);
+        }
+    }
+
 }
