@@ -79,8 +79,8 @@ public class MapReader {
             }
             boardContent.add(line);
         }
-
         BoardModel boardModel = new BoardModel(boardContent, monster, snowballs);
+        boardModel.saveState();
         setMapName(mapName);
         return boardModel;
     }

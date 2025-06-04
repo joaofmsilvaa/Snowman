@@ -23,4 +23,6 @@ public interface View {
 
     /// Called before drawing the monster in its new cell, to clear it from the old one.
     void onMonsterCleared(Position monsterPosition);
+
+    void updateBoard();
 }

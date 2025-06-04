@@ -89,6 +89,9 @@ public class MobileBoard extends GridPane implements View {
                 }
 
                 EntityButton button = new EntityButton(entity);
+                if(snowball != null){
+                    button.setSnowballType(snowball.getType());
+                }
                 this.add(button, col + 1, row + 1);
                 buttons[row][col] = button;
             }
@@ -261,6 +264,11 @@ public class MobileBoard extends GridPane implements View {
     public void onMonsterCleared(Position monsterPosition) {
 
         buttons[monsterPosition.getRow()][monsterPosition.getCol()].setMonsterVisible(false);
+    }
+
+    @Override
+    public void updateBoard() {
+        drawBoard();
     }
 
     /**
