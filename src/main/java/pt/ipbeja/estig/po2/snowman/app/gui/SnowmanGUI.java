@@ -3,6 +3,9 @@ package pt.ipbeja.estig.po2.snowman.app.gui;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -18,11 +21,17 @@ import pt.ipbeja.estig.po2.snowman.app.model.*;
 public class SnowmanGUI extends Application {
     private final String mapFileName;
     private final String playerName;
+    private BoardModel boardModel;
+    private MapReader reader;
 
     /// Constructs the GUI launcher with the specified map file name and player name.
     public SnowmanGUI(String mapFileName, String playerName) {
         this.mapFileName = mapFileName;
         this.playerName = playerName;
+
+        //Load the map from resource file
+        reader = new MapReader();
+        boardModel = reader.loadMapFromFile("/" + this.mapFileName);
     }
 
     /**
@@ -34,9 +43,6 @@ public class SnowmanGUI extends Application {
      */
     @Override
     public void start(Stage stage) {
-        //Load the map from resource file
-        MapReader reader = new MapReader();
-        BoardModel boardModel = reader.loadMapFromFile("/" + this.mapFileName);
 
         //Create a Game instance for tracking moves and player info
         Game game = new Game(this.playerName, reader.getMapName());
@@ -57,8 +63,10 @@ public class SnowmanGUI extends Application {
         //Stack the static terrain and the mobile overlay on top of each other
         StackPane boardPane = new StackPane(board, mobileBoard);
 
+        VBox stateMenuBar = stateMenuBar();
+
         //Create a VBox on the left: board + move history
-        VBox leftPane = new VBox(boardPane, moveHistoryPane);
+        VBox leftPane = new VBox(stateMenuBar, boardPane, moveHistoryPane);
         leftPane.setSpacing(10);
         leftPane.setPadding(new Insets(10));
 
@@ -74,5 +82,23 @@ public class SnowmanGUI extends Application {
         stage.setScene(scene);
         stage.setTitle("Snowman Game");
         stage.show();
+    }
+
+    private VBox stateMenuBar() {
+        MenuBar menuBar = new MenuBar();
+
+        Menu editMenu = new Menu("Edit");
+
+        MenuItem undoItem = new MenuItem("Undo");
+        undoItem.setOnAction(e -> boardModel.undo());
+
+        MenuItem redoItem = new MenuItem("Redo");
+        redoItem.setOnAction(e -> boardModel.redo());
+
+        editMenu.getItems().addAll(undoItem, redoItem);
+
+        menuBar.getMenus().addAll(editMenu);
+
+        return new VBox(menuBar);
     }
 }

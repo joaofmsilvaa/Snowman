@@ -28,7 +28,8 @@ public class BoardModel {
     private Game game;
     private ScoreListener scoreListener;
     private String mapFileName;
-
+    private int currentStateIndex = -1;
+    private List<GameState> history = new ArrayList<>();
 
     /**
      * Default constructor: initializes data structures and calls startGame()
@@ -37,7 +38,7 @@ public class BoardModel {
     public BoardModel() {
         boardContent = new ArrayList<>();
         snowballs = new ArrayList<>();
-        startGame(); /// Inicializa tabuleiro, monstro e bolas de neve
+        startGame();
     }
 
 
@@ -52,6 +53,7 @@ public class BoardModel {
         this.monster = monster;
         this.snowballs = snowballs;
         this.boardContent = content;
+
     }
 
     /// Define the View that should be notified of graphical updates.
@@ -266,6 +268,8 @@ public class BoardModel {
                 game.onMove(oldPosition, currentPosition);
             }
         }
+
+        saveState();
         return moved;
     }
 
@@ -505,5 +509,68 @@ public class BoardModel {
             default -> null;
         };
         return type == null ? null : new Snowball(position.getRow(), position.getCol(), type);
+    }
+
+    public void saveState() {
+        while (history.size() > currentStateIndex + 1) {
+            history.remove(history.size() - 1);
+        }
+
+        GameState snapshot = cloneCurrentState();
+        history.add(snapshot);
+        currentStateIndex++;
+    }
+
+    private GameState cloneCurrentState() {
+        List<List<PositionContent>> boardCopy = new ArrayList<>();
+        for (List<PositionContent> row : boardContent) {
+            boardCopy.add(new ArrayList<>(row));
+        }
+
+        List<Snowball> snowballCopy = new ArrayList<>();
+        for (Snowball s : snowballs) {
+            snowballCopy.add(new Snowball(s.getRow(), s.getCol(), s.getType()));
+        }
+
+        Monster clonedMonster = new Monster(monster.getRow(), monster.getCol());
+
+        return new GameState(clonedMonster, snowballCopy, boardCopy);
+    }
+
+    public void undo() {
+        if(currentStateIndex > 0) {
+            currentStateIndex--;
+            setState(history.get(currentStateIndex));
+            if (view != null) {
+                view.updateBoard();
+            }
+        } else if (currentStateIndex == 0) {
+            setState(history.get(currentStateIndex));
+            if (view != null) {
+                view.updateBoard();
+            }
+        }
+    }
+
+    public void redo() {
+        if (currentStateIndex < history.size() - 1) {
+            currentStateIndex++;
+            setState(history.get(currentStateIndex));
+            if (view != null) {
+                view.updateBoard();
+            }
+        }
+    }
+
+    private void setState(GameState state) {
+        boardContent.clear();
+        for (List<PositionContent> row : state.boardContent()) {
+            boardContent.add(new ArrayList<>(row));
+        }
+
+        snowballs.clear();
+        snowballs.addAll(state.snowballs());
+
+        monster = new Monster(state.monster().getRow(), state.monster().getCol());
     }
 }
