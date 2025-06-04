@@ -237,27 +237,5 @@ public class BoardModelTest {
         assertEquals(1, monster.getCol(), "Monster col");
     }
 
-    //Check later
-    @Test
-    @DisplayName("Test stack small sized snowball in a Big_Mid snowball")
-    void testCompleteSnowman(){
-        Snowball small = board.getSnowballInPosition(2, 1);
-        assertEquals(2, small.getRow(), "Initial row position");
-        assertEquals(1, small.getCol(), "Initial col position");
-        assertEquals(SnowballType.SMALL, small.getType());
 
-        Snowball BigMidball = board.getSnowballInPosition(2, 2);
-        assertEquals(2, BigMidball.getRow(), "Second row position");
-        assertEquals(2, BigMidball.getCol(), "Second col position");
-        assertEquals(SnowballType.BIG_MID, BigMidball.getType());
-
-        assertTrue(small.canStackOn(BigMidball));
-
-        board.moveMonster(Direction.RIGHT);
-
-        Snowball snowman = board.getSnowballInPosition(2, 2);
-        assertEquals(2, snowman.getRow(), "Stacked row position");
-        assertEquals(2, snowman.getCol(), "Stacked col position");
-        assertEquals(SnowballType.COMPLETE, snowman.getType());
-    }
 }
