@@ -48,7 +48,7 @@ public class Main extends Application {
         // Locate the MP3 file in the resources folder
         URL resource = getClass().getResource("/SnowmanMusic.mp3");
         if (resource == null) {
-            System.err.println("Ficheiro de música não encontrado.");
+            System.err.println("Media file not found.");
             return;
         }
 
