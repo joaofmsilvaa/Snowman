@@ -24,5 +24,6 @@ public interface View {
     /// Called before drawing the monster in its new cell, to clear it from the old one.
     void onMonsterCleared(Position monsterPosition);
 
+    /// Draw the board again for the undo-redo
     void updateBoard();
 }

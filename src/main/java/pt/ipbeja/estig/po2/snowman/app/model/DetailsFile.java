@@ -5,15 +5,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * DetailsFile is an abstract base class for writing level information to a file
- * when a snowman is completed. It provides methods to create the file and write
- * the map name, move list, total moves, and final snowman position.
+ * Abstract base class for creating and writing details to a file when a snowman is completed.
+ *
+ * This class provides functionality to:
+ * 1. Set a filename for the details file.
+ * 2. Create the file on disk.
+ * 3. Write level information (map name, move list, player, move count, final position, and final map)
+ *    to the file.
  */
 public abstract class DetailsFile {
 
     private String fileName;
     private boolean fileCreated;
 
+    //Default constructor
     public DetailsFile() {
     }
 
@@ -45,22 +50,42 @@ public abstract class DetailsFile {
         }
     }
 
-
+    /**
+     * Writes the game details to the previously created file.
+     *
+     * The following data is written to the file in this order:
+     * 1. Map name
+     * 2. List of moves
+     * 3. Player name
+     * 4. Total number of moves
+     * 5. Final snowman position (with column converted to a letter)
+     * 6. Final map layout (one row per line)
+     *
+     * @param map             the name of the current map (or "Unknown" if null)
+     * @param mapPanel        an array of strings representing the final map layout
+     * @param moves           an array of move strings (e.g., "UP", "LEFT", etc.)
+     * @param moveCount       the total number of moves made in this game
+     * @param playerName      the name of the player (or "Unknown" if null)
+     * @param snowmanPosition the Position where the snowman was completed
+     */
     public void writeFile(String map, String[] mapPanel, String[] moves, int moveCount, String playerName, Position snowmanPosition) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            // Write map name and move list
             writer.write("Mapa: " + map);
             writer.write("\n" +"Movimentos:\n");
             for (String move : moves) {
                 writer.write(move);
             }
 
+            // Write player name and total moves
             writer.write("\nJogador: " + playerName);
             writer.write("\n" + "Total de jogadas: " + moveCount);
 
-            /// Convert the column index to a letter and write the final position
+            // Convert column index to letter and write final snowman position
             String colLetter = snowmanPosition.convertToLetter(snowmanPosition.getCol());
             writer.write("\n" + "Posição final do boneco de neve: (" + snowmanPosition.getRow() + "," + colLetter + ")\n");
 
+            //Write the final map layout
             writer.write("\n\nMapa final:\n");
             for (String line : mapPanel) {
                 writer.write(line + "\n");
