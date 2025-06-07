@@ -20,8 +20,6 @@ public class MobileBoard extends GridPane implements View {
 
     private final BoardModel board;
     private final EntityButton[][] buttons;
-    private String playerName;
-    private int moveCount = 0;
 
     /**
      * Constructs a MobileBoard tied to the given BoardModel.
@@ -98,11 +96,6 @@ public class MobileBoard extends GridPane implements View {
         }
     }
 
-    /// Increments the local move count when called.
-    public void incrementMoveCount() {
-        moveCount++;
-    }
-
 
     /**
      * Called when the monster has moved from one position to another.
@@ -118,7 +111,6 @@ public class MobileBoard extends GridPane implements View {
         buttons[monster.getPrevRow()][monster.getPrevCol()].setMonsterVisible(false);
         // Show monster on its new button
         buttons[monsterPosition.getRow()][monsterPosition.getCol()].setMonsterVisible(true);
-        incrementMoveCount();
     }
 
     /**

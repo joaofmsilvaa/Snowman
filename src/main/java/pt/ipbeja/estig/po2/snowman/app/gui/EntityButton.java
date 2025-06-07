@@ -91,7 +91,7 @@ public class EntityButton extends Button {
         try {
             InputStream stream = getClass().getResourceAsStream(imagePath);
             if (stream == null) {
-                System.err.println("ARQUIVO NÃO ENCONTRADO: " + imagePath);
+                System.err.println("FILE NOT FOUND: " + imagePath);
                 return;
             }
 
@@ -101,7 +101,7 @@ public class EntityButton extends Button {
             imageView.setFitHeight(size);
             this.setGraphic(imageView);
         } catch (Exception e) {
-            System.err.println("Erro ao carregar imagem:: " + e);
+            System.err.println("ERROR LOADING THE IMAGE: " + e);
         }
     }
 

@@ -34,9 +34,9 @@ public class StartMenu {
 
         //title Labels
         Label title1 = new Label("A Good Snowman Is Hard To Build");
-        title1.setStyle("-fx-font-size: 36px; -fx-font-weight: bold;");
+        title1.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
         Label title2 = new Label("PO2 edition");
-        title2.setStyle("-fx-font-size: 36px; -fx-font-weight: bold;");
+        title2.setStyle("-fx-font-size: 26px; -fx-font-weight: bold;");
 
         // text field label
         Label textFieldLabel = new Label("Player Name:");
@@ -44,7 +44,7 @@ public class StartMenu {
 
         //credits label
         Label credits = new Label("Made by: João Silva and Paulo Neves");
-        credits.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        credits.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
         //Start buttons
         Button startGame = new Button("Start Game");
@@ -52,7 +52,7 @@ public class StartMenu {
 
         // Text field for the name
         TextField name = new TextField();
-        name.setPromptText("Nome (3 chars): ");
+        name.setPromptText("Your name (3 letters only)");
         name.setMaxWidth(120);
 
         // Action event for the buttons launch the map
