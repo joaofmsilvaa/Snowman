@@ -876,6 +876,7 @@ public class BoardModel {
             // Notify the view to update the board display
             if (view != null) {
                 view.updateBoard();
+                boardListener.updateBoard();
             }
 
             // Undo made

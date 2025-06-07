@@ -74,4 +74,9 @@ public class SnowmanBoard extends GridPane implements BoardListener {
 
 
     }
+
+    @Override
+    public void updateBoard() {
+        drawBoard();
+    }
 }
