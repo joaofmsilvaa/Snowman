@@ -11,6 +11,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+/**
+ * @author João Silva
+ * @author Paulo Neves
+ */
 public class MonsterTest {
     Monster monster;
     List<List<PositionContent>> content = new ArrayList<>();

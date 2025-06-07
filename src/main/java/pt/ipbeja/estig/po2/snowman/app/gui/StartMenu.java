@@ -2,123 +2,94 @@ package pt.ipbeja.estig.po2.snowman.app.gui;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import  javafx.scene.control.TextField;
 
 /**
- * StartMenu displays the initial menu for the game, allowing the player
- * to enter their name and choose between two levels. It shows two title lines,
- * a credits line, level-selection buttons, decorative images, and a name field.
+ * @author João Silva
+ * @author Paulo Neves
  */
 public class StartMenu {
 
-    /**
-     * Builds and shows the start menu on the provided Stage. The menu includes:
-     * - Two title labels ("A Good Snowman Is Hard To Build" and "PO2 edition")
-     * - A credits label ("Made by: João Silva and Paulo Neves")
-     * - Two level buttons ("Level 1" and "Level 2")
-     * - Two images (monster and snowman) for decoration
-     * - A TextField for the player to enter their name
-     *
-     * @param stage the Stage on which to display the start menu
-     */
     public static void show(Stage stage) {
-
-        //title Labels
-        Label title1 = new Label("A Good Snowman Is Hard To Build");
-        title1.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
-        Label title2 = new Label("PO2 edition");
-        title2.setStyle("-fx-font-size: 26px; -fx-font-weight: bold;");
-
-        // text field label
-        Label textFieldLabel = new Label("Player Name:");
-        textFieldLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-
-        //credits label
-        Label credits = new Label("Made by: João Silva and Paulo Neves");
-        credits.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-
-        //Start buttons
-        Button startGame = new Button("Start Game");
-        startGame.setStyle("-fx-font-size: 16px; -fx-padding: 10 20;");
-
-        // Text field for the name
-        TextField name = new TextField();
-        name.setPromptText("Your name (3 letters only)");
-        name.setMaxWidth(120);
-
-        // Action event for the buttons launch the map
-        startGame.setOnAction(e -> {
-            String playerName = name.getText().trim().toUpperCase();
-            if (playerName.length() != 3 ){
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Error");
-                alert.setHeaderText("You must use only 3 character");
-                alert.setContentText("Please, insert only 3 character");
-                alert.showAndWait();
-            }
-            else {
-                startLevel("map1.txt", name.getText());
-            }
-        });
-
-        // monster
-        ImageView monsterView = new ImageView(new Image("/monster1.png"));
-        monsterView.setFitWidth(80);
-        monsterView.setFitHeight(80);
-
-        // snowman
-        ImageView snowmanView = new ImageView(new Image("/snowman.png"));
-        snowmanView.setFitWidth(80);
-        snowmanView.setFitHeight(80);
-
-        VBox title = new VBox(20);
-        title.setAlignment(Pos.CENTER);
-        title.setStyle("-fx-background-color: white;");
-        title.getChildren().addAll(title1, title2);
-
-
-        HBox Images = new HBox(40);
-        Images.setAlignment(Pos.CENTER);
-        Images.setStyle("-fx-background-color: white;");
-        Images.getChildren().addAll(monsterView, snowmanView);
-
-        HBox playerName = new HBox(5);
-        playerName.setAlignment(Pos.CENTER);
-        playerName.setStyle("-fx-background-color: white;");
-        playerName.getChildren().addAll(textFieldLabel, name);
-
-        VBox layout = new VBox(40);
-        layout.setAlignment(Pos.CENTER);
-        layout.setStyle("-fx-background-color: white;");
-
-        //overall layout
-        layout.getChildren().addAll(title, startGame, Images, playerName, credits);
-
-
+        VBox layout = createLayout();
         Scene scene = new Scene(new StackPane(layout), 600, 600);
         stage.setScene(scene);
         stage.setTitle("Snowman - Menu");
         stage.show();
     }
 
-    /**
-     * Helper method that creates a new SnowmanGUI instance and starts it
-     * on a new Stage, using the specified map file and player name.
-     *
-     * @param fileName   the map file to load ex: "map1.txt"
-     * @param playerName the name entered by the player
-     */
-    private static void startLevel(String fileName, String playerName){
-        SnowmanGUI gui = new SnowmanGUI(fileName, playerName );
-        gui.start(new Stage());
+    private static VBox createLayout() {
+        Label title1 = createLabel("A Good Snowman Is Hard To Build", 28);
+        Label title2 = createLabel("PO2 edition", 26);
+        Label credits = createLabel("Made by: João Silva and Paulo Neves", 16);
+        Label nameLabel = createLabel("Player Name:", 16);
+
+        TextField nameField = new TextField();
+        nameField.setPromptText("Your name (3 letters only)");
+        nameField.setMaxWidth(120);
+
+        Button startGame = createStartButton(nameField);
+
+        HBox images = new HBox(40, createImage("/monster1.png"), createImage("/snowman.png"));
+        images.setAlignment(Pos.CENTER);
+        images.setStyle("-fx-background-color: white;");
+
+        HBox nameInput = new HBox(5, nameLabel, nameField);
+        nameInput.setAlignment(Pos.CENTER);
+        nameInput.setStyle("-fx-background-color: white;");
+
+        VBox titleBox = new VBox(20, title1, title2);
+        titleBox.setAlignment(Pos.CENTER);
+        titleBox.setStyle("-fx-background-color: white;");
+
+        VBox layout = new VBox(40, titleBox, startGame, images, nameInput, credits);
+        layout.setAlignment(Pos.CENTER);
+        layout.setStyle("-fx-background-color: white;");
+        return layout;
+    }
+
+    private static Label createLabel(String text, int fontSize) {
+        Label label = new Label(text);
+        label.setStyle("-fx-font-size: " + fontSize + "px; -fx-font-weight: bold;");
+        return label;
+    }
+
+    private static ImageView createImage(String path) {
+        ImageView view = new ImageView(new Image(path));
+        view.setFitWidth(80);
+        view.setFitHeight(80);
+        return view;
+    }
+
+    private static Button createStartButton(TextField nameField) {
+        Button button = new Button("Start Game");
+        button.setStyle("-fx-font-size: 16px; -fx-padding: 10 20;");
+        button.setOnAction(e -> handleStart(nameField.getText()));
+        return button;
+    }
+
+    private static void handleStart(String name) {
+        String playerName = name.trim().toUpperCase();
+        if (playerName.length() != 3) {
+            showAlert("Error", "You must use only 3 character", "Please, insert only 3 character");
+        } else {
+            startLevel("map1.txt", playerName);
+        }
+    }
+
+    private static void showAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    private static void startLevel(String fileName, String playerName) {
+        new SnowmanGUI(fileName, playerName).start(new Stage());
     }
 }

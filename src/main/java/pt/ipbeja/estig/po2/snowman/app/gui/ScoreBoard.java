@@ -13,6 +13,8 @@ import java.util.List;
 /**
  * ScoreBoard is a VBox that displays the current game’s score and the top-3 high scores.
  * It implements ScoreListener to receive notifications when a new Score is earned.
+ * @author João Silva
+ * @author Paulo Neves
  */
 public class ScoreBoard extends VBox implements ScoreListener {
     private final Label currentScoreLabel;
@@ -38,19 +40,19 @@ public class ScoreBoard extends VBox implements ScoreListener {
      * Updates the ScoreBoard panel with the given currentScore:
      * - Displays the current player's name, level, and move count.
      * - Inserts the new score into the allScores list, sorts it,
-     *   and displays the top 3 scores, marking the current score if it is in the top 3.
+     * and displays the top 3 scores, marking the current score if it is in the top 3.
      *
      * @param currentScore the Score object representing the latest game result
      */
     private void updatePanel(Score currentScore) {
         // Update the current score label with player, level, and moves
         currentScoreLabel.setText(String.format("""
-                Pontuação Atual: 
-                ----------------------
-                Jogador: %s
-                Nível: %s
-                Movimentos: %d
-                """,
+                        Pontuação Atual: 
+                        ----------------------
+                        Jogador: %s
+                        Nível: %s
+                        Movimentos: %d
+                        """,
 
                 currentScore.getPlayerName(),
                 currentScore.getLevelName(),

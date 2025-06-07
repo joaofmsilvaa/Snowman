@@ -8,11 +8,14 @@ import java.io.IOException;
  * PositionsFile extends DetailsFile to append each move's positions
  * into the same file previously created. It writes only the move details,
  * preserving earlier content.
+ *
+ * @author João Silva
+ * @author Paulo Neves
  */
-public class PositionsFile extends DetailsFile{
+public class PositionsFile extends DetailsFile {
 
     /// constructor calls the superclass constructor.
-    public PositionsFile(){
+    public PositionsFile() {
         super();
     }
 

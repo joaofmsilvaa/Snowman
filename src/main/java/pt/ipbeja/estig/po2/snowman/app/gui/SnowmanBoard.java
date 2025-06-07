@@ -9,6 +9,8 @@ import pt.ipbeja.estig.po2.snowman.app.model.interfaces.BoardListener;
 /**
  * SnowmanBoard extends GridPane to render a static view of the board,
  * showing terrain (grass, snow, block, snowman) but not the moving entities.
+ * @author João Silva
+ * @author Paulo Neves
  */
 public class SnowmanBoard extends GridPane implements BoardListener {
     private final BoardModel board;
@@ -67,8 +69,8 @@ public class SnowmanBoard extends GridPane implements BoardListener {
     @Override
     public void onTerrainChanged(int row, int col, PositionContent newContent) {
         BoardButton button = buttons[row][col];
-       
-        if(button != null ){
+
+        if (button != null) {
             button.setContent(newContent);
         }
 

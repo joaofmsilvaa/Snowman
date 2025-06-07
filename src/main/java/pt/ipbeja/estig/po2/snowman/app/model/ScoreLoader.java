@@ -9,6 +9,9 @@ import java.util.List;
  * from the specified directory. Each file that begins with "Snowman"
  * and ends with ".txt" is parsed to extract the player's name, map name,
  * and move count, producing a List<Score>.
+ *
+ * @author João Silva
+ * @author Paulo Neves
  */
 public class ScoreLoader {
 
@@ -19,7 +22,7 @@ public class ScoreLoader {
      * For each matching file, calls extractScoreFromFile to parse its contents.
      *
      * @return a List of Score objects extracted from all matching files;
-     *         returns an empty list if no files are found or if all extractions fail.
+     * returns an empty list if no files are found or if all extractions fail.
      */
     public static List<Score> loadScoresForMap(String mapNameToFilter) {
         File folder = new File(DIRECTORY);
@@ -44,10 +47,10 @@ public class ScoreLoader {
 
     /**
      * Opens the given file and reads its contents to extract:
-     *  - map name from the first line ("Mapa: [nome]")
-     *  - total moves from a line starting with "Total de jogadas:"
-     *  - player name from a line starting with "Jogador:"
-     *
+     * - map name from the first line ("Mapa: [nome]")
+     * - total moves from a line starting with "Total de jogadas:"
+     * - player name from a line starting with "Jogador:"
+     * <p>
      * If parsing succeeds, returns a new Score(playerName, mapName, moves).
      * In case of any I/O or format error, logs an error and returns null.
      *
@@ -66,11 +69,11 @@ public class ScoreLoader {
 
             // Read remaining lines to find "Total de jogadas:" and "Jogador:"
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith("Total de jogadas:")) {
+                if (line.startsWith("Turns:")) {
                     // Extract move count after colon
                     moves = Integer.parseInt(line.split(":")[1].trim());
                 }
-                if (line.startsWith("Jogador:")) {
+                if (line.startsWith("Player:")) {
                     // Extract player name after colon
                     playerName = line.split(":")[1].trim();
                 }
@@ -79,7 +82,7 @@ public class ScoreLoader {
             return new Score(playerName, mapName, moves);
 
         } catch (IOException | NumberFormatException | ArrayIndexOutOfBoundsException e) {
-            System.err.println("Erro ao ler pontuação de " + file.getName() + ": " + e.getMessage());
+            System.err.println("Error while reading score " + file.getName() + ": " + e.getMessage());
             return null;
         }
     }

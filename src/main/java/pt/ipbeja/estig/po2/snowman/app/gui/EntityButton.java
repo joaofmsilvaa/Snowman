@@ -14,11 +14,14 @@ import java.io.InputStream;
  * EntityButton is a custom Button that can display either a monster or a snowball image.
  * It maintains state flags for whether a monster or a snowball should be shown,
  * and updates its graphic accordingly.
+ * @author João Silva
+ * @author Paulo Neves
  */
 public class EntityButton extends Button {
 
     private static Image backgroundImage;
     private int size = 100;
+
     //flag indicating if the objects are visible
     private boolean hasMonster = false;
     private boolean hasSnowball = false;
@@ -60,12 +63,12 @@ public class EntityButton extends Button {
         this.setFocusTraversable(false);
     }
 
-    ///Clears any entity graphic from the button.
+    /// Clears any entity graphic from the button.
     public void clearEntity() {
         this.setGraphic(null);
     }
 
-    ///Sets the monster visibility flag and updates the button graphic accordingly.
+    /// Sets the monster visibility flag and updates the button graphic accordingly.
     public void setMonsterVisible(boolean visible) {
         this.hasMonster = visible;
         updateGraphic();
@@ -127,7 +130,6 @@ public class EntityButton extends Button {
             this.setGraphic(null);
         }
     }
-
 
 
 }

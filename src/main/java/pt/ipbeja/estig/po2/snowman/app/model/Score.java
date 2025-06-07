@@ -1,5 +1,9 @@
 package pt.ipbeja.estig.po2.snowman.app.model;
 
+/**
+ * @author João Silva
+ * @author Paulo Neves
+ */
 public class Score implements Comparable<Score> {
     private final String playerName;  // máx 3 letras
     private final String levelName;
@@ -23,10 +27,6 @@ public class Score implements Comparable<Score> {
 
     public int getMoves() {
         return moves;
-    }
-
-    public boolean isTop() {
-        return isTop;
     }
 
     public void setTop(boolean top) {

@@ -4,12 +4,13 @@ package pt.ipbeja.estig.po2.snowman.app.model;
  * MobileElement is an abstract class representing any movable object on the board,
  * such as Monster or Snowball. It stores the current position (row, col)
  * and the previous position (prevRow, prevCol) for purposes like animation or undo.
+ *
+ * @author João Silva
+ * @author Paulo Neves
  */
 public abstract class MobileElement {
     protected int row;
     protected int col;
-    protected int prevRow;
-    protected int prevCol;
 
     ///Constructs a MobileElement at the specified row and column.
     public MobileElement(int row, int col) {
@@ -34,20 +35,5 @@ public abstract class MobileElement {
     }
 
     public int getCol() {return col;
-    }
-
-    public int getPrevRow() {
-        return prevRow;
-    }
-    public int getPrevCol() {
-        return prevCol;
-    }
-
-    public void setPrevRow(int prevRow) {
-        this.prevRow = prevRow;
-    }
-
-    public void setPrevCol(int prevCol) {
-        this.prevCol = prevCol;
     }
 }

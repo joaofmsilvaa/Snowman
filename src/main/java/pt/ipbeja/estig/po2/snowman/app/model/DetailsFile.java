@@ -1,4 +1,5 @@
 package pt.ipbeja.estig.po2.snowman.app.model;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -6,12 +7,15 @@ import java.io.IOException;
 
 /**
  * Abstract base class for creating and writing details to a file when a snowman is completed.
- *
+ * <p>
  * This class provides functionality to:
  * 1. Set a filename for the details file.
  * 2. Create the file on disk.
  * 3. Write level information (map name, move list, player, move count, final position, and final map)
- *    to the file.
+ * to the file.
+ *
+ * @author João Silva
+ * @author Paulo Neves
  */
 public abstract class DetailsFile {
 
@@ -52,7 +56,7 @@ public abstract class DetailsFile {
 
     /**
      * Writes the game details to the previously created file.
-     *
+     * <p>
      * The following data is written to the file in this order:
      * 1. Map name
      * 2. List of moves
@@ -72,7 +76,7 @@ public abstract class DetailsFile {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             // Write map name and move list
             writer.write("Mapa: " + map);
-            writer.write("\n" +"Movimentos:\n");
+            writer.write("\n" + "Movimentos:\n");
             for (String move : moves) {
                 writer.write(move);
             }

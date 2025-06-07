@@ -4,6 +4,10 @@ import pt.ipbeja.estig.po2.snowman.app.model.Position;
 import pt.ipbeja.estig.po2.snowman.app.model.Snowball;
 import pt.ipbeja.estig.po2.snowman.app.model.SnowballType;
 
+/**
+ * @author João Silva
+ * @author Paulo Neves
+ */
 public interface View {
 
     /// Called when a complete snowman is formed (type COMPLETE).

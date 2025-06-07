@@ -9,6 +9,8 @@ import pt.ipbeja.estig.po2.snowman.app.model.PositionContent;
 /**
  * BoardButton is a custom Button that displays an image
  * corresponding to the PositionContent (grass, snow, block, or snowman).
+ * @author João Silva
+ * @author Paulo Neves
  */
 public class BoardButton extends Button {
 
@@ -30,6 +32,7 @@ public class BoardButton extends Button {
         setStyle("-fx-background-color: transparent; -fx-border-width: 0; -fx-padding: 0;");
         setFocusTraversable(false);
     }
+
     public void setContent(PositionContent content) {
         this.content = content;
         loadImageForContent();
@@ -39,8 +42,8 @@ public class BoardButton extends Button {
     private void loadImageForContent() {
         String imagePath = switch (content) {
             case NO_SNOW -> "/grass.png";
-            case SNOW    -> "/snow.png";
-            case BLOCK   -> "/block.png";
+            case SNOW -> "/snow.png";
+            case BLOCK -> "/block.png";
             case SNOWMAN -> "/snowman.png";
         };
 

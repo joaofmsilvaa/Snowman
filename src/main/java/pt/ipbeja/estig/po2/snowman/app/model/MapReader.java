@@ -9,6 +9,9 @@ import java.util.List;
  * and converting them into a BoardModel instance. Each symbol in the map
  * file corresponds to a specific cell or object type (e.g., snow, block,
  * monster, or small snowball).
+ *
+ * @author João Silva
+ * @author Paulo Neves
  */
 public class MapReader {
 

@@ -7,6 +7,8 @@ import pt.ipbeja.estig.po2.snowman.app.model.interfaces.MoveListener;
 /**
  * MoveHistoryPane is a non-editable TextArea that implements MoveListener.
  * It appends a formatted record each time the monster moves.
+ * @author João Silva
+ * @author Paulo Neves
  */
 public class MoveHistoryPane extends TextArea implements MoveListener {
 
@@ -30,7 +32,7 @@ public class MoveHistoryPane extends TextArea implements MoveListener {
     @Override
     public void onMove(Position from, Position to) {
         // Convert row indices to 1-based for display
-        int adjustedFromRow = from.getRow() +1, adjustedToRow = to.getRow() + 1;
+        int adjustedFromRow = from.getRow() + 1, adjustedToRow = to.getRow() + 1;
         String log = from.formatDetails(adjustedFromRow, from.getCol(),
                 adjustedToRow, to.getCol());
         // Append this move to the existing text

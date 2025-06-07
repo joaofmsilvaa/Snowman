@@ -9,6 +9,8 @@ import javafx.scene.text.Text;
  * PositionText is a StackPane that displays a single letter or number
  * centered within a fixed-size square. Used for row and column labels
  * on the game board.
+ * @author João Silva
+ * @author Paulo Neves
  */
 public class PositionText extends StackPane {
 

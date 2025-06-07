@@ -17,6 +17,8 @@ import pt.ipbeja.estig.po2.snowman.app.model.*;
  * by loading the selected map, setting up the model (BoardModel and Game),
  * and creating UI components for the static board, mobile elements,
  * move history, and scoreboard.
+ * @author João Silva
+ * @author Paulo Neves
  */
 public class SnowmanGUI extends Application {
     private final String mapFileName;
@@ -60,6 +62,15 @@ public class SnowmanGUI extends Application {
         SnowmanBoard board = new SnowmanBoard(boardModel);
         MobileBoard mobileBoard = new MobileBoard(boardModel);
 
+        //show the scene
+        Scene scene = new Scene(getRoot(board, mobileBoard, moveHistoryPane, scoreBoard));
+        stage.setScene(scene);
+        stage.setTitle("Snowman Game");
+        stage.show();
+    }
+
+    public BorderPane getRoot(SnowmanBoard board, MobileBoard mobileBoard, MoveHistoryPane moveHistoryPane, ScoreBoard scoreBoard) {
+
         //Stack the static terrain and the mobile overlay on top of each other
         StackPane boardPane = new StackPane(board, mobileBoard);
 
@@ -75,13 +86,9 @@ public class SnowmanGUI extends Application {
         //  - Right: scoreboard
         BorderPane root = new BorderPane();
         root.setLeft(leftPane);
-        root.setRight(scoreBoard); // adicionar scoreboard à direita
+        root.setRight(scoreBoard);
 
-        //show the scene
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Snowman Game");
-        stage.show();
+        return root;
     }
 
     private VBox stateMenuBar() {

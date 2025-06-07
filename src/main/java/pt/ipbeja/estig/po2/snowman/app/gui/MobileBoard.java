@@ -15,6 +15,8 @@ import java.util.Optional;
  * MobileBoard extends GridPane and implements View to render and update
  * the game board dynamically. It listens for key presses (W/A/S/D) to move
  * the monster, and updates buttons when the model notifies events.
+ * @author João Silva
+ * @author Paulo Neves
  */
 public class MobileBoard extends GridPane implements View {
 
@@ -78,9 +80,8 @@ public class MobileBoard extends GridPane implements View {
                 Monster monster = board.getMonster();
                 MobileEntity entity = MobileEntity.EMPTY;
                 Snowball snowball = board.getSnowballInPosition(row, col);
-                boolean hasMonster = monster.getRow() == row && monster.getCol() == col;
 
-                if (hasMonster) {
+                if (monster.getRow() == row && monster.getCol() == col) {
                     entity = MobileEntity.MONSTER;
                 } else if (snowball != null) {
                     entity = MobileEntity.SNOWBALL;

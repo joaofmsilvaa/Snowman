@@ -6,6 +6,9 @@ import java.util.List;
 /**
  * Game keeps track of the current player's name, the map name,
  * and the history of moves performed (as formatted strings).
+ *
+ * @author João Silva
+ * @author Paulo Neves
  */
 public class Game {
     private String playerName;
@@ -53,7 +56,7 @@ public class Game {
     }
 
     /// Returns the name of the current map or level.
-    public String getMapName(){
+    public String getMapName() {
         return mapName;
     }
 
@@ -61,11 +64,5 @@ public class Game {
     public void setPlayerName(String name) {
         this.playerName = name;
     }
-
-    /// Sets or updates the map name
-    public void setMapName(String mapName) {
-        this.mapName = mapName;
-    }
-
 }
 

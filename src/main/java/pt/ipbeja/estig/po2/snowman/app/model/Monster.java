@@ -4,8 +4,13 @@ package pt.ipbeja.estig.po2.snowman.app.model;
  * The Monster represents the player-controlled character. It extends MobileElement
  * and implements all the movement logic, including pushing snowballs and detecting if the
  * snowmen was completed.
+ *
+ * @author João Silva
+ * @author Paulo Neves
  */
 public class Monster extends MobileElement {
+    protected int prevRow;
+    protected int prevCol;
 
     public Monster(int row, int col) {
         super(row, col);
@@ -17,8 +22,8 @@ public class Monster extends MobileElement {
      * 1. Calculates the target cell.
      * 2. Checks if that cell is valid (not a BLOCK).
      * 3. If a snowball is in the target cell:
-     *    a. If it is part of a stack, try to unstack; if unstacked, movement fails.
-     *    b. Otherwise, attempt to push the snowball. If push fails, movement fails.
+     * a. If it is part of a stack, try to unstack; if unstacked, movement fails.
+     * b. Otherwise, attempt to push the snowball. If push fails, movement fails.
      * 4. Records the previous position, updates row/col to the new position.
      * 5. Checks if a complete snowman is formed beyond the new position.
      *
@@ -41,13 +46,13 @@ public class Monster extends MobileElement {
         /// Check if there is a snowball in the target cell
         Snowball snowball = board.getSnowballInPosition(newRow, newCol);
         if (snowball != null) {
-            if(board.isSnowballStack(snowball)) {
+            if (board.isSnowballStack(snowball)) {
                 board.unstackSnowballs(snowball, direction);
 
                 return false;
             }
             /// if not, will attempt to push the snowball. If push fails, cancel move
-            else if (!board.moveSnowball(direction, snowball)){
+            else if (!board.moveSnowball(direction, snowball)) {
                 return false;
             }
         }
@@ -63,6 +68,22 @@ public class Monster extends MobileElement {
         board.checkCompleteSnowman(checkposition);
 
         return true;
+    }
+
+    public int getPrevRow() {
+        return prevRow;
+    }
+
+    public int getPrevCol() {
+        return prevCol;
+    }
+
+    public void setPrevRow(int prevRow) {
+        this.prevRow = prevRow;
+    }
+
+    public void setPrevCol(int prevCol) {
+        this.prevCol = prevCol;
     }
 
 

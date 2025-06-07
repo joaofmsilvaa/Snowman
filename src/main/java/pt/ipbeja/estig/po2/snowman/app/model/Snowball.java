@@ -4,6 +4,9 @@ package pt.ipbeja.estig.po2.snowman.app.model;
  * Represents a snowball on the game board, managing its type and movement logic.
  * Extends MobileElement to track row and column positions. A Snowball can grow over snow,
  * stack with other snowballs to form larger types, and ultimately form a complete snowman.
+ *
+ * @author João Silva
+ * @author Paulo Neves
  */
 public class Snowball extends MobileElement {
     private SnowballType type;
@@ -93,14 +96,11 @@ public class Snowball extends MobileElement {
         // Compute resulting type based on combination
         if (this.type == SnowballType.SMALL && other.type == SnowballType.MID) {
             return SnowballType.MID_SMALL;
-        }
-        else if (this.type == SnowballType.SMALL && other.type == SnowballType.BIG) {
+        } else if (this.type == SnowballType.SMALL && other.type == SnowballType.BIG) {
             return SnowballType.BIG_SMALL;
-        }
-        else if (this.type == SnowballType.MID && other.type == SnowballType.BIG) {
+        } else if (this.type == SnowballType.MID && other.type == SnowballType.BIG) {
             return SnowballType.BIG_MID;
-        }
-        else if (this.type == SnowballType.SMALL && other.type == SnowballType.BIG_MID) {
+        } else if (this.type == SnowballType.SMALL && other.type == SnowballType.BIG_MID) {
             return SnowballType.COMPLETE;
         }
 
@@ -171,10 +171,10 @@ public class Snowball extends MobileElement {
      *
      * @return true if this snowball is a stacked variant; false otherwise
      */
-    public boolean isSnowballStack(){
+    public boolean isSnowballStack() {
         // Return true for known partial-stack types
         SnowballType type = this.getType();
-        if(type == SnowballType.BIG_MID || type == SnowballType.MID_SMALL ||
+        if (type == SnowballType.BIG_MID || type == SnowballType.MID_SMALL ||
                 type == SnowballType.BIG_SMALL) {
             return true;
         }
@@ -183,5 +183,55 @@ public class Snowball extends MobileElement {
     }
 
 
+    /**
+     * Returns the bottom component of a stacked snowball.
+     * <p>
+     * Given a combined snowball instance, this method determines the appropriate
+     * “bottom” snowball based on the stack’s type. For example, a MID_SMALL stack
+     * has a MID bottom, while BIG_MID and BIG_SMALL stacks share the same bottom size.
+     *
+     * @return a new Snowball representing the bottom part, or null if not applicable
+     */
+    public Snowball getBottom() {
+        // Determine bottom based on stack type
+        return switch (this.getType()) {
 
+            // a MID_SMALL stack has a MID snowball at its bottom position
+            case MID_SMALL -> new Snowball(this.getRow(), this.getCol(), SnowballType.MID);
+
+            // BIG_MID and BIG_SMALL stacks both have a BIG snowball as the bottom
+            case BIG_MID, BIG_SMALL -> new Snowball(this.getRow(), this.getCol(), SnowballType.BIG);
+            default -> null;
+        };
+    }
+
+    /**
+     * Returns the top component of a stacked snowball, positioned in the specified direction.
+     * <p>
+     * This method calculates the position of the “top” part by moving one cell from the
+     * base of the stacked snowball in the given direction. It then determines the appropriate
+     * SnowballType for the top based on the stack’s type (e.g., MID_SMALL or BIG_SMALL have a SMALL top,
+     * BIG_MID has a MID top). If the stack type does not correspond to a valid top part, it returns null.
+     *
+     * @param direction the Direction in which the top part should be placed
+     * @return a new Snowball representing the top part at its correct position, or null if not applicable
+     */
+    public Snowball getTop(Direction direction) {
+        //Calculate the target position for the top component
+        // Start from the base’s row and column, then move one cell in the specified direction
+        Position position = new Position(this.getRow(),
+                this.getCol()).changePosition(direction);
+
+        // Determine the SnowballType of the top component based on the stack type
+        SnowballType type = switch (this.getType()) {
+            case MID_SMALL, BIG_SMALL -> SnowballType.SMALL;
+            case BIG_MID -> SnowballType.MID;
+            default -> null;
+        };
+
+        // Create and return the new Snowball if type is valid, otherwise return null
+        return type == null
+                ? null
+                : new Snowball(position.getRow(), position.getCol(), type);
+    }
 }

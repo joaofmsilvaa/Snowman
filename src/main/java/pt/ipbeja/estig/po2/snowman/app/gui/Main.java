@@ -12,6 +12,8 @@ import static pt.ipbeja.estig.po2.snowman.app.gui.StartMenu.show;
 /**
  * Main is the JavaFX application entry point. It starts background music
  * and then displays the start menu.
+ * @author João Silva
+ * @author Paulo Neves
  */
 
 public class Main extends Application {

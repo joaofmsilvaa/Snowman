@@ -11,9 +11,10 @@ import java.util.List;
 /**
  * BoardModel manages all game logic with improved undo/redo functionality
  */
+
 /**
  * BoardModel serves as the central game logic controller for the Snowman puzzle game.
- *
+ * <p>
  * This class manages:
  * - Game board state and content (snow, blocks, empty spaces)
  * - Monster position and movement mechanics
@@ -21,11 +22,11 @@ import java.util.List;
  * - Undo/Redo functionality with complete state preservation
  * - Game progression tracking (moves, scores, completion)
  * - Event notification system for UI updates
- *
+ * <p>
  * The class implements a robust undo/redo system that captures complete game states
  * including monster position, all snowball positions and types, and board content.
  * This allows players to experiment with different strategies without penalty.
- *
+ * <p>
  * Key Design Patterns:
  * - Observer Pattern: Notifies multiple listeners of game state changes
  * - Command Pattern: Encapsulates game actions for undo/redo functionality
@@ -36,33 +37,51 @@ import java.util.List;
  */
 public class BoardModel {
     // CORE GAME STATE
-    /** 2D matrix representing the game board content (snow, blocks, empty spaces) */
+    /**
+     * 2D matrix representing the game board content (snow, blocks, empty spaces)
+     */
     private List<List<PositionContent>> boardContent;
 
-    /** The player-controlled monster that pushes snowballs */
+    /**
+     * The player-controlled monster that pushes snowballs
+     */
     private Monster monster;
 
-    /** Collection of all snowballs currently on the board with their positions and types */
+    /**
+     * Collection of all snowballs currently on the board with their positions and types
+     */
     private List<Snowball> snowballs;
 
     // === EVENT NOTIFICATION SYSTEM ===
-    /** Primary view interface for rendering game state changes */
+    /**
+     * Primary view interface for rendering game state changes
+     */
     private View view;
 
-    /** Listener for monster movement events */
+    /**
+     * Listener for monster movement events
+     */
     private MoveListener moveListener;
 
-    /** Listener for board terrain changes */
+    /**
+     * Listener for board terrain changes
+     */
     private BoardListener boardListener;
 
-    /** Listener for score-related events */
+    /**
+     * Listener for score-related events
+     */
     private ScoreListener scoreListener;
 
     // === GAME MANAGEMENT ===
-    /** Game instance containing player info, move count, and session data */
+    /**
+     * Game instance containing player info, move count, and session data
+     */
     private Game game;
 
-    /** Name of the current map file being played */
+    /**
+     * Name of the current map file being played
+     */
     private String mapFileName;
 
     // === UNDO/REDO SYSTEM ===
@@ -85,27 +104,9 @@ public class BoardModel {
     private static final int MAX_HISTORY_SIZE = 50;
 
     /**
-     * Default constructor that initializes a standard 5x5 game board.
-     *
-     * Creates the initial game setup:
-     * - 5x5 grid with snow on top row, empty spaces elsewhere
-     * - Monster positioned at (2,0) - middle-left of the board
-     * - Three small snowballs placed horizontally in row 2
-     *
-     * This constructor automatically saves the initial state for undo/redo functionality.
-     */
-    public BoardModel() {
-        boardContent = new ArrayList<>();
-        snowballs = new ArrayList<>();
-        startGame();
-        // Save initial state AFTER setting up the game to ensure first undo works correctly
-        saveInitialState();
-    }
-
-    /**
      * Advanced constructor for creating a BoardModel from existing game data.
      * Used for loading saved games or creating custom board configurations.
-     *
+     * <p>
      * This constructor performs deep copying to ensure data integrity and prevent
      * unintended modifications to the original data structures.
      *
@@ -115,7 +116,7 @@ public class BoardModel {
      */
     public BoardModel(List<List<PositionContent>> content, Monster monster, List<Snowball> snowballs) {
         this.monster = monster;
-        this.snowballs = new ArrayList<>(snowballs); // Defensive copy to prevent external modifications
+        this.snowballs = new ArrayList<>(snowballs);
         this.boardContent = new ArrayList<>();
 
         // Create deep copy of board content to ensure complete independence
@@ -181,19 +182,18 @@ public class BoardModel {
     }
 
 
-
     /**
      * Initializes the game board to its default starting configuration.
-     *
+     * <p>
      * This method creates a standard 5x5 Snowman puzzle setup:
      * - Top row (row 0): Filled with SNOW for snowball creation
      * - Remaining rows: Empty NO_SNOW spaces for movement
      * - Monster: Positioned at (2,0) - middle-left edge
      * - Snowballs: Three SMALL snowballs placed at (2,1), (2,2), (2,3)
-     *
+     * <p>
      * The setup is designed to provide an optimal starting puzzle where players
      * can learn the basic mechanics of pushing and stacking snowballs.
-     *
+     * <p>
      * Also resets the undo/redo history to provide a clean starting state.
      */
     public void startGame() {
@@ -230,11 +230,11 @@ public class BoardModel {
 
     /**
      * Saves the initial game state immediately after board setup.
-     *
+     * <p>
      * This method ensures that players can undo back to the very beginning
      * of the game, which is crucial for puzzle games where experimentation
      * is encouraged.
-     *
+     * <p>
      * Called automatically after startGame() completes to capture the
      * pristine starting configuration.
      */
@@ -246,7 +246,7 @@ public class BoardModel {
 
     /**
      * Associates a Game instance with this BoardModel.
-     *
+     * <p>
      * The Game object tracks session-specific data like player name,
      * move count, and game progression. This method ensures proper
      * initialization of player data if it exists.
@@ -263,24 +263,30 @@ public class BoardModel {
     /// GETTER METHODS
     /// These methods provide read-only access to game state information
 
-    /** @return The filename of the currently loaded map */
+    /**
+     * @return The filename of the currently loaded map
+     */
     public String getMapFileName() {
         return this.mapFileName;
     }
 
-    /** @return Number of rows in the game board */
+    /**
+     * @return Number of rows in the game board
+     */
     public int getRowCount() {
         return boardContent.size();
     }
 
-    /** @return Number of columns in the game board */
+    /**
+     * @return Number of columns in the game board
+     */
     public int getColCount() {
         return boardContent.isEmpty() ? 0 : boardContent.get(0).size();
     }
 
     /**
      * Retrieves the content type of a specific board cell.
-     *
+     * <p>
      * Includes bounds checking to prevent index out of bounds exceptions.
      * Returns BLOCK for out-of-bounds coordinates to simulate walls.
      *
@@ -295,37 +301,44 @@ public class BoardModel {
         return boardContent.get(row).get(col);
     }
 
-    /** @return Current Monster instance */
+    /**
+     * @return Current Monster instance
+     */
     public Monster getMonster() {
         return monster;
     }
 
-    /** @return Current player name, or empty string if no game is set */
+    /**
+     * @return Current player name, or empty string if no game is set
+     */
     public String getPlayerName() {
         return game != null ? game.getPlayerName() : "";
     }
 
-    /** @return Current move count, or 0 if no game is set */
+    /**
+     * @return Current move count, or 0 if no game is set
+     */
     public int getMoveCount() {
         return game != null ? game.getMoveCount() : 0;
     }
 
-    /** @return Current Game instance */
+    /**
+     * @return Current Game instance
+     */
     public Game getGame() {
         return this.game;
     }
-
 
 
     // GAME LOGIC AND COLLISION DETECTION
 
     /**
      * Validates whether a given position is accessible for movement.
-     *
+     * <p>
      * A position is considered valid if:
      * 1. It's within the board boundaries
      * 2. It doesn't contain a BLOCK (impassable terrain)
-     *
+     * <p>
      * This method is critical for preventing illegal moves and ensuring
      * game physics consistency.
      *
@@ -344,11 +357,11 @@ public class BoardModel {
 
     /**
      * Determines if a snowball can be unstacked at the specified position.
-     *
+     * <p>
      * For unstacking to be possible:
      * 1. The target position must be valid for movement
      * 2. No other snowball can occupy that position
-     *
+     * <p>
      * This prevents snowballs from being unstacked into occupied spaces
      * or illegal terrain.
      *
@@ -362,7 +375,7 @@ public class BoardModel {
 
     /**
      * Searches for a snowball at the specified coordinates.
-     *
+     * <p>
      * Uses linear search through the snowballs collection. While O(n) complexity,
      * this is acceptable given the small number of snowballs typically in play.
      *
@@ -381,13 +394,14 @@ public class BoardModel {
 
     /**
      * Detects if there's a snowball directly adjacent to the monster in the given direction.
-     *
+     * <p>
      * This is essential for push mechanics - the monster can only interact with
      * snowballs that are immediately in front of it.
-     *
+     * <p>
      * Uses switch expression for clean directional logic without complex if-else chains.
+     * <p>
+     * + @param direction Direction the monster is facing/moving
      *
-     + @param direction Direction the monster is facing/moving
      * @return Snowball directly in front of monster, or null if none exists
      */
     public Snowball snowballInFrontOfMonster(Direction direction) {
@@ -405,14 +419,14 @@ public class BoardModel {
 
     /**
      * Executes monster movement with comprehensive state management and event notification.
-     *
+     * <p>
      * This is one of the most complex methods in the class, handling:
      * 1. Pre-movement state capture for undo functionality
      * 2. Snowball collision detection and pushing mechanics
      * 3. Movement validation and execution
      * 4. Post-movement state saving and event notifications
      * 5. UI synchronization through multiple listener interfaces
-     *
+     * <p>
      * The method follows a careful sequence to ensure data consistency:
      * - Capture old positions BEFORE any changes
      * - Attempt movement (which may fail)
@@ -477,7 +491,7 @@ public class BoardModel {
 
     /**
      * Delegates snowball movement to the Snowball class.
-     *
+     * <p>
      * This method maintains consistent interface while allowing
      * Snowball objects to handle their own movement logic.
      *
@@ -491,7 +505,7 @@ public class BoardModel {
 
     /**
      * Attempts to stack one snowball on top of another.
-     *
+     * <p>
      * This method delegates the stacking logic to the Snowball class. If the two snowballs can be stacked,
      * it removes them from the collection, creates a new stacked snowball of the resulting type,
      * updates the board content and notifies the view. If the new snowball completes a snowman,
@@ -499,7 +513,7 @@ public class BoardModel {
      *
      * @param top    the Snowball instance to be placed on top
      * @param bottom the Snowball instance that will become the base of the stack
-     * @return       true if the snowballs were successfully stacked; false otherwise
+     * @return true if the snowballs were successfully stacked; false otherwise
      */
     public boolean tryStackSnowballs(Snowball top, Snowball bottom) {
         // Attempt to stack the two snowballs
@@ -539,7 +553,7 @@ public class BoardModel {
 
     /**
      * Stores the details of a completed snowman game into a file and notifies the score listener.
-     *
+     * <p>
      * This method creates a new SnowmanFile with a filename based on the current date,
      * writes the game details (map name, map string, move history, move count, player name, and
      * the position of the completed snowman) into the file, and, if a score listener is
@@ -580,7 +594,7 @@ public class BoardModel {
 
     /**
      * Generates a string array representation of the current game map.
-     *
+     * <p>
      * This method first locates the position of the completed snowman on the board.
      * Then, for each row of the board, it constructs a string (via getStringBuilder)
      * that includes all relevant symbols, potentially highlighting the snowman's location.
@@ -616,14 +630,14 @@ public class BoardModel {
 
     /**
      * Constructs a string representation for a single row of the game board.
-     *
+     * <p>
      * This method iterates through each column in the specified row and builds
      * a StringBuilder containing symbols for the monster, the completed snowman
      * (if present), or other board content (blocks, snow, no snow, or generic snowball).
      *
-     * @param row               the index of the row to render
-     * @param snowmanPosition   the Position of the completed snowman, or null if none
-     * @return                  a StringBuilder containing the symbols for this row
+     * @param row             the index of the row to render
+     * @param snowmanPosition the Position of the completed snowman, or null if none
+     * @return a StringBuilder containing the symbols for this row
      */
     private StringBuilder getStringBuilder(int row, Position snowmanPosition) {
         StringBuilder line = new StringBuilder();
@@ -633,12 +647,8 @@ public class BoardModel {
             Position current = new Position(row, col);
 
             if (monster.getRow() == row && monster.getCol() == col) {
-                // Monster emoji
-                line.append("\t\uD83D\uDC79\t");
+                line.append("\tM\t");
 
-            } else if (snowmanPosition != null && snowmanPosition.equals(current)) {
-                // append the snowman
-                line.append(" SM ");
             } else {
                 // otherwise, append symbol based on board content
                 PositionContent content = boardContent.get(row).get(col);
@@ -646,7 +656,7 @@ public class BoardModel {
                     case BLOCK -> line.append("\tB\t");
                     case SNOW -> line.append("\tS\t");
                     case NO_SNOW -> line.append("\tX\t");
-                    default -> line.append("\t☃️\t");
+                    default -> line.append("\tSM\t");
                 }
             }
         }
@@ -655,25 +665,25 @@ public class BoardModel {
 
     /**
      * Attempts to separate a combined snowball back into its top and bottom components.
-     *
+     * <p>
      * This method identifies the bottom and top parts of the provided stacked snowball.
      * It then verifies whether the top part can be unstacked into the specified direction.
      * If valid, it removes the combined snowball from the collection, re-adds its separate
      * parts, and notifies the view. Returns true if the unstack operation succeeds.
      *
-     * @param stacked   the combined Snowball instance to be unstacked
+     * @param stack     the combined Snowball instance to be unstacked
      * @param direction the Direction in which the top part will be placed after unstacking
-     * @return          true if unstacking succeeds; false otherwise
+     * @return true if unstacking succeeds; false otherwise
      */
-    public boolean unstackSnowballs(Snowball stacked, Direction direction) {
+    public boolean unstackSnowballs(Snowball stack, Direction direction) {
         // Identify bottom and top snowball parts from the stacked one
-        Snowball bottom = getBottom(stacked);
-        Snowball top = getTop(stacked, direction);
+        Snowball bottom = stack.getBottom();
+        Snowball top = stack.getTop(direction);
 
         // Check that both parts exist and the top can actually be unstacked
         if (bottom != null && top != null && canUnstack(top.getRow(), top.getCol())) {
             // Update the snowballs collection – remove combined, add separate parts
-            snowballs.remove(stacked);
+            snowballs.remove(stack);
             snowballs.add(top);
             snowballs.add(bottom);
 
@@ -690,12 +700,12 @@ public class BoardModel {
 
     /**
      * Checks if the given Snowball instance represents a stacked snowball.
-     *
+     * <p>
      * This method delegates the check to the Snowball class, maintaining a consistent
      * interface for querying snowball state.
      *
      * @param snowball the Snowball instance to check
-     * @return         true if the snowball is a stacked snowball; false otherwise
+     * @return true if the snowball is a stacked snowball; false otherwise
      */
     public boolean isSnowballStack(Snowball snowball) {
         // Delegate the check to the Snowball object
@@ -704,7 +714,7 @@ public class BoardModel {
 
     /**
      * Verifies if the snowballs at and above the given position form a complete snowman.
-     *
+     * <p>
      * This method checks whether there is a “BIG_MID” snowball at the specified position
      * and a “SMALL” snowball directly above it. If both exist, it removes them and replaces
      * them with a single “COMPLETE” snowman snowball. It also updates the board content
@@ -737,64 +747,8 @@ public class BoardModel {
     }
 
     /**
-     * Returns the bottom component of a stacked snowball.
-     *
-     * Given a combined snowball instance, this method determines the appropriate
-     * “bottom” snowball based on the stack’s type. For example, a MID_SMALL stack
-     * has a MID bottom, while BIG_MID and BIG_SMALL stacks share the same bottom size.
-     *
-     * @param stack the combined Snowball instance to decompose
-     * @return      a new Snowball representing the bottom part, or null if not applicable
-     */
-    public Snowball getBottom(Snowball stack) {
-        // Determine bottom based on stack type
-        return switch (stack.getType()) {
-
-            // a MID_SMALL stack has a MID snowball at its bottom position
-            case MID_SMALL ->
-                    new Snowball(stack.getRow(), stack.getCol(), SnowballType.MID);
-
-            // BIG_MID and BIG_SMALL stacks both have a BIG snowball as the bottom
-            case BIG_MID, BIG_SMALL ->
-                    new Snowball(stack.getRow(), stack.getCol(), SnowballType.BIG);
-            default -> null;
-        };
-    }
-
-    /**
-     * Returns the top component of a stacked snowball, positioned in the specified direction.
-     *
-     * This method calculates the position of the “top” part by moving one cell from the
-     * base of the stacked snowball in the given direction. It then determines the appropriate
-     * SnowballType for the top based on the stack’s type (e.g., MID_SMALL or BIG_SMALL have a SMALL top,
-     * BIG_MID has a MID top). If the stack type does not correspond to a valid top part, it returns null.
-     *
-     * @param stack     the combined Snowball instance to decompose
-     * @param direction the Direction in which the top part should be placed
-     * @return          a new Snowball representing the top part at its correct position, or null if not applicable
-     */
-    public Snowball getTop(Snowball stack, Direction direction) {
-        //Calculate the target position for the top component
-        // Start from the base’s row and column, then move one cell in the specified direction
-        Position position = new Position(stack.getRow(),
-                stack.getCol()).changePosition(direction);
-
-        // Determine the SnowballType of the top component based on the stack type
-        SnowballType type = switch (stack.getType()) {
-            case MID_SMALL, BIG_SMALL -> SnowballType.SMALL;
-            case BIG_MID -> SnowballType.MID;
-            default -> null;
-        };
-
-        // Create and return the new Snowball if type is valid, otherwise return null
-        return type == null
-                ? null
-                : new Snowball(position.getRow(), position.getCol(), type);
-    }
-
-    /**
      * Saves the current game state to the history stack, maintaining a maximum history size.
-     *
+     * <p>
      * This method performs the following steps:
      * 1. Removes any “future” states if the user has undone moves and then makes a new move.
      * 2. If the history exceeds MAX_HISTORY_SIZE, drops the oldest state to make room.
@@ -823,7 +777,7 @@ public class BoardModel {
 
     /**
      * Creates and returns a deep copy of the current game state.
-     *
+     * <p>
      * This method performs the following steps:
      * 1. Deep-copies the board content into a new list of lists.
      * 2. Deep-copies each Snowball into a new list.
@@ -858,7 +812,7 @@ public class BoardModel {
 
     /**
      * Undoes the last action by reverting to the previous game state in the history.
-     *
+     * <p>
      * This method checks if an undo operation is possible. If so, it decrements the
      * currentStateIndex to point to the previous snapshot, restores that state, and
      * notifies the view to refresh the board. Returns true if the undo succeeds.
@@ -867,7 +821,7 @@ public class BoardModel {
      */
     public boolean undo() {
         //Check if undo is possible
-        if (canUndo()) {
+        if (currentStateIndex > 0) {
             // Move index back to the previous state
             currentStateIndex--;
             // Restore game to the selected snapshot
@@ -879,16 +833,15 @@ public class BoardModel {
                 boardListener.updateBoard();
             }
 
-            // Undo made
             return true;
         }
-        // Undo no
+
         return false;
     }
 
     /**
      * Reapplies an undone action by advancing to the next game state in the history.
-     *
+     * <p>
      * This method checks if a redo operation is possible. If so, it increments the
      * currentStateIndex to point to the next snapshot, restores that state, and
      * notifies the view to refresh the board. Returns true if the redo succeeds.
@@ -897,7 +850,7 @@ public class BoardModel {
      */
     public boolean redo() {
         // Check if redo is possible
-        if (canRedo()) {
+        if (currentStateIndex < history.size() - 1) {
             // Advance index to the next state
             currentStateIndex++;
             //Restore game to the selected snapshot
@@ -916,34 +869,8 @@ public class BoardModel {
     }
 
     /**
-     * Determines whether an undo operation can be performed.
-     *
-     * An undo is possible if there is at least one previous state in the history
-     * (the currentStateIndex is greater than zero).
-     *
-     * @return true if there is a prior state to revert to; false otherwise
-     */
-    public boolean canUndo() {
-        // Check if there is a previous state in the history
-        return currentStateIndex > 0;
-    }
-
-    /**
-     * Determines whether a redo operation can be performed.
-     *
-     * A redo is possible if there is at least one subsequent state in the history
-     * (The currentStateIndex is less than the index of the last stored state).
-     *
-     * @return true if there is a future state to advance to; false otherwise
-     */
-    public boolean canRedo() {
-        // Check if there is a next state in the history
-        return currentStateIndex < history.size() - 1;
-    }
-
-    /**
      * Restores the game to a previously saved state.
-     *
+     * <p>
      * This method clears the current board content, snowballs list, and monster,
      * then repopulates them using the data from the provided GameState instance.
      *
@@ -969,7 +896,7 @@ public class BoardModel {
 
     /**
      * Sets the content of a specific board cell and notifies the listener of any terrain change.
-     *
+     * <p>
      * This method first checks that the provided row and column indices are within the valid board range.
      * If valid, it updates the boardContent at the specified location to the new PositionContent,
      * then informs the boardListener (if registered) about the terrain change.

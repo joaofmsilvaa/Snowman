@@ -14,6 +14,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author João Silva
+ * @author Paulo Neves
+ */
 public class PositionsFileModelTest {
 
     private File tempFile;
