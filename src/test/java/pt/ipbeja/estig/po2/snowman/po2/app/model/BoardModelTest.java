@@ -69,7 +69,7 @@ public class BoardModelTest {
             content.add(row);
         }
 
-        // Place a MID snowball at (2,1) and a BIG snowball at (2,2)
+        // Place a Small snowball at (2,1) and a BIG snowball at (2,2)
         snowballs.add(new Snowball(2, 2, SnowballType.SMALL));
 
         board = new BoardModel(content, monster, snowballs);
@@ -95,6 +95,11 @@ public class BoardModelTest {
         snowballs.add(new Snowball(2, 2, SnowballType.SMALL));
 
         board = new BoardModel(content, monster, snowballs);
+    }
+    private void unstackSetup() {
+        setUp();
+        // Empilha uma vez para obter BIG_MID em (2,2)
+        board.moveMonster(Direction.RIGHT);
     }
 
     /**
@@ -290,21 +295,21 @@ public class BoardModelTest {
     @Test
     @DisplayName("Test unstack big-mid snowball")
     void testUnstackBigMidSnowball() {
-        setUp();
+        // Usa o setup já empilhado
+        unstackSetup();
 
-        // First, stack MID onto BIG to form BIG_MID
+        // Segunda empurrada para des-empilhar
         board.moveMonster(Direction.RIGHT);
 
-        // Then, push again to unstack
-        board.moveMonster(Direction.RIGHT);
-
+        // Bottom (deve permanecer BIG em (2,2))
         Snowball bottom = board.getSnowballInPosition(2, 2);
+        assertEquals(SnowballType.BIG, bottom.getType());
+
+        // Top (deve ser SMALL que virou MID, em (2,3))
         Snowball top = board.getSnowballInPosition(2, 3);
+        assertEquals(SnowballType.MID, top.getType());
 
-        assertEquals(SnowballType.MID, bottom.getType());
-        assertEquals(SnowballType.BIG, top.getType());
-
-        // Monster should end up left of the original stack
+        // Monstro fica na posição correta
         assertEquals(2, monster.getRow());
         assertEquals(1, monster.getCol());
     }
