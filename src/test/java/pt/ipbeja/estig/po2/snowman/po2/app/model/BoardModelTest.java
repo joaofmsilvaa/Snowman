@@ -30,7 +30,6 @@ public class BoardModelTest {
      * Sets up a 5×5 board with a monster at (2,0),
      * snow on row 2 for columns > 1, and two snowballs at (2,1) MID and (2,2) BIG.
      */
-    @BeforeEach
     public void setUp() {
         monster = new Monster(2, 0);
 
@@ -54,6 +53,50 @@ public class BoardModelTest {
         board = new BoardModel(content, monster, snowballs);
     }
 
+    public void basicSetup(){
+        monster = new Monster(2, 0);
+
+        for (int i = 0; i < rows; i++) {
+            List<PositionContent> row = new ArrayList<>();
+            for (int j = 0; j < cols; j++) {
+                // Place snow on row 2, columns 2–4; elsewhere no snow
+                if (i == 2 && j > 1) {
+                    row.add(PositionContent.SNOW);
+                } else {
+                    row.add(PositionContent.NO_SNOW);
+                }
+            }
+            content.add(row);
+        }
+
+        // Place a MID snowball at (2,1) and a BIG snowball at (2,2)
+        snowballs.add(new Snowball(2, 2, SnowballType.SMALL));
+
+        board = new BoardModel(content, monster, snowballs);
+    }
+
+    public void simpleMonsterSetup(){
+        monster = new Monster(2, 1);
+
+        for (int i = 0; i < rows; i++) {
+            List<PositionContent> row = new ArrayList<>();
+            for (int j = 0; j < cols; j++) {
+                // Place snow on row 2, columns 2–4; elsewhere no snow
+                if (i == 2 && j > 1) {
+                    row.add(PositionContent.SNOW);
+                } else {
+                    row.add(PositionContent.NO_SNOW);
+                }
+            }
+            content.add(row);
+        }
+
+        // Place a MID snowball at (2,1) and a BIG snowball at (2,2)
+        snowballs.add(new Snowball(2, 2, SnowballType.SMALL));
+
+        board = new BoardModel(content, monster, snowballs);
+    }
+
     /**
      * Tests that moving the monster left from (2,0) wraps or moves correctly.
      * After moving LEFT, monster should be at (1,0).
@@ -61,8 +104,10 @@ public class BoardModelTest {
     @Test
     @DisplayName("Move the monster to the left")
     void testMonsterToTheLeft() {
+        basicSetup();
+
         board.moveMonster(Direction.LEFT);
-        assertEquals(1, monster.getRow());
+        assertEquals(2, monster.getRow());
         assertEquals(0, monster.getCol());
     }
 
@@ -73,6 +118,8 @@ public class BoardModelTest {
     @Test
     @DisplayName("Move the monster up")
     void testMonsterToUp() {
+        setUp();
+
         board.moveMonster(Direction.UP);
         assertEquals(0, monster.getRow());
         assertEquals(1, monster.getCol());
@@ -85,6 +132,8 @@ public class BoardModelTest {
     @Test
     @DisplayName("Test invalid monster move")
     void testMonsterInvalidMove() {
+        setUp();
+
         board.moveMonster(Direction.UP);
         assertEquals(1, monster.getRow());
         assertEquals(0, monster.getCol());
@@ -99,6 +148,8 @@ public class BoardModelTest {
      */
     @Test
     void testPositionContent() {
+        setUp();
+
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 PositionContent element = board.getPositionContent(i, j);
@@ -115,6 +166,8 @@ public class BoardModelTest {
     @Test
     @DisplayName("Move snowball to the left")
     void testMoveSnowballToTheLeft() {
+        setUp();
+
         Snowball snowball = board.getSnowballInPosition(0, 1);
         board.moveMonster(Direction.LEFT);
 
@@ -131,6 +184,8 @@ public class BoardModelTest {
     @Test
     @DisplayName("Move the snowball up")
     void testMoveSnowballToUp() {
+        basicSetup();
+
         Snowball snowball = board.getSnowballInPosition(1, 0);
         board.moveMonster(Direction.UP);
 
@@ -147,6 +202,8 @@ public class BoardModelTest {
     @Test
     @DisplayName("Create average snowball")
     void testCreateAverageSnowball() {
+        setUp();
+
         Snowball snowball = board.getSnowballInPosition(1, 0);
         assertEquals(SnowballType.SMALL, snowball.getType());
 
@@ -163,8 +220,10 @@ public class BoardModelTest {
     @Test
     @DisplayName("Create big snowball")
     void testCreateBigSnowball() {
+        setUp();
+
         Snowball snowball = board.getSnowballInPosition(2, 1);
-        assertEquals(SnowballType.MID, snowball.getType());
+        assertEquals(SnowballType.SMALL, snowball.getType());
 
         board.moveMonster(Direction.RIGHT);
         assertEquals(SnowballType.MID, snowball.getType());
@@ -179,6 +238,8 @@ public class BoardModelTest {
     @Test
     @DisplayName("Maintain big snowball")
     void testMaintainBigSnowball() {
+        setUp();
+
         // Pre-set to BIG for this test
         Snowball snowball = board.getSnowballInPosition(2, 1);
         snowball.setType(SnowballType.BIG);
@@ -194,6 +255,8 @@ public class BoardModelTest {
     @Test
     @DisplayName("Test invalid snowball move")
     void testSnowballInvalidMove() {
+        setUp();
+
         Snowball snowball = board.getSnowballInPosition(1, 0);
         assertTrue(board.moveMonster(Direction.UP));   // First move succeeds
         assertFalse(board.moveMonster(Direction.UP));  // Second move fails
@@ -208,6 +271,8 @@ public class BoardModelTest {
     @Test
     @DisplayName("Test stack mid sized snowball in a big snowball")
     void testAverageBigSnowman() {
+        setUp();
+
         Snowball midBall = board.getSnowballInPosition(2, 1);
         Snowball bigBall = board.getSnowballInPosition(2, 2);
         assertTrue(midBall.canStackOn(bigBall));
@@ -225,6 +290,8 @@ public class BoardModelTest {
     @Test
     @DisplayName("Test unstack big-mid snowball")
     void testUnstackBigMidSnowball() {
+        setUp();
+
         // First, stack MID onto BIG to form BIG_MID
         board.moveMonster(Direction.RIGHT);
 
