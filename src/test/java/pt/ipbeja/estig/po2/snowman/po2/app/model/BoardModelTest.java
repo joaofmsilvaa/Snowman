@@ -53,6 +53,27 @@ public class BoardModelTest {
         board = new BoardModel(content, monster, snowballs);
     }
 
+    public void bigSnowballSetup() {
+        monster = new Monster(2, 0);
+
+        for (int i = 0; i < rows; i++) {
+            List<PositionContent> row = new ArrayList<>();
+            for (int j = 0; j < cols; j++) {
+                // Place snow on row 2, columns 2–4; elsewhere no snow
+                if (i == 2 && j > 1) {
+                    row.add(PositionContent.SNOW);
+                } else {
+                    row.add(PositionContent.NO_SNOW);
+                }
+            }
+            content.add(row);
+        }
+
+        snowballs.add(new Snowball(2, 1, SnowballType.SMALL));
+
+        board = new BoardModel(content, monster, snowballs);
+    }
+
     public void basicSetup(){
         monster = new Monster(2, 0);
 
@@ -220,7 +241,7 @@ public class BoardModelTest {
     @Test
     @DisplayName("Create big snowball")
     void testCreateBigSnowball() {
-        setUp();
+        bigSnowballSetup();
 
         Snowball snowball = board.getSnowballInPosition(2, 1);
         assertEquals(SnowballType.SMALL, snowball.getType());
