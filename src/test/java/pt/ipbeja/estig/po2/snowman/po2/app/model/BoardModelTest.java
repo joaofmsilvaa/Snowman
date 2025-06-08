@@ -97,23 +97,18 @@ public class BoardModelTest {
     }
 
     public void simpleMonsterSetup(){
-        monster = new Monster(2, 1);
+        monster = new Monster(3, 1);
 
         for (int i = 0; i < rows; i++) {
             List<PositionContent> row = new ArrayList<>();
             for (int j = 0; j < cols; j++) {
-                // Place snow on row 2, columns 2–4; elsewhere no snow
-                if (i == 2 && j > 1) {
-                    row.add(PositionContent.SNOW);
-                } else {
-                    row.add(PositionContent.NO_SNOW);
-                }
+               row.add(PositionContent.NO_SNOW);
             }
             content.add(row);
         }
 
         // Place a MID snowball at (2,1) and a BIG snowball at (2,2)
-        snowballs.add(new Snowball(2, 2, SnowballType.SMALL));
+        snowballs.add(new Snowball(2, 1, SnowballType.SMALL));
 
         board = new BoardModel(content, monster, snowballs);
     }
@@ -205,15 +200,15 @@ public class BoardModelTest {
     @Test
     @DisplayName("Move the snowball up")
     void testMoveSnowballToUp() {
-        basicSetup();
+        simpleMonsterSetup();
 
-        Snowball snowball = board.getSnowballInPosition(1, 0);
+        Snowball snowball = board.getSnowballInPosition(2, 1);
         board.moveMonster(Direction.UP);
 
-        assertEquals(0, snowball.getRow());
-        assertEquals(0, snowball.getCol());
-        assertEquals(1, monster.getRow());
-        assertEquals(0, monster.getCol());
+        assertEquals(1, snowball.getRow());
+        assertEquals(1, snowball.getCol());
+        assertEquals(2, monster.getRow());
+        assertEquals(1, monster.getCol());
     }
 
     /**
