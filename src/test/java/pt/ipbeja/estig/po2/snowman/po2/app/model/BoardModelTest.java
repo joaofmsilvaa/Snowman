@@ -182,15 +182,21 @@ public class BoardModelTest {
     @Test
     @DisplayName("Move snowball to the left")
     void testMoveSnowballToTheLeft() {
-        setUp();
+        basicSetup();
 
-        Snowball snowball = board.getSnowballInPosition(0, 1);
+        board.moveMonster(Direction.DOWN);
+        board.moveMonster(Direction.RIGHT);
+        board.moveMonster(Direction.RIGHT);
+        board.moveMonster(Direction.RIGHT);
+        board.moveMonster(Direction.UP);
+
+        Snowball snowball = board.getSnowballInPosition(2, 2);
         board.moveMonster(Direction.LEFT);
 
-        assertEquals(0, snowball.getRow());
-        assertEquals(0, snowball.getCol());
-        assertEquals(0, monster.getRow());
-        assertEquals(1, monster.getCol());
+        assertEquals(2, snowball.getRow());
+        assertEquals(1, snowball.getCol());
+        assertEquals(2, monster.getRow());
+        assertEquals(2, monster.getCol());
     }
 
     /**
