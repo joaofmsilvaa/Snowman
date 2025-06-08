@@ -134,11 +134,11 @@ public class BoardModelTest {
     @Test
     @DisplayName("Move the monster up")
     void testMonsterToUp() {
-        setUp();
+        basicSetup();
 
         board.moveMonster(Direction.UP);
-        assertEquals(0, monster.getRow());
-        assertEquals(1, monster.getCol());
+        assertEquals(1, monster.getRow());
+        assertEquals(0, monster.getCol());
     }
 
     /**
@@ -279,14 +279,19 @@ public class BoardModelTest {
     @Test
     @DisplayName("Test invalid snowball move")
     void testSnowballInvalidMove() {
-        setUp();
+        basicSetup();
 
-        Snowball snowball = board.getSnowballInPosition(1, 0);
+        board.moveMonster(Direction.DOWN);
+        board.moveMonster(Direction.RIGHT);
+        board.moveMonster(Direction.RIGHT);
+
+        Snowball snowball = board.getSnowballInPosition(2, 2);
+        assertTrue(board.moveMonster(Direction.UP));   // First move succeeds
         assertTrue(board.moveMonster(Direction.UP));   // First move succeeds
         assertFalse(board.moveMonster(Direction.UP));  // Second move fails
 
         assertEquals(0, snowball.getRow());
-        assertEquals(0, snowball.getCol());
+        assertEquals(2, snowball.getCol());
     }
 
     /**
