@@ -120,7 +120,7 @@ public class PositionsFileModelTest {
     @Test
     @DisplayName("Convert position to letter")
     public void testConvertPositionToLetter() {
-        String letter = current.convertToLetter(1);
+        String letter = current.convertToLetter(0);
         assertEquals("A", letter, "Column index 1 should convert to 'A'");
     }
 }
