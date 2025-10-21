@@ -1,0 +1,47 @@
+Mapa: Snowy garden
+Movimentos:
+(2,A) -> (3,A)
+(3,A) -> (3,B)
+(3,B) -> (3,C)
+(3,C) -> (3,B)
+(3,B) -> (3,A)
+(3,A) -> (4,A)
+(4,A) -> (5,A)
+(5,A) -> (5,B)
+(5,B) -> (5,C)
+(5,C) -> (5,D)
+(5,D) -> (4,D)
+(4,D) -> (4,C)
+(4,C) -> (5,C)
+(5,C) -> (5,B)
+(5,B) -> (5,A)
+(5,A) -> (4,A)
+(4,A) -> (4,B)
+(4,B) -> (5,B)
+(5,B) -> (5,C)
+(5,C) -> (4,C)
+(4,C) -> (4,D)
+(4,D) -> (4,E)
+(4,E) -> (3,E)
+(3,E) -> (2,E)
+(2,E) -> (2,D)
+(2,D) -> (2,C)
+(2,C) -> (2,B)
+(2,B) -> (3,B)
+(3,B) -> (3,C)
+(3,C) -> (4,C)
+(4,C) -> (5,C)
+(5,C) -> (5,D)
+
+Jogador: AAA
+Total de jogadas: 32
+Posição final do boneco de neve: (3,D)
+
+
+Mapa final:
+	B		B		B		B		B	
+	X		X		X		X		X	
+	X		X		X		SM		X	
+	X		X		X		X		X	
+	X		X		X		M		X	
+	B		B		X		X		B	

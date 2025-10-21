@@ -16,7 +16,6 @@ public class Monster extends MobileElement {
         super(row, col);
     }
 
-
     /**
      * Attempts to move the monster in the specified direction. The method:
      * 1. Calculates the target cell.
